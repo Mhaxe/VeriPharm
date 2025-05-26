@@ -9,5 +9,11 @@
     <p>
         It worked 
     </p>
+    <p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="logout_button">Log out!</button>
+        </form>
+    </p>
 </body>
 </html>
