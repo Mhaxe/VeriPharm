@@ -2,9 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.db import models
 from django.utils import timezone
 
-# --------------------------
-# Custom User Manager
-# --------------------------
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, password=None, **extra_fields):
         if not username:
@@ -25,9 +23,7 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(username, password, **extra_fields)
 
-# --------------------------
-# Custom User Model
-# --------------------------
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = [
         ('consumer', 'Consumer'),
@@ -46,8 +42,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = 'username'  # ✅ This makes login use `username`
-    REQUIRED_FIELDS = ['full_name', 'role']  # ✅ Required when using `createsuperuser`
+    USERNAME_FIELD = 'username'  
+    REQUIRED_FIELDS = ['full_name', 'role']  
 
     def __str__(self):
         return self.username

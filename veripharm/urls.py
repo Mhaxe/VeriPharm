@@ -22,5 +22,6 @@ urlpatterns = [
     path('',include('accounts.urls')),
     path('consumer/',include('consumer.urls',namespace="consumer")),
     path('manufacturer/', include('manufacturer.urls', namespace="manufacturer")),
-    path('distributer/',include('distro.urls', namespace = 'distro')),
+    path('distributor/',include('distributor.urls', namespace = 'distributor')),
+    path('pharmacy/',include('pharmacy.urls', namespace = 'pharmacy')),
 ]

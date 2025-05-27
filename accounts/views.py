@@ -25,13 +25,13 @@ def login_view(request):
             role = user.role
             login(request, user)
             if role == 'consumer':
-                return redirect('consumer_home')
+                return redirect('consumer:consumer_home')
             elif role == 'manufacturer':
                 return redirect('manufacturer:dashboard')
             elif role == 'pharmacist':
-                return redirect('pharmacist_home')
-            elif role == 'admin':
-                return redirect('admin_home')
+                return redirect('pharmacy:dashboard')
+            elif role == 'distributor':
+                return redirect('distributor:dashboard')
             else:
                 return redirect('dashboard')#to be changed to an error page i guess
             
