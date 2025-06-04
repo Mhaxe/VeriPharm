@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>About Us | Veripharm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #007BFF;
+      --hover-blue: #0056b3;
+      --light-bg: #f0f8ff;
+      --text-color: #333;
+      --card-bg: #ffffff;
+      --font: 'Plus Jakarta Sans', sans-serif;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font);
+      background-color: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+    header {
+      background-color: var(--primary-blue);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+    }
+    .container {
+      padding: 40px 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: white;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      color: var(--primary-blue);
+      font-size: 1.8rem;
+      margin-top: 2.5rem;
+      border-bottom: 2px solid var(--primary-blue);
+      padding-bottom: 0.5rem;
+    }
+    p, ul {
+      font-size: 16px;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    .image-gallery {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
+    .image-gallery img {
+      width: 300px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .image-gallery img:hover {
+      transform: scale(1.03);
+    }
+    .cta-section {
+      background-color: var(--card-bg);
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      margin: 40px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .cta-button {
+      display: inline-block;
+      background-color: var(--primary-blue);
+      color: white;
+      padding: 12px 30px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 15px;
+      transition: background-color 0.3s;
+    }
+    .cta-button:hover {
+      background-color: var(--hover-blue);
+    }
+    footer {
+      text-align: center;
+      padding: 30px;
+      background-color: #f1f1f1;
+      color: #666;
+      font-size: 14px;
+      margin-top: 60px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .footer-links a {
+      color: var(--primary-blue);
+      text-decoration: none;
+    }
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .social-links a {
+      color: #666;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>About Veripharm</h1>
+  </header>
+  <div class="container">
+    <p>
+      The proliferation of counterfeit medicines in Ghana presents a critical public health concern that can no longer be overlooked.
+      Across sub-Saharan Africa, it is estimated that counterfeit drugs contribute to over 500,000 deaths annually,
+      with approximately 267,000 deaths linked to substandard or falsified antimalarial medications and 169,000 deaths resulting from
+      ineffective or fake antibiotics used to treat severe paediatric pneumonia (WHO, 2023).
+    </p>
+
+    <p>
+      The pharmaceutical supply chain—an intricate network spanning various organizations and geographical regions—plays a central role in
+      ensuring safe medicine distribution. However, its inherent complexity often introduces vulnerabilities, such as fragmented data sources,
+      inaccurate records, and insufficient transparency. These gaps create opportunities for the infiltration of counterfeit drugs, posing severe
+      health risks and leading to significant financial losses within the healthcare sector.
+    </p>
+
+    <p>
+      As a result, there is a growing demand for a secure, end-to-end drug traceability system that can provide full visibility across the
+      pharmaceutical supply chain. Traditional centralized tracking systems have proven inadequate, frequently falling short in key areas such as
+      data authenticity, privacy protection, transparency, scalability, and system resilience. These shortcomings are regularly exploited by
+      counterfeiters, undermining public trust and drug safety.
+    </p>
+
+    <p>
+      To address these challenges, this project proposes a blockchain-based pharmaceutical traceability system built on the Ethereum platform.
+      By leveraging smart contracts, the system records and verifies drug transactions at every stage of the supply chain.
+      These smart contracts ensure immutable, tamper-proof records and establish a trusted source of data provenance among all stakeholders involved.
+    </p>
+
+    <p>
+      Preliminary implementation results demonstrate promising outcomes: a notable reduction in counterfeit drug circulation,
+      enhanced consumer confidence in pharmaceutical products, and increased transparency and accountability among supply chain actors.
+      By discouraging fraudulent activities and guaranteeing traceable transactions, the system strengthens the integrity of Ghana's
+      pharmaceutical supply chain and reinforces public health safeguards.
+    </p>
+
+    <h2>Modus operandum</h2>
+    <p>The main objective of this study is to design and implement a blockchain-based drug traceability system for Ghana's pharmaceutical supply chain, incorporating measures:</p>
+    <ul>
+      <li>Blockchain-based Traceability Platform</li>
+      <li>QR-Code Integration for Real-Time Tracking</li>
+      <li>AI-Powered Supply-Chain Monitoring</li>
+      <li>Stakeholder-Centric User Interfaces</li>
+    </ul>
+
+    <h2>Significance of the Study</h2>
+    <p>
+      This project addresses a major gap in pharmaceutical regulation in Ghana by providing a verifiable method to confirm drug authenticity
+      and prevent unauthorized use. It aligns with Ghana's SDG priorities, particularly SDG 3, SDG 9, and SDG 16,
+      by enhancing healthcare safety, promoting technological infrastructure, and strengthening regulatory institutions.
+      If effectively implemented, the system can serve as a replicable model for other countries facing similar pharmaceutical challenges.
+    </p>
+
+    <!-- IMAGE GALLERY SECTION - REPLACE THESE IMAGE TAGS WITH YOUR ACTUAL IMAGES -->
+    <div class="image-gallery">
+      <img src="img/veripharm-feature1.jpg" alt="Veripharm team working on the blockchain solution">
+      <img src="img/veripharm-feature2.jpg" alt="Veripharm technology being used in pharmaceutical supply chain">
+      <img src="img/veripharm-feature3.jpg" alt="Infographic showing Veripharm's impact on counterfeit drug reduction">
+    </div>
+
+    <div class="cta-section">
+      <h3>Want to learn more about our solution?</h3>
+      <a href="contact.html" class="cta-button">Contact Our Team</a>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-links">
+      <a href="veripharm_home.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="solutions.html">Solutions</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="social-links">
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-linkedin"></i></a>
+      <a href="#"><i class="fab fa-facebook"></i></a>
+    </div>
+    <p>&copy; 2024 Veripharm. All rights reserved.</p>
+  </footer>
+
+  <!-- Font Awesome for social icons (add this before closing body tag) -->
+  <script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script>
+</body>
+</html>
