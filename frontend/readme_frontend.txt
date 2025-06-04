@@ -1,0 +1,1 @@
+Html and other related files should go in this directory
