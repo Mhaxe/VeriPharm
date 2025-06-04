@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veripharm</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #007BFF;
+      --hover-blue: #0056b3;
+      --light-bg: #f0f8ff;
+      --white: #ffffff;
+      --gray: #555;
+      --dark-bg: #121212;
+      --dark-card: #1e1e1e;
+      --dark-text: #e0e0e0;
+      --font: 'Plus Jakarta Sans', sans-serif;
+      --weak: #ff4757;
+      --medium: #ffa502;
+      --strong: #2ed573;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background-color: var(--light-bg);
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    .top-bar {
+      background-color: var(--primary-blue);
+      color: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 40px;
+    }
+
+    .dark-mode .top-bar {
+      background-color: #004a99;
+    }
+
+    .top-bar .nav-links a {
+      color: var(--white);
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+
+    .top-bar .nav-links a:hover {
+      opacity: 0.8;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      min-height: 100vh;
+    }
+
+    .left-section {
+      flex: 1;
+      background: linear-gradient(135deg, var(--primary-blue), #0066cc);
+      color: var(--white);
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .dark-mode .left-section {
+      background: linear-gradient(135deg, #004a99, #003366);
+    }
+
+    .left-section h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .left-section p {
+      font-size: 18px;
+      max-width: 400px;
+    }
+
+    .right-section {
+      flex: 1;
+      padding: 60px 40px;
+      background-color: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .dark-mode .right-section {
+      background-color: var(--dark-card);
+    }
+
+    .auth-form {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
+      transition: background-color 0.3s;
+    }
+
+    .auth-form.signup-form {
+      display: none;
+    }
+
+    .dark-mode .auth-form {
+      background: var(--dark-card);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .dark-mode label {
+      color: var(--dark-text);
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cce;
+      border-radius: 6px;
+      font-family: var(--font);
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .dark-mode input[type="email"],
+    .dark-mode input[type="password"],
+    .dark-mode input[type="text"],
+    .dark-mode select {
+      background-color: #2d2d2d;
+      border-color: #444;
+      color: var(--dark-text);
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .dark-mode .toggle-password {
+      color: #aaa;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      font-family: var(--font);
+      cursor: pointer;
+      background-color: var(--primary-blue);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: var(--hover-blue);
+    }
+
+    .dark-mode button:hover {
+      background-color: #003d7a;
+    }
+
+    .switch-link {
+      margin-top: 10px;
+      display: block;
+      font-size: 14px;
+      text-align: center;
+      color: var(--primary-blue);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .dark-mode .switch-link {
+      color: #4da6ff;
+    }
+
+    .switch-link:hover {
+      opacity: 0.8;
+    }
+
+    .lang-select {
+      margin-top: 20px;
+      text-align: center;
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .lang-select button {
+      margin: 0 auto;
+      padding: 8px 16px;
+    }
+
+    .lang-dropdown {
+      display: none;
+      position: absolute;
+      background: var(--white);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 6px;
+      z-index: 1;
+      width: 100%;
+      text-align: left;
+      transition: background-color 0.3s;
+    }
+
+    .dark-mode .lang-dropdown {
+      background: var(--dark-card);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .lang-dropdown button {
+      display: block;
+      width: 100%;
+      margin: 0;
+      border-radius: 0;
+      border-bottom: 1px solid #eee;
+      background: var(--white);
+      color: var(--primary-blue);
+    }
+
+    .dark-mode .lang-dropdown button {
+      background: var(--dark-card);
+      border-bottom: 1px solid #333;
+    }
+
+    .lang-dropdown button:hover {
+      background: var(--light-bg);
+    }
+
+    .dark-mode .lang-dropdown button:hover {
+      background: #2d2d2d;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--gray);
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+
+    .dark-mode footer {
+      color: #888;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--primary-blue);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      z-index: 100;
+    }
+
+    .dark-mode .theme-toggle {
+      background-color: #555;
+    }
+
+    /* New styles for additional features */
+    .password-strength {
+      height: 4px;
+      margin-top: 8px;
+      border-radius: 2px;
+      transition: width 0.3s, background-color 0.3s;
+    }
+
+    .password-rules {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+
+    .dark-mode .password-rules {
+      color: #aaa;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+
+    .remember-me input {
+      margin-right: 8px;
+    }
+
+    .validation-message {
+      font-size: 12px;
+      color: var(--weak);
+      margin-top: 4px;
+      display: none;
+    }
+
+    .email-verification {
+      display: none;
+      background: rgba(0, 123, 255, 0.1);
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .dark-mode .email-verification {
+      background: rgba(0, 123, 255, 0.2);
+    }
+
+    /* Responsive fixes */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .left-section, .right-section {
+        padding: 40px 20px;
+      }
+      .left-section h1 {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top navigation bar -->
+  <div class="top-bar">
+    <div><strong>Veripharm</strong></div>
+    <div class="nav-links">
+      <a href="https://your-about-site.com" target="_blank">About</a>
+      <a href="#login-button">Login</a>
+      <a href="#register-link">Sign Up</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="left-section">
+      <h1 id="main-title">Welcome to Veripharm</h1>
+      <p id="main-desc">Your trusted platform for secure, traceable, and authentic pharmaceutical services. Empowering patients, pharmacists, and regulators with real-time access and control.</p>
+    </div>
+
+    <div class="right-section">
+  
+      <!-- Login Form -->
+      <form class="auth-form login-form" id="login-form" method="post" action="{%url 'login_view'%}">
+        {%csrf_token%%}
+        <h2 id="login-title">Login</h2>
+        <div class="form-group">
+          <label for="email" id="email-label">Email</label>
+          <input type="email" id="email" required placeholder="Enter your email">
+          <div class="validation-message" id="email-validation"></div>
+        </div>
+        <div class="form-group password-wrapper">
+          <label for="password" id="password-label">Password</label>
+          <input type="password" id="password" minlength="8" required placeholder="Enter your password">
+          <button class="toggle-password" aria-label="Toggle password visibility" type="button" onclick="togglePassword('password')">👁️</button>
+          <div class="validation-message" id="password-validation"></div>
+        </div>
+        <div class="remember-me">
+          <input type="checkbox" id="remember-me">
+          <label for="remember-me">Remember me</label>
+        </div>
+        <button type="submit" id="login-button">Login</button>
+        <a href="#" class="switch-link" id="register-link">Don't have an account? Register</a>
+        <a href="#" class="switch-link" id="forgot-link">Forgot Password?</a>
+        <div class="lang-select">
+          <button type="button" onclick="toggleLanguageDropdown()">🌐 Language: English ▼</button>
+          <div class="lang-dropdown" id="lang-dropdown">
+            <button type="button" onclick="translatePage('en')">English</button>
+            <button type="button" onclick="translatePage('fr')">French</button>
+            <button type="button" onclick="translatePage('ak')">Akan</button>
+            <button type="button" onclick="translatePage('ig')">Igbo</button>
+          </div>
+        </div>
+      </form>
+    
+      <!-- Sign-Up Form -->
+      <form class="auth-form signup-form" id="signup-form" method="post" action ="{% url 'signup_view' %}">
+        {% csrf_token %}
+        <h2 id="signup-title">Create Account</h2>
+        <div class="form-group">
+          <label for="signup-email">Email</label>
+          <input type="email" id="signup-email" required placeholder="Enter your email">
+          <div class="validation-message" id="signup-email-validation"></div>
+        </div>
+        <div class="form-group password-wrapper">
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" required placeholder="Create password (min 6 chars)">
+          <button class="toggle-password" aria-label="Toggle password visibility" type="button" onclick="togglePassword('signup-password')">👁️</button>
+          <div class="password-strength" id="password-strength"></div>
+          <p class="password-rules" id="password-rules-text">Must contain at least 6 characters with 2+ letters</p>
+          <div class="validation-message" id="signup-password-validation"></div>
+        </div>
+        <input type="hidden" id="user-role" value="consumer">
+        <div class="email-verification" id="email-verification">
+          <p>Verification email sent! Please check your inbox.</p>
+        </div>
+        <button type="submit" id="signup-button">Register</button>
+        <a href="#" class="switch-link" id="login-link">Already have an account? Login</a>
+      </form>
+    
+    </div>
+    
+  </div>
+
+  <footer aria-label="Copyright information">
+    &copy; 2024 Veripharm. All rights reserved.
+  </footer>
+
+  <button class="theme-toggle" onclick="toggleDarkMode()">🌓</button>
+
+  <script>
+    // Password visibility toggle
+    function togglePassword(fieldId) {
+      const input = document.getElementById(fieldId);
+      input.type = input.type === "password" ? "text" : "password";
+    }
+
+    // Language dropdown toggle
+    function toggleLanguageDropdown() {
+      const dropdown = document.getElementById("lang-dropdown");
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".lang-select")) {
+        document.getElementById("lang-dropdown").style.display = "none";
+      }
+    });
+
+    // Dark mode toggle
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+    }
+
+    // Check for saved dark mode preference
+    if (localStorage.getItem("darkMode") === "true") {
+      document.body.classList.add("dark-mode");
+    }
+
+    // Password strength meter
+    document.getElementById("signup-password").addEventListener("input", function() {
+      const password = this.value;
+      const strengthBar = document.getElementById("password-strength");
+      const strength = checkPasswordStrength(password);
+      
+      strengthBar.style.width = strength.percentage + "%";
+      strengthBar.style.backgroundColor = strength.color;
+    });
+
+    function checkPasswordStrength(password) {
+      const hasLetters = /[a-zA-Z]/.test(password);
+      const hasNumbers = /\d/.test(password);
+      const hasSpecial = /[^a-zA-Z0-9]/.test(password);
+      let strength = 0;
+      
+      if (password.length > 0) strength += 20;
+      if (password.length >= 6) strength += 20;
+      if (hasLetters && password.length >= 6) strength += 20;
+      if (hasNumbers) strength += 20;
+      if (hasSpecial) strength += 20;
+      
+      return {
+        percentage: strength,
+        color: strength < 40 ? "var(--weak)" : strength < 80 ? "var(--medium)" : "var(--strong)"
+      };
+    }
+
+    // Form validation with real-time feedback
+    function setupValidation(inputId, validationId, validateFn, errorMessage) {
+      const input = document.getElementById(inputId);
+      const validation = document.getElementById(validationId);
+      
+      input.addEventListener("input", function() {
+        if (validateFn(this.value)) {
+          validation.style.display = "none";
+          this.style.borderColor = "#cce";
+        } else {
+          validation.textContent = errorMessage;
+          validation.style.display = "block";
+          this.style.borderColor = "var(--weak)";
+        }
+      });
+    }
+
+    // Email validation
+    setupValidation(
+      "email",
+      "email-validation",
+      email => email.includes("@") && email.includes("."),
+      "Please enter a valid email"
+    );
+
+    setupValidation(
+      "signup-email",
+      "signup-email-validation",
+      email => email.includes("@") && email.includes("."),
+      "Please enter a valid email"
+    );
+
+    // Password validation
+    setupValidation(
+      "password",
+      "password-validation",
+      password => password.length >= 8,
+      "Password must be at least 8 characters"
+    );
+
+    setupValidation(
+      "signup-password",
+      "signup-password-validation",
+      password => {
+        const letterCount = (password.match(/[a-zA-Z]/g) || []).length;
+        return password.length >= 6 && letterCount >= 2;
+      },
+      "Must be 6+ chars with 2+ letters"
+    );
+
+    // Toggle between login/signup forms
+    document.getElementById("register-link").addEventListener("click", function(e) {
+      //e.preventDefault();
+      document.getElementById("login-form").style.display = "none";
+      document.getElementById("signup-form").style.display = "block";
+      translatePage(localStorage.getItem("preferredLang") || "en");
+    });
+
+    document.getElementById("login-link").addEventListener("click", function(e) {
+      //e.pre ventDefault();
+      document.getElementById("signup-form").style.display = "none";
+      document.getElementById("login-form").style.display = "block";
+    });
+
+    // Simulate email verification
+    document.getElementById("signup-button").addEventListener("click", function(e) {
+      //e.preventDefault();
+      const email = document.getElementById("signup-email").value;
+      const password = document.getElementById("signup-password").value;
+      
+      // Validate again in case user didn't type anything
+      if (!email.includes("@") || !email.includes(".")) {
+        document.getElementById("signup-email-validation").textContent = "Please enter a valid email";
+        document.getElementById("signup-email-validation").style.display = "block";
+        return;
+      }
+      
+      const letterCount = (password.match(/[a-zA-Z]/g) || []).length;
+      if (password.length < 6 || letterCount < 2) {
+        document.getElementById("signup-password-validation").style.display = "block";
+        return;
+      }
+
+      // Show verification message
+      document.getElementById("email-verification").style.display = "block";
+      
+      // Store user data (in real app, this would go to backend)
+      const user = {
+        email: email,
+        password: password,
+        role: "consumer",
+        verified: false
+      };
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      
+      // Simulate sending verification email
+      setTimeout(() => {
+        alert("Registration successful! Please check your email for verification.");
+        document.getElementById("signup-form").style.display = "none";
+        document.getElementById("login-form").style.display = "block";
+        document.getElementById("email-verification").style.display = "none";
+      }, 1500);
+    });
+
+    // Check "Remember me" on page load
+    document.addEventListener("DOMContentLoaded", function() {
+      if (localStorage.getItem("rememberMe") === "true") {
+        document.getElementById("remember-me").checked = true;
+        const savedEmail = localStorage.getItem("savedEmail");
+        if (savedEmail) {
+          document.getElementById("email").value = savedEmail;
+        }
+      }
+    });
+
+    // Handle login with remember me
+    document.getElementById("login-button").addEventListener("click", function(e) {
+      const rememberMe = document.getElementById("remember-me").checked;
+      const email = document.getElementById("email").value;
+      
+      if (rememberMe) {
+        localStorage.setItem("rememberMe", "true");
+        localStorage.setItem("savedEmail", email);
+      } else {
+        localStorage.removeItem("rememberMe");
+        localStorage.removeItem("savedEmail");
+      }
+      
+      // Continue with login validation...
+    });
+
+    // Translation logic
+    const translations = {
+      fr: {
+        mainTitle: "Bienvenue à Veripharm",
+        mainDesc: "Votre plateforme de confiance pour des services pharmaceutiques sécurisés et traçables.",
+        loginTitle: "Connexion",
+        emailLabel: "E-mail",
+        passwordLabel: "Mot de passe",
+        loginButton: "Se connecter",
+        registerLink: "Pas de compte ? Inscrivez-vous",
+        forgotLink: "Mot de passe oublié?",
+        rememberMe: "Se souvenir de moi",
+        signupTitle: "Créer un compte",
+        signupButton: "S'inscrire",
+        loginLink: "Vous avez déjà un compte? Connexion",
+        passwordRules: "Doit contenir 6+ caractères avec 2+ lettres",
+        verificationMessage: "Email de vérification envoyé! Veuillez vérifier votre boîte de réception."
+      },
+      ak: {
+        mainTitle: "Akwaaba wɔ Veripharm",
+        mainDesc: "Wo gyidi mu nhyehyɛe a ɛhwɛ aduro yiyedi ne nokware so.",
+        loginTitle: "Fa kɔɔ mu",
+        emailLabel: "Email",
+        passwordLabel: "Kurow a wɔde kɔɔ mu",
+        loginButton: "Fa kɔɔ mu",
+        registerLink: "Wo nnwom akontaabi? Dwumadi dzi kan",
+        forgotLink: "Wɔagye wo kurow a wɔde kɔɔ mu?",
+        rememberMe: "Ka me wɔ mema",
+        signupTitle: "Yɛ Dwumadi",
+        signupButton: "Dwumadi",
+        loginLink: "Wowo akontaabi? Fa kɔɔ mu",
+        passwordRules: "Ɛsɛ sɛ ɛwɔ 6+ nkyerɛwee ne 2+ ahyɛnsode",
+        verificationMessage: "Email a wɔde bɛhwehwɛ nokware no asoma! Yɛsrɛ sɛ hwɛ wo email inbox."
+      },
+      ig: {
+        mainTitle: "Nnọọ Veripharm",
+        mainDesc: "Ọ bụ ikpo okwu gị a pụrụ ịtụkwasị obi maka ọgwụ ziri ezi na nchekwa.",
+        loginTitle: "Banye",
+        emailLabel: "Email",
+        passwordLabel: "Okwuntughe",
+        loginButton: "Banye",
+        registerLink: "Ị naghị enwe akaụntụ? Debanye",
+        forgotLink: "Chefuru okwuntughe?",
+        rememberMe: "Cheta m",
+        signupTitle: "Mepụta Akaụntụ",
+        signupButton: "Debanye aha",
+        loginLink: "Ị nweela akaụntụ? Banye",
+        passwordRules: "Ga-enwerịrị opekata mpe 6 mkpụrụedemede nwere 2+ mkpụrụedemede",
+        verificationMessage: "E zigara email nkwenye! Biko lelee igbe mbata gị."
+      },
+      en: {
+        mainTitle: "Welcome to Veripharm",
+        mainDesc: "Your trusted platform for secure, traceable, and authentic pharmaceutical services. Empowering patients, pharmacists, and regulators with real-time access and control.",
+        loginTitle: "Login",
+        emailLabel: "Email",
+        passwordLabel: "Password",
+        loginButton: "Login",
+        registerLink: "Don't have an account? Register",
+        forgotLink: "Forgot Password?",
+        rememberMe: "Remember me",
+        signupTitle: "Create Account",
+        signupButton: "Register",
+        loginLink: "Already have an account? Login",
+        passwordRules: "Must contain at least 6 characters with 2+ letters",
+        verificationMessage: "Verification email sent! Please check your inbox."
+      }
+    };
+
+    // Translate the page
+    function translatePage(lang) {
+      const t = translations[lang];
+      document.getElementById("main-title").textContent = t.mainTitle;
+      document.getElementById("main-desc").textContent = t.mainDesc;
+      
+      // Login form translations
+      if (document.getElementById("login-title")) {
+        document.getElementById("login-title").textContent = t.loginTitle;
+        document.getElementById("email-label").textContent = t.emailLabel;
+        document.getElementById("password-label").textContent = t.passwordLabel;
+        document.getElementById("login-button").textContent = t.loginButton;
+        document.getElementById("register-link").textContent = t.registerLink;
+        document.getElementById("forgot-link").textContent = t.forgotLink;
+        document.querySelector("label[for='remember-me']").textContent = t.rememberMe;
+      }
+      
+      // Signup form translations
+      if (document.getElementById("signup-title")) {
+        document.getElementById("signup-title").textContent = t.signupTitle;
+        document.getElementById("signup-button").textContent = t.signupButton;
+        document.getElementById("login-link").textContent = t.loginLink;
+        document.getElementById("password-rules-text").textContent = t.passwordRules;
+        document.querySelector("#email-verification p").textContent = t.verificationMessage;
+      }
+      
+      document.querySelector(".lang-select button").innerHTML = `🌐 Language: ${lang === 'en' ? 'English' : lang === 'fr' ? 'French' : lang === 'ak' ? 'Akan' : 'Igbo'} ▼`;
+      localStorage.setItem("preferredLang", lang);
+      document.getElementById("lang-dropdown").style.display = "none";
+    }
+
+    // Load saved preferences
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedLang = localStorage.getItem("preferredLang") || "en";
+      translatePage(savedLang);
+      
+      if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark-mode");
+      }
+    });
+  </script>
+</body>
+</html>

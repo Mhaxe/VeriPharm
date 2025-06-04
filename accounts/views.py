@@ -4,18 +4,20 @@ from .forms import CustomUserCreationForm, CustomLoginForm
 from django.contrib.auth.decorators import login_required
 
 def home_view(request):
-    return render(request,'home.html')
+    return render(request,'hhome.html')
 
 def signup_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+            user.role = request.POST.get('role','consumer')
+            user.save()
             login(request, user)
             return redirect('consumer:consumer_home') 
     else:
         form = CustomUserCreationForm()
-    return render(request, 'signup.html', {'form': form})
+    return render(request, 'hhome.html', {'form': form})
 
 def login_view(request):
     if request.method == 'POST':
@@ -37,7 +39,7 @@ def login_view(request):
             
     else:
         form = CustomLoginForm()
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'hhome.html', {'form': form})
 
 @login_required
 def logout_view(request):
