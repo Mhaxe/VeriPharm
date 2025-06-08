@@ -7,22 +7,31 @@ def home_view(request):
     return render(request,'hhome.html')
 
 def signup_view(request):
+    print("signup_view running")
     if request.method == 'POST':
+        print("POST req made to signup_view")
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
+            print("valid form from signup_view")
             user = form.save(commit=False)
             user.role = request.POST.get('role','consumer')
             user.save()
             login(request, user)
-            return redirect('consumer:consumer_home') 
+            return redirect('consumer:consumer_home')
+        else:
+             print("Form errors:", form.errors)  # 🔍 log why it failed 
     else:
+        print("invalid form from signup_view")
         form = CustomUserCreationForm()
     return render(request, 'hhome.html', {'form': form})
 
 def login_view(request):
+    print("login_view running")
     if request.method == 'POST':
+        print("POST req made to login_view")
         form = CustomLoginForm(data=request.POST)
         if form.is_valid():
+            print("valid form from login_view")
             user = form.get_user()
             role = user.role
             login(request, user)
@@ -38,6 +47,7 @@ def login_view(request):
                 return redirect('dashboard')#to be changed to an error page i guess
             
     else:
+        print("invalid form from login_view")
         form = CustomLoginForm()
     return render(request, 'hhome.html', {'form': form})
 

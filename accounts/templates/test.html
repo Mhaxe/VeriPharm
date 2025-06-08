@@ -22,14 +22,16 @@
     }
 
     body {
-      margin: 0;
-      font-family: var(--font);
-      background: 
-        linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
-        url('img/veripharm-pill.jpg') no-repeat center center fixed;
-      background-size: cover;
-      transition: background-color 0.5s, color 0.5s;
-    }
+  margin: 0;
+  font-family: var(--font);
+  background: 
+    linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+    url('veripharm-pill.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s;
+}
+
 
     body.dark-mode {
       background-color: var(--dark-bg);
@@ -140,16 +142,17 @@
     }
 
     .left-section {
-      flex: 1;
-      background-image: url('img/veripharm-pill.jpg'); 
+      background: linear-gradient(135deg, var(--primary-blue), #0066cc), 
+          img('img/veripharm-pill.jpg') no-repeat center center;
       background-size: cover;
-      background-position: center;
-      position: relative;
+      color: var(--white);
+      padding: 60px 40px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 60px 40px;
-      color: white;
+      position: relative;
+      overflow: hidden;
+      flex: 1;
     }
 
     .left-section::before {
@@ -257,6 +260,7 @@
       color: var(--dark-text);
     }
 
+    input[type="email"],
     input[type="password"],
     input[type="text"],
     select {
@@ -275,6 +279,7 @@
       box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
     }
 
+    .dark-mode input[type="email"],
     .dark-mode input[type="password"],
     .dark-mode input[type="text"],
     .dark-mode select {
@@ -488,7 +493,8 @@
 
     <div class="right-section">
       <!-- Login Form -->
-      <form class="auth-form login-form" id="login-form">
+      <form class="auth-form login-form" id="login-form" action="{%url 'login'%}">
+        {% csrf_token %} 
         <h2 id="login-title">Login</h2>
         <div class="form-group">
           <label for="username" id="username-label">Username</label>
@@ -505,22 +511,23 @@
           <input type="checkbox" id="remember-me">
           <label for="remember-me">Remember me</label>
         </div>
-        <button type="button" id="login-button">Login</button>
+        <button type="submit" id="login-button">Login</button>
         <a href="#" class="switch-link" id="register-link">Don't have an account? Register</a>
         <a href="#" class="switch-link" id="forgot-link">Forgot Password?</a>
-      </div>
+      </form>
 
       <!-- Sign-Up Form -->
-      <div class="auth-form signup-form" id="signup-form">
+      <form class="auth-form signup-form" id="signup-form" action="{% url 'signup'%}">
+        {% csrf_token %} 
         <h2 id="signup-title">Create Account</h2>
         <div class="form-group">
           <label for="signup-username">Username</label>
-          <input type="text" id="signup-username" required placeholder="Choose a username">
-          <div class="validation-message" id="signup-username-validation"></div>
+          <input type="text" id="signup-username" required placeholder="Enter your username">
+          <div class="validation-message" id="signup-email-validation"></div>
         </div>
         <div class="form-group password-wrapper">
           <label for="signup-password">Password</label>
-          <input type="password" id="signup-password" required placeholder="Create password (min 6 chars)">
+          <input name="password1" type="password" id="signup-password" required placeholder="Create password (min 6 chars)">
           <label class="show-password-toggle"><input type="checkbox" onchange="togglePassword('signup-password')"> Show password</label>
           <div class="password-strength" id="password-strength"></div>
           <p class="password-rules" id="password-rules-text">Must contain at least 6 characters with 2+ letters</p>
@@ -528,17 +535,17 @@
         </div>
         <div class="form-group password-wrapper">
           <label for="confirm-password">Confirm Password</label>
-          <input type="password" id="confirm-password" required placeholder="Repeat password">
+          <input name="password2" type="password" id="confirm-password" required placeholder="Repeat password">
           <label class="show-password-toggle"><input type="checkbox" onchange="togglePassword('confirm-password')"> Show password</label>
           <div class="validation-message" id="confirm-password-validation"></div>
         </div>
-        <input type="hidden" id="user-role" value="consumer">
+        <input type="hidden" id="user-role" value="consumer" name="role">
         <div class="email-verification" id="email-verification">
           <p>Verification email sent! Please check your inbox.</p>
         </div>
-        <button type="button" id="signup-button">Register</button>
+        <button type="submit" id="signup-button">Register</button>
         <a href="#" class="switch-link" id="login-link">Already have an account? Login</a>
-      </div>
+      </form>
     </div>
   </div>
 
@@ -734,19 +741,19 @@
 
     // Toggle between login/signup forms
     document.getElementById('register-link')?.addEventListener('click', function(e) {
-      e.preventDefault();
+      //e.preventDefault();
       document.getElementById('login-form').style.display = 'none';
       document.getElementById('signup-form').style.display = 'block';
       translatePage(localStorage.getItem('preferredLang') || 'en');
     });
 
     document.getElementById('login-link')?.addEventListener('click', function(e) {
-      e.preventDefault();
+      //e.preventDefault();
       document.getElementById('signup-form').style.display = 'none';
       document.getElementById('login-form').style.display = 'block';
     });
 
-    // Simulate registration
+    // Simulate email verification
     document.getElementById('signup-button')?.addEventListener('click', function(e) {
       //e.preventDefault();
       const username = document.getElementById('signup-username').value;
@@ -795,6 +802,7 @@
       }, 1500);
     });
 
+
     // Remember me functionality
     document.getElementById('remember-me')?.addEventListener('change', function() {
       localStorage.setItem('rememberMe', this.checked);
@@ -822,13 +830,14 @@
       console.log('Login attempted with:', username);
     });
 
+
     // Translation logic
     const translations = {
       fr: {
         mainTitle: "Bienvenue à Veripharm",
         mainDesc: "Votre plateforme de confiance pour des services pharmaceutiques sécurisés et traçables.",
         loginTitle: "Connexion",
-        usernameLabel: "Nom d'utilisateur",
+        emailLabel: "E-mail",
         passwordLabel: "Mot de passe",
         loginButton: "Se connecter",
         registerLink: "Pas de compte ? Inscrivez-vous",
@@ -838,29 +847,29 @@
         signupButton: "S'inscrire",
         loginLink: "Vous avez déjà un compte? Connexion",
         passwordRules: "Doit contenir 6+ caractères avec 2+ lettres",
-        verificationMessage: "Inscription réussie! Vous pouvez maintenant vous connecter."
+        verificationMessage: "Email de vérification envoyé! Veuillez vérifier votre boîte de réception."
       },
       ak: {
         mainTitle: "Akwaaba ba Veripharm",
         mainDesc: "Wo gyidi mu nhyehyɛe a ɛhwɛ aduro yiyedi ne nokware so.",
-        loginTitle: "Wura Mu",
-        usernameLabel: "Dinom a Wɔde Wura Mu",
-        passwordLabel: "Bo woPaswɛde",
-        loginButton: "Wura Mu",
-        registerLink: "Ka yɛn ho",
-        forgotLink: "wo werɛ afi wo paswɛde Paswɛde anaa?",
-        rememberMe: "Kae me ",
-        signupTitle: "Ka yɛn ho",
+        loginTitle: "Fa kɔɔ mu",
+        emailLabel: "Email",
+        passwordLabel: "Kurow a wɔde kɔɔ mu",
+        loginButton: "Fa kɔɔ mu",
+        registerLink: "Wo nnwom akontaabi? Dwumadi dzi kan",
+        forgotLink: "Wɔagye wo kurow a wɔde kɔɔ mu?",
+        rememberMe: "Ka me wɔ mema",
+        signupTitle: "Yɛ Dwumadi",
         signupButton: "Dwumadi",
-        loginLink: "Wowo account deda? Mea ha",
+        loginLink: "Wowo akontaabi? Fa kɔɔ mu",
         passwordRules: "Ɛsɛ sɛ ɛwɔ 6+ nkyerɛwee ne 2+ ahyɛnsode",
-        verificationMessage: "Wo ahyɛde no ayɛ yiye! Wobɛtumi afiri seisei wura mu."
+        verificationMessage: "Email a wɔde bɛhwehwɛ nokware no asoma! Yɛsrɛ sɛ hwɛ wo email inbox."
       },
       ig: {
         mainTitle: "Nnọọ Veripharm",
         mainDesc: "Ọ bụ ikpo okwu gị a pụrụ ịtụkwasị obi maka ọgwụ ziri ezi na nchekwa.",
         loginTitle: "Banye",
-        usernameLabel: "Aha njirimara",
+        emailLabel: "Email",
         passwordLabel: "Okwuntughe",
         loginButton: "Banye",
         registerLink: "Ị naghị enwe akaụntụ? Debanye",
@@ -870,13 +879,13 @@
         signupButton: "Debanye aha",
         loginLink: "Ị nweela akaụntụ? Banye",
         passwordRules: "Ga-enwerịrị opekata mpe 6 mkpụrụedemede nwere 2+ mkpụrụedemede",
-        verificationMessage: "Ndebanye aha gara nke ọma! I nwere ike ịbanye ugbu a."
+        verificationMessage: "E zigara email nkwenye! Biko lelee igbe mbata gị."
       },
       en: {
         mainTitle: "Welcome to Veripharm",
         mainDesc: "Your trusted platform for secure, traceable, and authentic pharmaceutical services. Empowering patients, pharmacists, and regulators with real-time access and control.",
         loginTitle: "Login",
-        usernameLabel: "Username",
+        emailLabel: "Email",
         passwordLabel: "Password",
         loginButton: "Login",
         registerLink: "Don't have an account? Register",
@@ -886,7 +895,7 @@
         signupButton: "Register",
         loginLink: "Already have an account? Login",
         passwordRules: "Must contain at least 6 characters with 2+ letters",
-        verificationMessage: "Registration successful! You can now login."
+        verificationMessage: "Verification email sent! Please check your inbox."
       }
     };
 
@@ -899,7 +908,7 @@
         'main-title': 'mainTitle',
         'main-desc': 'mainDesc',
         'login-title': 'loginTitle',
-        'username-label': 'usernameLabel',
+        'email-label': 'emailLabel',
         'password-label': 'passwordLabel',
         'login-button': 'loginButton',
         'register-link': 'registerLink',
