@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Batch,BatchDistribution,Drug
+from .models import Batch,BatchDistribution,Drug
 
 # Register your models here.
 admin.site.register(Batch)
