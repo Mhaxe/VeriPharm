@@ -1,9 +1,12 @@
 from django.db import models
 
 # Create your models here.
-# models.py
 from django.db import models
 from django.conf import settings
+import uuid
+import qrcode
+from io import BytesIO
+from django.core.files import File
 
 class Batch(models.Model):
     batch_id = models.CharField(max_length=100)
@@ -20,9 +23,20 @@ class Drug(models.Model):
     name = models.CharField(max_length=100)
     batch = models.ForeignKey(Batch,on_delete=models.CASCADE)
     qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
+    qr_code_string = models.CharField(max_length=255,unique=True)
+    scanned = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.qr_code:
+            # Create QR image from the string
+            qr = qrcode.make(str(self.qr_code_string))
+            buffer = BytesIO()
+            qr.save(buffer, format='PNG')
+            self.qr_code.save(f'{self.product_qr_string}.png', File(buffer), save=False)
+        super().save(*args, **kwargs)
     
 
 class BatchDistribution(models.Model):
