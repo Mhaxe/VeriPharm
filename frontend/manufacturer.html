@@ -361,284 +361,11 @@
   </header>
 
   <div class="container">
-    
-
-<div class="section">
+    <div class="section">
       <h2>Drug Inventory by Category</h2>
       <div class="dashboard-grid">
-        <div>
-          <!-- Drug Categories -->
-          <div class="drug-category">
-            <div class="category-header" onclick="toggleCategory('antibiotics')">
-              <span>Antibiotics <span class="category-count">(85)</span></span>
-              <span class="toggle-icon">→</span>
-            </div>
-            <div class="drug-list" id="antibiotics">
-              <div class="drug-item">
-                <span>Amoxicillin-Clavulanic Acid</span>
-                <span class="inventory-cell" data-quantity="50">50</span>
-              </div>
-              <div class="drug-item">
-                <span>Ciprofloxacin</span>
-                <span class="inventory-cell" data-quantity="20">20</span>
-              </div>
-              <div class="drug-item">
-                <span>Azithromycin</span>
-                <span class="inventory-cell" data-quantity="15">15</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="drug-category">
-            <div class="category-header" onclick="toggleCategory('antimalarials')">
-              <span>Antimalarials <span class="category-count">(120)</span></span>
-              <span class="toggle-icon">→</span>
-            </div>
-            <div class="drug-list" id="antimalarials">
-              <div class="drug-item">
-                <span>Artemether-Lumefantrine</span>
-                <span class="inventory-cell" data-quantity="120">120</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="drug-category">
-            <div class="category-header" onclick="toggleCategory('painkillers')">
-              <span>Painkillers <span class="category-count">(90)</span></span>
-              <span class="toggle-icon">→</span>
-            </div>
-            <div class="drug-list" id="painkillers">
-              <div class="drug-item">
-                <span>Ibuprofen</span>
-                <span class="inventory-cell" data-quantity="60">60</span>
-              </div>
-              <div class="drug-item">
-                <span>Paracetamol</span>
-                <span class="inventory-cell" data-quantity="30">30</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="drug-category">
-            <div class="category-header" onclick="toggleCategory('opioids')">
-              <span>Opioids <span class="category-count">(30)</span></span>
-              <span class="toggle-icon">→</span>
-            </div>
-            <div class="drug-list" id="opioids">
-              <div class="drug-item">
-                <span>Tramadol</span>
-                <span class="inventory-cell" data-quantity="30">30</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="drug-category">
-            <div class="category-header" onclick="toggleCategory('antihypertensives')">
-              <span>Antihypertensives <span class="category-count">(55)</span></span>
-              <span class="toggle-icon">→</span>
-            </div>
-            <div class="drug-list" id="antihypertensives">
-              <div class="drug-item">
-                <span>Lisinopril</span>
-                <span class="inventory-cell" data-quantity="55">55</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="drug-category">
-            <div class="category-header" onclick="toggleCategory('antidiabetics')">
-              <span>Antidiabetics <span class="category-count">(95)</span></span>
-              <span class="toggle-icon">→</span>
-            </div>
-            <div class="drug-list" id="antidiabetics">
-              <div class="drug-item">
-                <span>Metformin</span>
-                <span class="inventory-cell" data-quantity="95">95</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="drug-category">
-            <div class="category-header" onclick="toggleCategory('antacids')">
-              <span>Antacids/PPIs <span class="category-count">(20)</span></span>
-              <span class="toggle-icon">→</span>
-            </div>
-            <div class="drug-list" id="antacids">
-              <div class="drug-item">
-                <span>Omeprazole</span>
-                <span class="inventory-cell" data-quantity="20">20</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="drug-category">
-            <div class="category-header" onclick="toggleCategory('vitamins')">
-              <span>Vitamin Supplements <span class="category-count">(200)</span></span>
-              <span class="toggle-icon">→</span>
-            </div>
-            <div class="drug-list" id="vitamins">
-              <div class="drug-item">
-                <span>Iron + Folic Acid</span>
-                <span class="inventory-cell" data-quantity="200">200</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="drug-category">
-            <div class="category-header" onclick="toggleCategory('glaucoma')">
-              <span>Glaucoma Medications <span class="category-count">(15)</span></span>
-              <span class="toggle-icon">→</span>
-            </div>
-            <div class="drug-list" id="glaucoma">
-              <div class="drug-item">
-                <span>Latanoprost</span>
-                <span class="inventory-cell" data-quantity="15">15</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="drug-category">
-            <div class="category-header" onclick="toggleCategory('antifungals')">
-              <span>Antifungals <span class="category-count">(40)</span></span>
-              <span class="toggle-icon">→</span>
-            </div>
-            <div class="drug-list" id="antifungals">
-              <div class="drug-item">
-                <span>Clotrimazole</span>
-                <span class="inventory-cell" data-quantity="40">40</span>
-              </div>
-            </div>
-          </div>
-          
-          
-<div class="drug-category">
-  <div class="category-header" onclick="toggleCategory('antivirals')">
-    <span>Antivirals <span class="category-count">(25)</span></span>
-    <span class="toggle-icon">→</span>
-  </div>
-  <div class="drug-list" id="antivirals">
-    <div class="drug-item">
-      <span>Acyclovir</span>
-      <span class="inventory-cell" data-quantity="25">25</span>
-    </div>
-  </div>
-</div>
-
-<div class="drug-category">
-  <div class="category-header" onclick="toggleCategory('corticosteroids')">
-    <span>Corticosteroids <span class="category-count">(25)</span></span>
-    <span class="toggle-icon">→</span>
-  </div>
-  <div class="drug-list" id="corticosteroids">
-    <div class="drug-item">
-      <span>Prednisone</span>
-      <span class="inventory-cell" data-quantity="25">25</span>
-    </div>
-  </div>
-</div>
-
-<div class="drug-category">
-  <div class="category-header" onclick="toggleCategory('antidepressants')">
-    <span>Antidepressants <span class="category-count">(25)</span></span>
-    <span class="toggle-icon">→</span>
-  </div>
-  <div class="drug-list" id="antidepressants">
-    <div class="drug-item">
-      <span>Fluoxetine</span>
-      <span class="inventory-cell" data-quantity="25">25</span>
-    </div>
-  </div>
-</div>
-
-<div class="drug-category">
-  <div class="category-header" onclick="toggleCategory('topical_agents')">
-    <span>Topical Agents <span class="category-count">(25)</span></span>
-    <span class="toggle-icon">→</span>
-  </div>
-  <div class="drug-list" id="topical_agents">
-    <div class="drug-item">
-      <span>Hydrocortisone Cream</span>
-      <span class="inventory-cell" data-quantity="25">25</span>
-    </div>
-  </div>
-</div>
-
-<div class="drug-category">
-  <div class="category-header" onclick="toggleCategory('general_creams')">
-    <span>General Creams <span class="category-count">(25)</span></span>
-    <span class="toggle-icon">→</span>
-  </div>
-  <div class="drug-list" id="general_creams">
-    <div class="drug-item">
-      <span>Moisturizing Cream</span>
-      <span class="inventory-cell" data-quantity="25">25</span>
-    </div>
-  </div>
-</div>
-
-
-<!-- Add New Drug Form -->
-          <div class="add-drug-form">
-            <h2>Add New Drug</h2>
-            <form id="addDrugForm">
-              <div class="form-row">
-                <div>
-                  <label for="newDrugCategory">Category</label>
-                  <select id="newDrugCategory" required>
-                    <option value="">Select Category</option>
-                    <option value="antibiotics">Antibiotics</option>
-                    <option value="antimalarials">Antimalarials</option>
-                    <option value="painkillers">Painkillers</option>
-                    <option value="opioids">Opioids</option>
-                    <option value="antihypertensives">Antihypertensives</option>
-                    <option value="antidiabetics">Antidiabetics</option>
-                    <option value="antacids">Antacids/PPIs</option>
-                    <option value="vitamins">Vitamin Supplements</option>
-                    <option value="glaucoma">Glaucoma Medications</option>
-                    <option value="antifungals">Antifungals</option>
-      <option value="decongestants">Decongestants</option>
-      <option value="general_creams">General Creams</option>
-      <option value="topical_agents">Topical Agents</option>
-      <option value="antidepressants">Antidepressants</option>
-      <option value="corticosteroids">Corticosteroids</option>
-      <option value="antivirals">Antivirals</option>
-                  </select>
-                </div>
-                <div>
-                  
-<label for="newDrugName">Drug Name</label>
-<input type="text" id="newDrugName" list="drugSuggestions" placeholder="Enter drug name or select" required>
-<datalist id="drugSuggestions">
-  <option value="Amoxicillin-Clavulanic Acid">
-  <option value="Ciprofloxacin">
-  <option value="Azithromycin">
-  <option value="Artemether-Lumefantrine">
-  <option value="Ibuprofen">
-  <option value="Paracetamol">
-  <option value="Tramadol">
-  <option value="Lisinopril">
-  <option value="Metformin">
-  <option value="Omeprazole">
-  <option value="Iron + Folic Acid">
-  <option value="Latanoprost">
-  <option value="Clotrimazole">
-  <option value="Pseudoephedrine">
-  <option value="Acyclovir">
-  <option value="Prednisone">
-  <option value="Fluoxetine">
-  <option value="Hydrocortisone Cream">
-  <option value="Moisturizing Cream">
-</datalist>
-
-                </div>
-              </div>
-              <div>
-                <label for="newDrugQuantity">Quantity</label>
-                <input type="number" id="newDrugQuantity" placeholder="Enter quantity" min="1" required>
-              </div>
-              <button type="submit">Add Drug to Inventory</button>
-            </form>
-          </div>
+        <div id="inventory-column">
+          <!-- Drug Categories (the lists will be filled by JS) -->
         </div>
         
         <div>
@@ -656,12 +383,12 @@
               <option value="vitamins">Vitamin Supplements</option>
               <option value="glaucoma">Glaucoma Medications</option>
               <option value="antifungals">Antifungals</option>
-      <option value="decongestants">Decongestants</option>
-      <option value="general_creams">General Creams</option>
-      <option value="topical_agents">Topical Agents</option>
-      <option value="antidepressants">Antidepressants</option>
-      <option value="corticosteroids">Corticosteroids</option>
-      <option value="antivirals">Antivirals</option>
+              <option value="decongestants">Decongestants</option>
+              <option value="general_creams">General Creams</option>
+              <option value="topical_agents">Topical Agents</option>
+              <option value="antidepressants">Antidepressants</option>
+              <option value="corticosteroids">Corticosteroids</option>
+              <option value="antivirals">Antivirals</option>
             </select>
             
             <select id="drugSelection" required disabled>
@@ -677,26 +404,7 @@
           
           <div class="section">
             <h2>Recent Transfers</h2>
-            <div class="transfer-log">
-              <div class="transfer-log-item">
-                <div>Amoxicillin-Clavulanic Acid</div>
-                <div>15</div>
-                <div>Central Hospital Pharmacy</div>
-                <div>Today</div>
-              </div>
-              <div class="transfer-log-item">
-                <div>Ibuprofen</div>
-                <div>25</div>
-                <div>Regional Clinic Pharmacy</div>
-                <div>Yesterday</div>
-              </div>
-              <div class="transfer-log-item">
-                <div>Omeprazole</div>
-                <div>5</div>
-                <div>Main Street Pharmacy</div>
-                <div>2 days ago</div>
-              </div>
-            </div>
+            <div class="transfer-log" id="transferLog"></div>
           </div>
           
           <!-- Analytics Section -->
@@ -705,30 +413,77 @@
             <div class="analytics-grid">
               <div class="analytics-card">
                 <h3>Top 5 Requested Drugs</h3>
-                <ul class="analytics-list" id="topDrugsList">
-                  <li><span>Amoxicillin-Clavulanic Acid</span> <span>85 transfers</span></li>
-                  <li><span>Ibuprofen</span> <span>72 transfers</span></li>
-                  <li><span>Artemether-Lumefantrine</span> <span>65 transfers</span></li>
-                  <li><span>Metformin</span> <span>58 transfers</span></li>
-                  <li><span>Paracetamol</span> <span>45 transfers</span></li>
-                </ul>
+                <ul class="analytics-list" id="topDrugsList"></ul>
               </div>
               <div class="analytics-card">
                 <h3>Top 5 Delivery Locations</h3>
-                <ul class="analytics-list" id="topLocationsList">
-                  <li><span>Central Hospital Pharmacy</span> <span>120 deliveries</span></li>
-                  <li><span>Main Street Pharmacy</span> <span>95 deliveries</span></li>
-                  <li><span>Regional Clinic Pharmacy</span> <span>78 deliveries</span></li>
-                  <li><span>University Medical Pharmacy</span> <span>65 deliveries</span></li>
-                  <li><span>Green Valley Pharmacy</span> <span>52 deliveries</span></li>
-                </ul>
+                <ul class="analytics-list" id="topLocationsList"></ul>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <!-- Add New Drug Form -->
+      <div class="add-drug-form">
+        <h2>Add New Drug</h2>
+        <form id="addDrugForm">
+          <div class="form-row">
+            <div>
+              <label for="newDrugCategory">Category</label>
+              <select id="newDrugCategory" required>
+                <option value="">Select Category</option>
+                <option value="antibiotics">Antibiotics</option>
+                <option value="antimalarials">Antimalarials</option>
+                <option value="painkillers">Painkillers</option>
+                <option value="opioids">Opioids</option>
+                <option value="antihypertensives">Antihypertensives</option>
+                <option value="antidiabetics">Antidiabetics</option>
+                <option value="antacids">Antacids/PPIs</option>
+                <option value="vitamins">Vitamin Supplements</option>
+                <option value="glaucoma">Glaucoma Medications</option>
+                <option value="antifungals">Antifungals</option>
+                <option value="decongestants">Decongestants</option>
+                <option value="general_creams">General Creams</option>
+                <option value="topical_agents">Topical Agents</option>
+                <option value="antidepressants">Antidepressants</option>
+                <option value="corticosteroids">Corticosteroids</option>
+                <option value="antivirals">Antivirals</option>
+              </select>
+            </div>
+            <div>
+              <label for="newDrugName">Drug Name</label>
+              <input type="text" id="newDrugName" list="drugSuggestions" placeholder="Enter drug name or select" required>
+              <datalist id="drugSuggestions">
+                <option value="Amoxicillin-Clavulanic Acid">
+                <option value="Ciprofloxacin">
+                <option value="Azithromycin">
+                <option value="Artemether-Lumefantrine">
+                <option value="Ibuprofen">
+                <option value="Paracetamol">
+                <option value="Tramadol">
+                <option value="Lisinopril">
+                <option value="Metformin">
+                <option value="Omeprazole">
+                <option value="Iron + Folic Acid">
+                <option value="Latanoprost">
+                <option value="Clotrimazole">
+                <option value="Pseudoephedrine">
+                <option value="Acyclovir">
+                <option value="Prednisone">
+                <option value="Fluoxetine">
+                <option value="Hydrocortisone Cream">
+                <option value="Moisturizing Cream">
+              </datalist>
+            </div>
+          </div>
+          <div>
+            <label for="newDrugQuantity">Quantity</label>
+            <input type="number" id="newDrugQuantity" placeholder="Enter quantity" min="1" required>
+          </div>
+          <button type="submit">Add Drug to Inventory</button>
+        </form>
+      </div>
     </div>
-
     <div class="section notice">
       Important: Please ensure that all medication packages are tagged with QR codes prior to transfer.
     </div>
@@ -744,152 +499,192 @@
   </div>
 
   <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // --- Drug Database ---
+    const drugDatabase = {
+      antibiotics: [
+        { name: 'Amoxicillin-Clavulanic Acid', quantity: 50 },
+        { name: 'Ciprofloxacin', quantity: 20 },
+        { name: 'Azithromycin', quantity: 15 }
+      ],
+      antimalarials: [
+        { name: 'Artemether-Lumefantrine', quantity: 120 }
+      ],
+      painkillers: [
+        { name: 'Ibuprofen', quantity: 60 },
+        { name: 'Paracetamol', quantity: 30 }
+      ],
+      opioids: [
+        { name: 'Tramadol', quantity: 30 }
+      ],
+      antihypertensives: [
+        { name: 'Lisinopril', quantity: 55 }
+      ],
+      antidiabetics: [
+        { name: 'Metformin', quantity: 95 }
+      ],
+      antacids: [
+        { name: 'Omeprazole', quantity: 20 }
+      ],
+      vitamins: [
+        { name: 'Iron + Folic Acid', quantity: 200 }
+      ],
+      glaucoma: [
+        { name: 'Latanoprost', quantity: 15 }
+      ],
+      antifungals: [
+        { name: 'Clotrimazole', quantity: 40 }
+      ],
+      decongestants: [
+        { name: 'Pseudoephedrine', quantity: 45 }
+      ],
+      antivirals: [
+        { name: 'Acyclovir', quantity: 25 }
+      ],
+      corticosteroids: [
+        { name: 'Prednisone', quantity: 25 }
+      ],
+      antidepressants: [
+        { name: 'Fluoxetine', quantity: 25 }
+      ],
+      topical_agents: [
+        { name: 'Hydrocortisone Cream', quantity: 25 }
+      ],
+      general_creams: [
+        { name: 'Moisturizing Cream', quantity: 25 }
+      ]
+    };
 
-const drugDatabase = {
-  antibiotics: [
-    { name: 'Amoxicillin-Clavulanic Acid', quantity: 50 },
-    { name: 'Ciprofloxacin', quantity: 20 },
-    { name: 'Azithromycin', quantity: 15 }
-  ],
-  antimalarials: [
-    { name: 'Artemether-Lumefantrine', quantity: 120 }
-  ],
-  painkillers: [
-    { name: 'Ibuprofen', quantity: 60 },
-    { name: 'Paracetamol', quantity: 30 }
-  ],
-  opioids: [
-    { name: 'Tramadol', quantity: 30 }
-  ],
-  antihypertensives: [
-    { name: 'Lisinopril', quantity: 55 }
-  ],
-  antidiabetics: [
-    { name: 'Metformin', quantity: 95 }
-  ],
-  antacids: [
-    { name: 'Omeprazole', quantity: 20 }
-  ],
-  vitamins: [
-    { name: 'Iron + Folic Acid', quantity: 200 }
-  ],
-  glaucoma: [
-    { name: 'Latanoprost', quantity: 15 }
-  ],
-  antifungals: [
-    { name: 'Clotrimazole', quantity: 40 }
-  ],
-  decongestants: [
-    { name: 'Pseudoephedrine', quantity: 45 }
-  ],
-  antivirals: [
-    { name: 'Acyclovir', quantity: 25 }
-  ],
-  corticosteroids: [
-    { name: 'Prednisone', quantity: 25 }
-  ],
-  antidepressants: [
-    { name: 'Fluoxetine', quantity: 25 }
-  ],
-  topical_agents: [
-    { name: 'Hydrocortisone Cream', quantity: 25 }
-  ],
-  general_creams: [
-    { name: 'Moisturizing Cream', quantity: 25 }
-  ]
-};
+    // --- Analytics Counters ---
+    const transferCounts = {};
+    const locationCounts = {};
 
+    // --- Category Descriptions ---
+    const categoryDefinitions = {
+      antibiotics: "Medicines that fight bacterial infections by killing or slowing the growth of bacteria.",
+      antimalarials: "Drugs used to prevent and treat malaria, a disease caused by parasites.",
+      painkillers: "Medications that relieve pain without causing loss of consciousness.",
+      opioids: "Strong pain relievers that can also produce euphoria and are potentially addictive.",
+      antihypertensives: "Drugs used to treat high blood pressure (hypertension).",
+      antidiabetics: "Medications that help control blood sugar levels in people with diabetes.",
+      antacids: "Medicines that neutralize stomach acid to relieve heartburn or indigestion.",
+      vitamins: "Nutritional supplements that provide essential vitamins and minerals.",
+      glaucoma: "Eye drops or medications that reduce pressure in the eye for glaucoma patients.",
+      antifungals: "Medicines that treat fungal infections like athlete's foot or yeast infections.",
+      decongestants: "Medications that relieve nasal congestion in the upper respiratory tract.",
+      antivirals: "Medications that treat viral infections such as influenza, herpes, or hepatitis.",
+      corticosteroids: "Drugs that reduce inflammation and suppress the immune system, used in asthma, allergies, and autoimmune conditions.",
+      antidepressants: "Medications used to treat depression and other mood disorders.",
+      topical_agents: "Drugs applied directly to the skin for local treatment of conditions like wounds, burns, or rashes.",
+      general_creams: "Non-specific creams used for a variety of skin conditions including dryness, irritation, and minor infections."
+    };
 
-const categoryDefinitions = {
-  antibiotics: "Medicines that fight bacterial infections by killing or slowing the growth of bacteria.",
-  antimalarials: "Drugs used to prevent and treat malaria, a disease caused by parasites.",
-  painkillers: "Medications that relieve pain without causing loss of consciousness.",
-  opioids: "Strong pain relievers that can also produce euphoria and are potentially addictive.",
-  antihypertensives: "Drugs used to treat high blood pressure (hypertension).",
-  antidiabetics: "Medications that help control blood sugar levels in people with diabetes.",
-  antacids: "Medicines that neutralize stomach acid to relieve heartburn or indigestion.",
-  vitamins: "Nutritional supplements that provide essential vitamins and minerals.",
-  glaucoma: "Eye drops or medications that reduce pressure in the eye for glaucoma patients.",
-  antifungals: "Medicines that treat fungal infections like athlete's foot or yeast infections.",
-  decongestants: "Medications that relieve nasal congestion in the upper respiratory tract.",
-  antivirals: "Medications that treat viral infections such as influenza, herpes, or hepatitis.",
-  corticosteroids: "Drugs that reduce inflammation and suppress the immune system, used in asthma, allergies, and autoimmune conditions.",
-  antidepressants: "Medications used to treat depression and other mood disorders.",
-  topical_agents: "Drugs applied directly to the skin for local treatment of conditions like wounds, burns, or rashes.",
-  general_creams: "Non-specific creams used for a variety of skin conditions including dryness, irritation, and minor infections."
-};
+    // --- Dynamic Inventory Rendering ---
+    function renderInventory() {
+      const inventoryColumn = document.getElementById('inventory-column');
+      inventoryColumn.innerHTML = '';
+      Object.keys(drugDatabase).forEach(cat => {
+        // Count category total
+        const count = drugDatabase[cat].reduce((sum, drug) => sum + drug.quantity, 0);
+        // Create category elements
+        const drugCategory = document.createElement('div');
+        drugCategory.className = 'drug-category';
+        const categoryHeader = document.createElement('div');
+        categoryHeader.className = 'category-header';
+        categoryHeader.setAttribute('data-cat', cat);
+        categoryHeader.setAttribute('tabindex', '0');
+        categoryHeader.onclick = function() { toggleCategory(cat); };
+        categoryHeader.innerHTML = `<span>${getCategoryLabel(cat)} <span class="category-count" id="count-${cat}">(${count})</span></span>
+          <span class="toggle-icon">→</span>`;
+        // Info icon for accessibility
+        const infoIcon = document.createElement('span');
+        infoIcon.className = 'info-icon';
+        infoIcon.textContent = '?';
+        infoIcon.setAttribute('aria-label', 'Show category info');
+        infoIcon.setAttribute('title', 'Show category info');
+        infoIcon.setAttribute('tabindex', '0');
+        infoIcon.onclick = function(e) {
+          e.stopPropagation();
+          showCategoryInfo(cat);
+        };
+        categoryHeader.appendChild(infoIcon);
 
-    // Theme Toggle
-    function toggleTheme() {
+        // Drug list
+        const drugList = document.createElement('div');
+        drugList.className = 'drug-list';
+        drugList.id = cat;
+        drugDatabase[cat].forEach(drug => {
+          const drugItem = document.createElement('div');
+          drugItem.className = 'drug-item';
+          drugItem.innerHTML = `<span>${drug.name}</span><span class="inventory-cell" data-quantity="${drug.quantity}">${drug.quantity}</span>`;
+          drugList.appendChild(drugItem);
+        });
+        drugCategory.appendChild(categoryHeader);
+        drugCategory.appendChild(drugList);
+        inventoryColumn.appendChild(drugCategory);
+      });
+    }
+
+    function getCategoryLabel(cat) {
+      switch(cat) {
+        case 'antacids': return 'Antacids/PPIs';
+        case 'vitamins': return 'Vitamin Supplements';
+        case 'glaucoma': return 'Glaucoma Medications';
+        case 'general_creams': return 'General Creams';
+        case 'topical_agents': return 'Topical Agents';
+        case 'antidepressants': return 'Antidepressants';
+        case 'corticosteroids': return 'Corticosteroids';
+        case 'antivirals': return 'Antivirals';
+        default: return cat.charAt(0).toUpperCase() + cat.slice(1);
+      }
+    }
+
+    // --- Category Toggle ---
+    window.toggleCategory = function(categoryId) {
+      const list = document.getElementById(categoryId);
+      if (!list) return;
+      const icon = list.previousElementSibling.querySelector('.toggle-icon');
+      list.classList.toggle('expanded');
+      icon.textContent = list.classList.contains('expanded') ? '↓' : '→';
+    };
+
+    // --- Category Info Popup ---
+    function showCategoryInfo(category) {
+      const popup = document.getElementById('categoryPopup');
+      document.getElementById('popupCategoryTitle').textContent = getCategoryLabel(category);
+      document.getElementById('popupCategoryDescription').textContent = categoryDefinitions[category] || "";
+      popup.classList.add('active');
+    }
+    window.closePopup = function() {
+      document.getElementById('categoryPopup').classList.remove('active');
+    };
+    document.getElementById('categoryPopup').addEventListener('click', function(e) {
+      if (e.target === this) closePopup();
+    });
+
+    // --- Theme Toggle ---
+    window.toggleTheme = function() {
       document.body.classList.toggle('dark-mode');
       const btn = document.querySelector('.theme-toggle');
       const isDark = document.body.classList.contains('dark-mode');
       btn.textContent = isDark ? '🌞' : '🌙';
       localStorage.setItem('darkMode', isDark);
-    }
-
+    };
     // Initialize theme from localStorage
     if (localStorage.getItem('darkMode') === 'true') {
       document.body.classList.add('dark-mode');
       document.querySelector('.theme-toggle').textContent = '🌞';
     }
 
-    // Toggle drug categories
-    function toggleCategory(categoryId) {
-      const list = document.getElementById(categoryId);
-      const icon = list.previousElementSibling.querySelector('.toggle-icon');
-      list.classList.toggle('expanded');
-      icon.textContent = list.classList.contains('expanded') ? '↓' : '→';
-    }
-
-    // Drug database
-    
-
-    // Drug category definitions
-    
-
-    // Show category info popup
-    function showCategoryInfo(category) {
-      const popup = document.getElementById('categoryPopup');
-      document.getElementById('popupCategoryTitle').textContent =
-        document.querySelector(`[onclick="toggleCategory('${category}')"] span`).textContent.split(' (')[0];
-      document.getElementById('popupCategoryDescription').textContent = categoryDefinitions[category];
-      popup.classList.add('active');
-    }
-
-    // Close popup
-    function closePopup() {
-      document.getElementById('categoryPopup').classList.remove('active');
-    }
-
-    // Close popup on outside click
-    document.getElementById('categoryPopup').addEventListener('click', function(e) {
-      if (e.target === this) closePopup();
-    });
-
-    // Add info icons to category headers
-    document.querySelectorAll('.category-header').forEach(header => {
-      const infoIcon = document.createElement('span');
-      infoIcon.className = 'info-icon';
-      infoIcon.textContent = '?';
-      infoIcon.onclick = (e) => {
-        e.stopPropagation();
-        const id = header.getAttribute('onclick').match(/'([^']+)'/)[1];
-        showCategoryInfo(id);
-      };
-      header.appendChild(infoIcon);
-    });
-
-    // Dynamic drug selection
+    // --- Dynamic Drug Selection for Transfer ---
     document.getElementById('drugCategory').addEventListener('change', function() {
       const drugSelect = document.getElementById('drugSelection');
       drugSelect.innerHTML = '<option value="">Select Drug</option>';
       drugSelect.disabled = !this.value;
-      
       if (this.value && drugDatabase[this.value]) {
         drugDatabase[this.value].forEach(drug => {
           const option = document.createElement('option');
-          option.value = drug.name.toLowerCase().replace(/ /g, '_');
+          option.value = drug.name;
           option.textContent = `${drug.name} (${drug.quantity} available)`;
           option.dataset.quantity = drug.quantity;
           drugSelect.appendChild(option);
@@ -897,7 +692,7 @@ const categoryDefinitions = {
       }
     });
 
-    // Quantity validation
+    // --- Quantity Validation for Transfer ---
     document.getElementById('drugSelection').addEventListener('change', function() {
       const maxQuantity = this.selectedOptions[0]?.dataset.quantity;
       if (maxQuantity) {
@@ -905,213 +700,113 @@ const categoryDefinitions = {
       }
     });
 
-    // Form submission for transfer
+    // --- Transfer Form Logic ---
     document.getElementById('transferForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      
-      const drugName = document.getElementById('drugSelection').selectedOptions[0].text.split(' (')[0];
-      const quantity = document.getElementById('transferQuantity').value;
+      const cat = document.getElementById('drugCategory').value;
+      const drugName = document.getElementById('drugSelection').value;
+      const quantity = parseInt(document.getElementById('transferQuantity').value, 10);
       const destination = document.getElementById('destination').value;
-      
+
+      // Inventory decrement
+      const drug = drugDatabase[cat]?.find(d => d.name === drugName);
+      if (drug && drug.quantity >= quantity) {
+        drug.quantity -= quantity;
+      } else {
+        alert("Not enough quantity available!");
+        return;
+      }
+
       // Add to transfer log
-const logItem = document.createElement('div');
-logItem.className = 'transfer-log-item';
-const now = new Date().toLocaleString();
-logItem.innerHTML = `
-  <div>${drugName}</div>
-  <div>${quantity}</div>
-  <div>${destination}</div>
-  <div>${now}</div>
-`;
-document.querySelector('.transfer-log').prepend(logItem);
-      
+      const logItem = document.createElement('div');
+      logItem.className = 'transfer-log-item';
+      const now = new Date().toLocaleString();
+      logItem.innerHTML = `
+        <div>${drugName}</div>
+        <div>${quantity}</div>
+        <div>${destination}</div>
+        <div>${now}</div>
+      `;
+      document.getElementById('transferLog').prepend(logItem);
+
       // Show success message
       const successMsg = document.createElement('div');
       successMsg.className = 'success';
       successMsg.textContent = `Transfer of ${quantity} ${drugName} to ${destination} initiated!`;
       this.parentNode.insertBefore(successMsg, this.nextSibling);
-      
+
       // Reset form
       this.reset();
       document.getElementById('drugSelection').disabled = true;
-      
+
       // Remove success message after 5 seconds
       setTimeout(() => successMsg.remove(), 5000);
-      
-      // Update analytics (simplified example)
-      updateAnalytics(drugName, destination);
+
+      // Analytics update
+      transferCounts[drugName] = (transferCounts[drugName] || 0) + 1;
+      locationCounts[destination] = (locationCounts[destination] || 0) + 1;
+      updateAnalytics();
+
+      // Re-render inventory and category counts
+      renderInventory();
     });
-    
-    // Update analytics data
-    function updateAnalytics(drugName, destination) {
-      const topDrugsList = document.getElementById('topDrugsList');
-      const topLocationsList = document.getElementById('topLocationsList');
-      
-      // Find if drug already exists in top list
-      let drugFound = false;
-      topDrugsList.querySelectorAll('li').forEach(li => {
-        if (li.textContent.includes(drugName)) {
-          drugFound = true;
-          const countSpan = li.querySelector('span:last-child');
-          const currentCount = parseInt(countSpan.textContent);
-          countSpan.textContent = `${currentCount + 1} transfers`;
-        }
-      });
-      
-      // Find if location already exists in top list
-      let locationFound = false;
-      topLocationsList.querySelectorAll('li').forEach(li => {
-        if (li.textContent.includes(destination)) {
-          locationFound = true;
-          const countSpan = li.querySelector('span:last-child');
-          const currentCount = parseInt(countSpan.textContent);
-          countSpan.textContent = `${currentCount + 1} deliveries`;
-        }
-      });
+
+    // --- Analytics Rendering ---
+    function updateAnalytics() {
+      // Top 5 drugs
+      const drugsList = document.getElementById('topDrugsList');
+      drugsList.innerHTML = '';
+      Object.entries(transferCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .forEach(([drug, count]) => {
+          const li = document.createElement('li');
+          li.innerHTML = `<span>${drug}</span> <span>${count} transfers</span>`;
+          drugsList.appendChild(li);
+        });
+      // Top 5 locations
+      const locationsList = document.getElementById('topLocationsList');
+      locationsList.innerHTML = '';
+      Object.entries(locationCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .forEach(([loc, count]) => {
+          const li = document.createElement('li');
+          li.innerHTML = `<span>${loc}</span> <span>${count} deliveries</span>`;
+          locationsList.appendChild(li);
+        });
     }
 
-    // Form submission for adding new drug
+    // --- Add Drug Form Logic ---
     document.getElementById('addDrugForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      
       const category = document.getElementById('newDrugCategory').value;
       const name = document.getElementById('newDrugName').value;
-      const quantity = parseInt(document.getElementById('newDrugQuantity').value);
-      
-      // Add to drug database
-      if (!drugDatabase[category]) {
-        drugDatabase[category] = [];
-      }
-      
-      // Check if drug already exists
+      const quantity = parseInt(document.getElementById('newDrugQuantity').value, 10);
+      if (!drugDatabase[category]) drugDatabase[category] = [];
       const existingDrug = drugDatabase[category].find(drug => drug.name.toLowerCase() === name.toLowerCase());
       if (existingDrug) {
         existingDrug.quantity += quantity;
       } else {
         drugDatabase[category].push({ name, quantity });
       }
-      
-      // Update the inventory display
-      updateInventoryDisplay();
-      
+      // Update inventory display
+      renderInventory();
       // Show success message
       const successMsg = document.createElement('div');
       successMsg.className = 'success';
-      successMsg.textContent = `${quantity} ${name} added to ${category} inventory!`;
+      successMsg.textContent = `${quantity} ${name} added to ${getCategoryLabel(category)} inventory!`;
       this.parentNode.insertBefore(successMsg, this.nextSibling);
-      
-      // Reset form
       this.reset();
-      
-      // Remove success message after 5 seconds
       setTimeout(() => successMsg.remove(), 5000);
     });
 
-    // Update inventory display
-    function updateInventoryDisplay() {
-      // Clear all drug lists
-      document.querySelectorAll('.drug-list').forEach(list => list.innerHTML = '');
-      
-      // Rebuild all drug lists from database
-      for (const [category, drugs] of Object.entries(drugDatabase)) {
-        const list = document.getElementById(category);
-        let totalQuantity = 0;
-        
-        drugs.forEach(drug => {
-          const item = document.createElement('div');
-          item.className = 'drug-item';
-          item.innerHTML = `
-            <span>${drug.name}</span>
-            <span class="inventory-cell" data-quantity="${drug.quantity}">${drug.quantity}</span>
-          `;
-          list.appendChild(item);
-          totalQuantity += drug.quantity;
-        });
-        
-        // Update category count
-        const countElement = document.querySelector(`#${category} + .category-header .category-count`);
-        if (countElement) {
-          countElement.textContent = `(${totalQuantity})`;
-        }
-      }
-      
-      // Reapply inventory highlighting
-      highlightInventory();
-    }
-
-    // Highlight low inventory
-    function highlightInventory() {
-      document.querySelectorAll('.inventory-cell').forEach(cell => {
-        const quantity = parseInt(cell.dataset.quantity);
-        if (quantity < 20) {
-          cell.style.backgroundColor = '#ffe6e6';
-          cell.style.color = '#cc0000';
-          cell.style.fontWeight = 'bold';
-          cell.style.animation = 'pulseFlash 1.5s infinite';
-        } else if (quantity < 50) {
-          cell.style.backgroundColor = '#fff5cc';
-          cell.style.color = '#b36b00';
-        }
-      });
-    }
-
-    // Scroll-triggered animations
-    const sections = document.querySelectorAll('.section');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });A
-    }, { threshold: 0.2 });
-
-    sections.forEach(section => observer.observe(section));
-
-    // Initialize
-    highlightInventory();
-    
-    // Auto-expand first category
-    setTimeout(() => {
-      document.getElementById('antibiotics').classList.add('expanded');
-      document.querySelector('#antibiotics + .category-header .toggle-icon').textContent = '↓';
-    }, 300);
-  
-document.getElementById('batchEntryForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-
-  const type = document.getElementById('batchDrugType').value;
-  const name = document.getElementById('batchDrugName').value;
-  const quantity = parseInt(document.getElementById('batchQuantity').value);
-
-  const destinations = Array.from(this.querySelectorAll('input[name^="dest"]'))
-    .map(input => input.value.trim())
-    .filter(dest => dest);
-
-  if (!type || !name || !quantity || destinations.length === 0) {
-    alert("Please complete all required fields.");
-    return;
-  }
-
-  if (!drugDatabase[type]) drugDatabase[type] = [];
-
-  const existing = drugDatabase[type].find(d => d.name.toLowerCase() === name.toLowerCase());
-  if (existing) {
-    existing.quantity += quantity;
-  } else {
-    drugDatabase[type].push({ name, quantity });
-  }
-
-  updateInventoryDisplay();
-
-  const successMsg = document.createElement('div');
-  successMsg.className = 'success';
-  successMsg.textContent = `${quantity} ${name} added under ${type} category and will be delivered to: ${destinations.join(', ')}`;
-  this.parentNode.insertBefore(successMsg, this.nextSibling);
-
-  this.reset();
-
-  setTimeout(() => successMsg.remove(), 6000);
-});
-</script>
+    // --- Initial Rendering ---
+    renderInventory();
+    updateAnalytics();
+    // Make all sections visible (for animation)
+    document.querySelectorAll('.section').forEach(s => s.classList.add('visible'));
+  });
+  </script>
 </body>
 </html>
