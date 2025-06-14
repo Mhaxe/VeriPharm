@@ -1,231 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Consumer Dashboard | Veripharm</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary-blue: #007BFF;
-      --hover-blue: #0056b3;
-      --light-bg: #f0f8ff;
-      --white: #ffffff;
-      --gray: #555;
-      --font: 'Plus Jakarta Sans', sans-serif;
-      --bubble-bg: #e9f4ff;
-      --bubble-shadow: rgba(0, 123, 255, 0.15);
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <title>Form Test</title>
+  </head>
+  <body>
+    <h1>Test Batch Form</h1>
+    <form method="POST">
+      {% csrf_token %} {{ batch_form.as_p }}
+      <button type="submit">Submit Batch Form</button>
+    </form>
 
-    * {
-      box-sizing: border-box;
-    }
+    <hr />
 
-    body {
-      margin: 0;
-      font-family: var(--font);
-      background: linear-gradient(145deg, #f0f8ff, #ffffff);
-      color: #333;
-    }
+    <h1>Test Drug Form</h1>
+    <form method="POST">
+      {% csrf_token %} {{ drug_form.as_p }}
+      <button type="submit">Submit Drug Form</button>
+    </form>
 
-    /* Top Bar */
-    .top-bar {
-      background-color: var(--primary-blue);
-      color: var(--white);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 25px;
-      font-size: 20px;
-      font-weight: 600;
-    }
-
-    .nav-links a {
-      color: var(--white);
-      text-decoration: none;
-      margin-left: 20px;
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .nav-links a:hover {
-      text-decoration: underline;
-    }
-
-    .scan-button {
-      background-color: var(--white);
-      color: var(--primary-blue);
-      border: none;
-      border-radius: 25px;
-      padding: 10px 24px;
-      font-weight: 600;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-      margin-left: 15px;
-    }
-
-    .scan-button:hover {
-      background-color: #e6f0ff;
-      transform: scale(1.05);
-    }
-
-    /* Main Steps Container */
-    .steps-container {
-      max-width: 1100px;
-      margin: 60px auto;
-      padding: 30px;
-      background: var(--white);
-      border-radius: 20px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.07);
-    }
-
-    .steps-container h2 {
-      font-size: 32px;
-      text-align: center;
-      margin-bottom: 50px;
-      color: var(--primary-blue);
-    }
-
-    /* Step Styles */
-    .step {
-      display: flex;
-      align-items: center;
-      background: var(--bubble-bg);
-      border-radius: 20px;
-      margin-bottom: 40px;
-      padding: 25px;
-      gap: 30px;
-      box-shadow: 0 6px 12px var(--bubble-shadow);
-
-      opacity: 0;
-      transform: translateY(60px) scale(0.95);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-
-    /* Animate in */
-    .step.show {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    /* Custom delays for staggered effect */
-    .step:nth-child(2) { transition-delay: 0.1s; }
-    .step:nth-child(3) { transition-delay: 0.2s; }
-    .step:nth-child(4) { transition-delay: 0.3s; }
-    .step:nth-child(5) { transition-delay: 0.4s; }
-
-    .step-number {
-      font-size: 64px;
-      color: var(--primary-blue);
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    .step-text {
-      flex: 1;
-      font-size: 22px;
-      font-weight: 600;
-    }
-
-    .step-image {
-      width: 220px;
-      height: 220px;
-      border-radius: 20px;
-      object-fit: cover;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    }
-
-    .final-note {
-      margin-top: 40px;
-      font-size: 16px;
-      color: var(--gray);
-      text-align: center;
-      font-style: italic;
-    }
-
-    /* Responsive Layout */
-    @media (max-width: 768px) {
-      .step {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .step-image {
-        margin-top: 15px;
-        width: 100%;
-        max-width: 320px;
-        height: auto;
-      }
-
-      .step-number {
-        font-size: 52px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <!-- Navigation and Scan Button -->
-  <div class="top-bar">
-    <div>Veripharm</div>
-    <div class="nav-links">
-      <a href="#">Dashboard</a>
-      <a href="#">Create Batch</a>
-      <a href="#">Distribute Batch</a>
-      <a href="#">About</a>
-      <button class="#">Scan Here</button>
-    </div>
-  </div>
-
-  <!-- Steps Section -->
-  <div class="steps-container">
-    <h2>Verify Your Medication in 4 Easy Steps</h2>
-
-    <!-- Each Step -->
-    <div class="step">
-      <div class="step-number">1</div>
-      <div class="step-text">Take out your medication package</div>
-      <img src="img/checking out medicine.webp" alt="Step 1" class="step-image" />
-    </div>
-
-    <div class="step">
-      <div class="step-number">2</div>
-      <div class="step-text">Locate the QR code on the drug label</div>
-      <img src="img/qr code found.webp" alt="Step 2" class="step-image" />
-    </div>
-
-    <div class="step">
-      <div class="step-number">3</div>
-      <div class="step-text">Tap <strong>"Scan Here"</strong> and scan the code. Wait for verification</div>
-      <img src="img/scanning the code.jpeg" alt="Step 3" class="step-image" />
-    </div>
-
-    <div class="step">
-      <div class="step-number">4</div>
-      <div class="step-text">If verified, you’re safe to use. If not, contact your nearest hospital immediately</div>
-      <img src="img/medicine checked.avif" alt="Step 4" class="step-image" />
-    </div>
-
-    <p class="final-note">Your safety is our priority. Stay informed, stay safe.</p>
-  </div>
-
-  <!-- Scroll Animation Logic -->
-  <script>
-    const steps = document.querySelectorAll('.step');
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('show');
-        } else {
-          entry.target.classList.remove('show'); // persistently replay animation
-        }
-      });
-    }, {
-      threshold: 0.3 // Trigger when ~30% of step is visible
-    });
-
-    steps.forEach(step => observer.observe(step));
-  </script>
-</body>
+    <h1>Test Distro Form</h1>
+    <form method="POST">
+      {% csrf_token %} {{ distributor_form.as_p }}
+      <button type="submit">Submit Drug Form</button>
+    </form>
+  </body>
 </html>

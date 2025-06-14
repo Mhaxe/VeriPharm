@@ -1,23 +1,26 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.conf import settings
 import uuid
 import qrcode
 from io import BytesIO
 from django.core.files import File
+from .utils import *
+
 
 class Batch(models.Model):
     batch_id = models.CharField(max_length=100)
     drug_name = models.CharField(max_length=100)
+    drug_category = models.CharField(max_length = 100, default = "unknown")
     manufacturer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    description = models.TextField()
+    description = models.TextField(max_length=100)
+    quantity = models.IntegerField(default=0)
     manufacture_date = models.DateField()
     expiry_date = models.DateField()
 
     def __str__(self):
-        return self.name
+        return self.batch_id
+    
+
 
 class Drug(models.Model):
     name = models.CharField(max_length=100)
@@ -27,15 +30,15 @@ class Drug(models.Model):
     scanned = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return self.qr_code_string
     
     def save(self, *args, **kwargs):
+        self.qr_code_string = generate_qr_code()
         if not self.qr_code:
-            # Create QR image from the string
             qr = qrcode.make(str(self.qr_code_string))
             buffer = BytesIO()
             qr.save(buffer, format='PNG')
-            self.qr_code.save(f'{self.product_qr_string}.png', File(buffer), save=False)
+            self.qr_code.save(f'{self.qr_code_string}.png', File(buffer), save=False)
         super().save(*args, **kwargs)
     
 
