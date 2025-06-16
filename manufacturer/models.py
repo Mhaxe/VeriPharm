@@ -14,12 +14,18 @@ class Batch(models.Model):
     manufacturer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     description = models.TextField(max_length=100)
     quantity = models.IntegerField(default=0)
+    quantity_left = models.IntegerField(blank=True, null=True)
     manufacture_date = models.DateField()
     expiry_date = models.DateField()
     verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.batch_id
+    
+    def save(self, *args, **kwargs):
+        if self._state.adding and self.quantity_left is None:
+            self.quantity_left = self.quantity
+        super().save(*args, **kwargs)
     
 
 

@@ -20,6 +20,23 @@ def verify_distribution(request, distribution_id):
     distribution = get_object_or_404(BatchDistribution, id=distribution_id, distributor=request.user)
     distribution.verified = True
     distribution.save()
-    return redirect('dashboard')  
+    return redirect('dashboard') 
+
+
+
+from .forms import PharmacyDistributionForm
+
+@login_required
+def pass_to_pharmacy(request):
+    if request.method == 'POST':
+        form = PharmacyDistributionForm(request.POST, distributor=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('distributor:dashboard')  # or any other success view
+    else:
+        form = PharmacyDistributionForm(distributor=request.user)
+
+    return render(request, 'distributor/transfer_to_pharmacy.html', {'form': form})
+
 
 

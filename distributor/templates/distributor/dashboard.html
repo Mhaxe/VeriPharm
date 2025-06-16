@@ -4,6 +4,7 @@
     <title>Received Batches</title>
 </head>
 <body>
+    <a href = {%url 'distributor:pass_to_pharmacy'%}></a>
     <h1>Batches You Have Received</h1>
     {% if distributions %}
         <table border="1" cellpadding="10">
@@ -35,6 +36,9 @@
     {% else %}
         <p>You haven't received any batches yet.</p>
     {% endif %}
+
+    
+
 </body>
 </html>
 
