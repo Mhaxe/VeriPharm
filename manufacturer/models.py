@@ -16,6 +16,7 @@ class Batch(models.Model):
     quantity = models.IntegerField(default=0)
     manufacture_date = models.DateField()
     expiry_date = models.DateField()
+    verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.batch_id

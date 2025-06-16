@@ -22,6 +22,7 @@ def manufacturer_dashboard(request):
     if request.method == 'POST':
         batch_form = BatchForm(request.POST)
         drug_form = DrugForm(request.POST)
+        distributor_form = BatchDistributionForm(request.POST)
         if batch_form.is_valid():
             batch = batch_form.save(commit=False)
             batch.manufacturer = request.user  
@@ -36,8 +37,8 @@ def manufacturer_dashboard(request):
                     qr_code_string=unique_qr_string,
                 )
                 drug.save()  # This will auto-generate the QR image in .save()
-
-        print(f'{quantity} drugs added successfully.')
+                print(f'{quantity} drugs added successfully.')
+        
         if drug_form.is_valid():
             drug_form.save()
         if distributor_form.is_valid():
