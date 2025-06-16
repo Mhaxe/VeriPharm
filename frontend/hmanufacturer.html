@@ -349,7 +349,44 @@
   body.dark-mode .info-icon {
     background: #66b2ff;
   }
-</style>
+  .error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-left: 5px solid #dc3545;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  /* Custom select arrow styling */
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: var(--white);
+    border: 2px solid var(--primary-blue);
+    padding-right: 48px;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23007BFF" height="28" viewBox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="%23007BFF"/><path d="M8 10l4 4 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 28px 28px;
+    font-weight: 600;
+    color: var(--primary-blue);
+    transition: border-color 0.3s;
+  }
+  select:focus {
+    border-color: #0056b3;
+    outline: none;
+  }
+  body.dark-mode select {
+    background-color: #3a3a4a;
+    color: #66b2ff;
+    border-color: #66b2ff;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%2366b2ff" height="28" viewBox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="%2366b2ff"/><path d="M8 10l4 4 4-4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  }
+  select::-ms-expand {
+    display: none;
+  }
+  </style>
 </head>
 <body>
   <header>
@@ -362,29 +399,102 @@
 
   <div class="container">
     <div class="section">
-      
-<button id="inventoryToggleBtn" onclick="toggleInventory()" style="margin-bottom: 10px; font-weight: 600; background: #007BFF; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
-  Show Drug Inventory ▼
-</button>
-
-<div id="inventoryWrapper" style="display: none;">
-
-  <h2>Drug Inventory by Category</h2>
-      <div class="dashboard-grid">
+      <!-- Inventory section header with retractable arrow -->
+      <h2 id="inventory-toggle-header" style="cursor:pointer;user-select:none;">
+        <span id="inventory-toggle-arrow" style="font-size:18px;">►</span>
+        Drug Inventory by Category
+      </h2>
+      <div class="dashboard-grid" id="inventory-section" style="display:none;">
         <div id="inventory-column">
-          <!-- Drug Categories (the lists will be filled by JS) -->
+          <!-- Drug categories and drugs rendered here by JS -->
         </div>
-        
-        <div>
+      </div>
+      <!-- Transfer Medication section header with its own retractable arrow -->
+      <h2 id="transfer-toggle-header" style="cursor:pointer;user-select:none;">
+        <span id="transfer-toggle-arrow" style="font-size:18px;">►</span>
+        Transfer Medication
+      </h2>
+      <div id="transfer-section" style="display:none;">
+        <form id="transferForm" class="section">
+          <!-- Transfer form fields -->
+          <select id="drugCategory" required>
+            <option value="">Select Drug Category</option>
+            <!-- [Category options, see your file for full list] -->
+            <option value="antibiotics">Antibiotics</option>
+            <option value="antimalarials">Antimalarials</option>
+            <option value="analgesics">Analgesics</option>
+            <option value="opioids">Opioids</option>
+            <option value="antihypertensives">Antihypertensives</option>
+            <option value="antidiabetics">Antidiabetics</option>
+            <option value="antacids">Antacids/PPIs</option>
+            <option value="vitamins">Vitamin Supplements</option>
+            <option value="glaucoma">Glaucoma Medications</option>
+            <option value="antifungals">Antifungals</option>
+            <option value="decongestants">Decongestants</option>
+            <option value="general_creams">General Creams</option>
+            <option value="topical_agents">Topical Agents</option>
+            <option value="antidepressants">Antidepressants</option>
+            <option value="corticosteroids">Corticosteroids</option>
+            <option value="antivirals">Antivirals</option>
+            <option value="anthelmintics">Anthelmintics (Dewormers)</option>
+            <option value="antituberculars">Antituberculars</option>
+            <option value="antiretrovirals">Antiretrovirals (HIV/AIDS)</option>
+            <option value="antihistamines">Antihistamines</option>
+            <option value="antidiarrheals">Antidiarrheals</option>
+            <option value="antiseptics">Antiseptics/Disinfectants</option>
+            <option value="hematinics">Hematinics</option>
+            <option value="eye_ear_preparations">Eye/Ear Preparations</option>
+          </select>
+          <select id="drugSelection" required disabled>
+            <option value="">Select Drug</option>
+          </select>
+          <input type="number" id="transferQuantity" placeholder="Quantity" min="1" required>
+          <input type="text" id="destination" placeholder="Enter pharmacy name" required>
+          <div class="form-row">
+            <div>
+              <label for="transfer_batch_id">Batch ID</label>
+              <input type="text" id="transfer_batch_id" placeholder="Enter batch ID" required>
+            </div>
           </div>
-
-  <h2>Transfer Medication</h2>
-          <form id="transferForm" class="section">
-            <select id="drugCategory" required>
-              <option value="">Select Drug Category</option>
+          <div>
+            <label for="transfer_description">Description / Notes</label>
+            <textarea id="transfer_description" rows="3" placeholder="Optional comments or special instructions..."></textarea>
+          </div>
+          <button type="submit">Initiate Transfer</button>
+        </form>
+        <div class="section">
+          <h2>Recent Transfers</h2>
+          <div class="transfer-log" id="transferLog"></div>
+        </div>
+        <!-- Analytics Section -->
+        <div class="analytics-section">
+          <h2>Drug Distribution Analytics</h2>
+          <div class="analytics-grid">
+            <div class="analytics-card">
+              <h3>Top 5 Requested Drugs</h3>
+              <ul class="analytics-list" id="topDrugsList"></ul>
+            </div>
+            <div class="analytics-card">
+              <h3>Top 5 Delivery Locations</h3>
+              <ul class="analytics-list" id="topLocationsList"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Add New Drug Form -->
+    <div class="add-drug-form">
+      <h2>Add New Batch</h2>
+      <form id="addDrugForm">
+        <div class="form-row">
+          <div>
+            <label for="newDrugCategory">Category</label>
+            <select id="newDrugCategory" required>
+              <option value="">Select Category</option>
+              <!-- [Category options, see your file for full list] -->
               <option value="antibiotics">Antibiotics</option>
               <option value="antimalarials">Antimalarials</option>
-              <option value="painkillers">Painkillers</option>
+              <option value="analgesics">Analgesics</option>
               <option value="opioids">Opioids</option>
               <option value="antihypertensives">Antihypertensives</option>
               <option value="antidiabetics">Antidiabetics</option>
@@ -398,107 +508,49 @@
               <option value="antidepressants">Antidepressants</option>
               <option value="corticosteroids">Corticosteroids</option>
               <option value="antivirals">Antivirals</option>
+              <option value="anthelmintics">Anthelmintics (Dewormers)</option>
+              <option value="antituberculars">Antituberculars</option>
+              <option value="antiretrovirals">Antiretrovirals (HIV/AIDS)</option>
+              <option value="antihistamines">Antihistamines</option>
+              <option value="antidiarrheals">Antidiarrheals</option>
+              <option value="antiseptics">Antiseptics/Disinfectants</option>
+              <option value="hematinics">Hematinics</option>
+              <option value="eye_ear_preparations">Eye/Ear Preparations</option>
             </select>
-            
-            <select id="drugSelection" required disabled>
-              <option value="">Select Drug</option>
-            </select>
-            
-            <input type="number" id="transferQuantity" placeholder="Quantity" min="1" required>
-            
-            <input type="text" id="destination" placeholder="Enter pharmacy name" required>
-            
-            <button type="submit">Initiate Transfer</button>
-          </form>
-          
-          <div class="section">
-            <h2>Recent Transfers</h2>
-            <div class="transfer-log" id="transferLog"></div>
-          </div>
-          
-          <!-- Analytics Section -->
-          <div class="analytics-section">
-            <h2>Drug Distribution Analytics</h2>
-            <div class="analytics-grid">
-              <div class="analytics-card">
-                <h3>Top 5 Requested Drugs</h3>
-                <ul class="analytics-list" id="topDrugsList"></ul>
-              </div>
-              <div class="analytics-card">
-                <h3>Top 5 Delivery Locations</h3>
-                <ul class="analytics-list" id="topLocationsList"></ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Add New Drug Form -->
-      <div class="add-drug-form">
-        <h2>Add New Drug</h2>
-        <form id="addDrugForm">
-          <div class="form-row">
-            <div>
-              <label for="newDrugCategory">Category</label>
-              <select id="newDrugCategory" required>
-                <option value="">Select Category</option>
-                <option value="antibiotics">Antibiotics</option>
-                <option value="antimalarials">Antimalarials</option>
-                <option value="painkillers">Painkillers</option>
-                <option value="opioids">Opioids</option>
-                <option value="antihypertensives">Antihypertensives</option>
-                <option value="antidiabetics">Antidiabetics</option>
-                <option value="antacids">Antacids/PPIs</option>
-                <option value="vitamins">Vitamin Supplements</option>
-                <option value="glaucoma">Glaucoma Medications</option>
-                <option value="antifungals">Antifungals</option>
-                <option value="decongestants">Decongestants</option>
-                <option value="general_creams">General Creams</option>
-                <option value="topical_agents">Topical Agents</option>
-                <option value="antidepressants">Antidepressants</option>
-                <option value="corticosteroids">Corticosteroids</option>
-                <option value="antivirals">Antivirals</option>
-              </select>
-            </div>
-            <div>
-              <label for="newDrugName">Drug Name</label>
-              <input type="text" id="newDrugName" list="drugSuggestions" placeholder="Enter drug name or select" required>
-              <datalist id="drugSuggestions">
-                <option value="Amoxicillin-Clavulanic Acid">
-                <option value="Ciprofloxacin">
-                <option value="Azithromycin">
-                <option value="Artemether-Lumefantrine">
-                <option value="Ibuprofen">
-                <option value="Paracetamol">
-                <option value="Tramadol">
-                <option value="Lisinopril">
-                <option value="Metformin">
-                <option value="Omeprazole">
-                <option value="Iron + Folic Acid">
-                <option value="Latanoprost">
-                <option value="Clotrimazole">
-                <option value="Pseudoephedrine">
-                <option value="Acyclovir">
-                <option value="Prednisone">
-                <option value="Fluoxetine">
-                <option value="Hydrocortisone Cream">
-                <option value="Moisturizing Cream">
-              </datalist>
-            </div>
           </div>
           <div>
-            <label for="newDrugQuantity">Quantity</label>
-            <input type="number" id="newDrugQuantity" placeholder="Enter quantity" min="1" required>
+            <label for="newDrugName">Drug Name</label>
+            <input type="text" id="newDrugName" list="drugSuggestions" placeholder="Enter drug name or select" required>
+            <datalist id="drugSuggestions"></datalist>
           </div>
-          <button type="submit">Add Drug to Inventory</button>
-        </form>
-      </div>
+        </div>
+        <div>
+          <label for="newDrugQuantity">Quantity</label>
+          <input type="number" id="newDrugQuantity" placeholder="Enter quantity" min="1" required>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="add_batch_id">Batch ID</label>
+            <input type="text" id="add_batch_id" placeholder="Enter batch ID" required>
+          </div>
+          <div>
+            <label for="manufacturing_date">Manufacturing Date</label>
+            <input type="date" id="manufacturing_date" required>
+          </div>
+          <div>
+            <label for="expiry_date">Expiry Date</label>
+            <input type="date" id="expiry_date" required>
+          </div>
+        </div>
+        <button type="submit">Add Drug to Inventory</button>
+      </form>
     </div>
     <div class="section notice">
       Important: Please ensure that all medication packages are tagged with QR codes prior to transfer.
     </div>
   </div>
 
-  <!-- Popup Modal -->
+  <!-- Popup Modal for category info -->
   <div class="popup-overlay" id="categoryPopup">
     <div class="popup-content">
       <button class="popup-close" onclick="closePopup()">×</button>
@@ -510,65 +562,108 @@
   <script>
   document.addEventListener('DOMContentLoaded', function() {
     // --- Drug Database ---
+    // Holds all categories and their drugs, including batch numbers.
     const drugDatabase = {
       antibiotics: [
-        { name: 'Amoxicillin-Clavulanic Acid', quantity: 50 },
-        { name: 'Ciprofloxacin', quantity: 20 },
-        { name: 'Azithromycin', quantity: 15 }
+        { name: 'Amoxicillin-Clavulanic Acid', quantity: 50, batchNumbers: [] },
+        { name: 'Ciprofloxacin', quantity: 20, batchNumbers: [] },
+        { name: 'Azithromycin', quantity: 15, batchNumbers: [] }
       ],
       antimalarials: [
-        { name: 'Artemether-Lumefantrine', quantity: 120 }
+        { name: 'Artemether-Lumefantrine', quantity: 120, batchNumbers: [] }
       ],
       analgesics: [
-        { name: 'Ibuprofen', quantity: 60 },
-        { name: 'Paracetamol', quantity: 30 }
+        { name: 'Ibuprofen', quantity: 60, batchNumbers: [] },
+        { name: 'Paracetamol', quantity: 30, batchNumbers: [] }
       ],
       opioids: [
-        { name: 'Tramadol', quantity: 30 }
+        { name: 'Tramadol', quantity: 30, batchNumbers: [] }
       ],
       antihypertensives: [
-        { name: 'Lisinopril', quantity: 55 }
+        { name: 'Lisinopril', quantity: 55, batchNumbers: [] }
       ],
       antidiabetics: [
-        { name: 'Metformin', quantity: 95 }
+        { name: 'Metformin', quantity: 95, batchNumbers: [] }
       ],
       antacids: [
-        { name: 'Omeprazole', quantity: 20 }
+        { name: 'Omeprazole', quantity: 20, batchNumbers: [] }
       ],
       vitamins: [
-        { name: 'Iron + Folic Acid', quantity: 200 }
+        { name: 'Iron + Folic Acid', quantity: 200, batchNumbers: [] }
       ],
       glaucoma: [
-        { name: 'Latanoprost', quantity: 15 }
+        { name: 'Latanoprost', quantity: 15, batchNumbers: [] }
       ],
       antifungals: [
-        { name: 'Clotrimazole', quantity: 40 }
+        { name: 'Clotrimazole', quantity: 40, batchNumbers: [] }
       ],
       decongestants: [
-        { name: 'Pseudoephedrine', quantity: 45 }
+        { name: 'Pseudoephedrine', quantity: 45, batchNumbers: [] },
+        { name: 'Diphenhydramine syrup', quantity: 30, batchNumbers: [] },
+        { name: 'Dextromethorphan syrup', quantity: 30, batchNumbers: [] }
       ],
       antivirals: [
-        { name: 'Acyclovir', quantity: 25 }
+        { name: 'Acyclovir', quantity: 25, batchNumbers: [] }
       ],
       corticosteroids: [
-        { name: 'Prednisone', quantity: 25 }
+        { name: 'Prednisone', quantity: 25, batchNumbers: [] }
       ],
       antidepressants: [
-        { name: 'Fluoxetine', quantity: 25 }
+        { name: 'Fluoxetine', quantity: 25, batchNumbers: [] }
       ],
       topical_agents: [
-        { name: 'Hydrocortisone Cream', quantity: 25 }
+        { name: 'Hydrocortisone Cream', quantity: 25, batchNumbers: [] }
       ],
       general_creams: [
-        { name: 'Moisturizing Cream', quantity: 25 }
+        { name: 'Moisturizing Cream', quantity: 25, batchNumbers: [] }
+      ],
+      anthelmintics: [
+        { name: 'Albendazole', quantity: 40, batchNumbers: [] },
+        { name: 'Mebendazole', quantity: 30, batchNumbers: [] },
+        { name: 'Praziquantel', quantity: 20, batchNumbers: [] }
+      ],
+      antituberculars: [
+        { name: 'Isoniazid', quantity: 25, batchNumbers: [] },
+        { name: 'Rifampicin', quantity: 25, batchNumbers: [] },
+        { name: 'Ethambutol', quantity: 20, batchNumbers: [] },
+        { name: 'Pyrazinamide', quantity: 20, batchNumbers: [] }
+      ],
+      antiretrovirals: [
+        { name: 'Zidovudine (AZT)', quantity: 30, batchNumbers: [] },
+        { name: 'Lamivudine (3TC)', quantity: 30, batchNumbers: [] },
+        { name: 'Efavirenz', quantity: 30, batchNumbers: [] },
+        { name: 'Tenofovir', quantity: 30, batchNumbers: [] }
+      ],
+      antihistamines: [
+        { name: 'Chlorpheniramine', quantity: 40, batchNumbers: [] },
+        { name: 'Cetirizine', quantity: 35, batchNumbers: [] },
+        { name: 'Loratadine', quantity: 30, batchNumbers: [] }
+      ],
+      antidiarrheals: [
+        { name: 'Oral Rehydration Salts (ORS)', quantity: 100, batchNumbers: [] },
+        { name: 'Loperamide', quantity: 40, batchNumbers: [] }
+      ],
+      antiseptics: [
+        { name: 'Chlorhexidine', quantity: 50, batchNumbers: [] },
+        { name: 'Povidone-iodine', quantity: 30, batchNumbers: [] }
+      ],
+      hematinics: [
+        { name: 'Ferrous sulfate', quantity: 80, batchNumbers: [] },
+        { name: 'Folic acid', quantity: 80, batchNumbers: [] }
+      ],
+      eye_ear_preparations: [
+        { name: 'Gentamicin eye/ear drops', quantity: 25, batchNumbers: [] },
+        { name: 'Tetracycline eye ointment', quantity: 25, batchNumbers: [] }
       ]
     };
 
     // --- Analytics Counters ---
+    // Used for analytics display (top drugs, locations).
     const transferCounts = {};
     const locationCounts = {};
 
     // --- Category Descriptions ---
+    // Human-readable descriptions for each drug category.
     const categoryDefinitions = {
       antibiotics: "Medicines that fight bacterial infections by killing or slowing the growth of bacteria.",
       antimalarials: "Drugs used to prevent and treat malaria, a disease caused by parasites.",
@@ -585,27 +680,48 @@
       corticosteroids: "Drugs that reduce inflammation and suppress the immune system, used in asthma, allergies, and autoimmune conditions.",
       antidepressants: "Medications used to treat depression and other mood disorders.",
       topical_agents: "Drugs applied directly to the skin for local treatment of conditions like wounds, burns, or rashes.",
-      general_creams: "Non-specific creams used for a variety of skin conditions including dryness, irritation, and minor infections."
+      general_creams: "Non-specific creams used for a variety of skin conditions including dryness, irritation, and minor infections.",
+      anthelmintics: "Drugs used to treat infections with parasitic worms (helminths), such as roundworm, tapeworm, and flukes.",
+      antituberculars: "Medications specifically used to treat tuberculosis (TB), a bacterial infection caused by Mycobacterium tuberculosis.",
+      antiretrovirals: "Medications used to manage and treat HIV/AIDS by inhibiting the replication of the virus.",
+      antihistamines: "Drugs that relieve allergy symptoms by blocking the effects of histamine in the body.",
+      antidiarrheals: "Medications used to reduce or stop diarrhea, including oral rehydration solutions.",
+      antiseptics: "Agents that prevent infection by inhibiting the growth of microorganisms on living tissue or surfaces.",
+      hematinics: "Substances that improve the quality or quantity of blood, especially by increasing hemoglobin or red blood cells.",
+      eye_ear_preparations: "Medications formulated for the treatment of eye or ear conditions, such as infections or inflammations."
     };
 
     // --- Dynamic Inventory Rendering ---
+    // Renders the inventory UI, including categories, drugs, and batch controls.
     function renderInventory() {
       const inventoryColumn = document.getElementById('inventory-column');
       inventoryColumn.innerHTML = '';
       Object.keys(drugDatabase).forEach(cat => {
-        // Count category total
+        // Calculate total quantity for the category.
         const count = drugDatabase[cat].reduce((sum, drug) => sum + drug.quantity, 0);
-        // Create category elements
+
+        // Create the category container.
         const drugCategory = document.createElement('div');
         drugCategory.className = 'drug-category';
+
+        // Category header with dropdown logic (collapsed by default).
         const categoryHeader = document.createElement('div');
         categoryHeader.className = 'category-header';
         categoryHeader.setAttribute('data-cat', cat);
         categoryHeader.setAttribute('tabindex', '0');
         categoryHeader.onclick = function() { toggleCategory(cat); };
-        categoryHeader.innerHTML = `<span>${getCategoryLabel(cat)} <span class="category-count" id="count-${cat}">(${count})</span></span>
-          <span class="toggle-icon">→</span>`;
-        // Info icon for accessibility
+        categoryHeader.onkeydown = function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleCategory(cat);
+          }
+        };
+        // Dropdown arrow and category label.
+        categoryHeader.innerHTML = `<span style="display:flex;align-items:center;">
+          <span class="toggle-icon" id="toggle-icon-${cat}" style="font-size:18px;">►</span>
+          ${getCategoryLabel(cat)} <span class="category-count" id="count-${cat}">(${count})</span>
+        </span>`;
+        // Info icon for category description popup.
         const infoIcon = document.createElement('span');
         infoIcon.className = 'info-icon';
         infoIcon.textContent = '?';
@@ -616,24 +732,67 @@
           e.stopPropagation();
           showCategoryInfo(cat);
         };
+        infoIcon.onkeydown = function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            showCategoryInfo(cat);
+          }
+        };
         categoryHeader.appendChild(infoIcon);
 
-        // Drug list
+        // Drug list for this category (collapsed by default).
         const drugList = document.createElement('div');
         drugList.className = 'drug-list';
         drugList.id = cat;
-        drugDatabase[cat].forEach(drug => {
+        drugList.style.maxHeight = '0';
+
+        // Render each drug in the category.
+        drugDatabase[cat].forEach((drug, idx) => {
           const drugItem = document.createElement('div');
           drugItem.className = 'drug-item';
-          drugItem.innerHTML = `<span>${drug.name}</span><span class="inventory-cell" data-quantity="${drug.quantity}">${drug.quantity}</span>`;
+
+          // Render batch numbers with delete (×) controls.
+          const batchDisplay = (drug.batchNumbers && drug.batchNumbers.length)
+            ? drug.batchNumbers.map((batch, bidx) =>
+                `<span style="font-size:12px;color:#007BFF;display:inline-block;position:relative;margin-right:6px;">
+                  ${batch}
+                  <span class="delete-batch" data-cat="${cat}" data-idx="${idx}" data-batchidx="${bidx}" title="Delete batch" style="color:#dc3545;cursor:pointer;font-weight:bold;position:absolute;top:-8px;right:-10px;font-size:14px;">×</span>
+                </span>`
+              ).join('')
+            : `<span style="font-size:12px;color:#888;">No batch</span>`;
+
+          const batchInputId = `batch-input-${cat}-${idx}`;
+
+          // Color-code the quantity cell based on stock level.
+          let qtyColor = '';
+          if (drug.quantity >= 50) {
+            qtyColor = 'green';
+          } else if (drug.quantity >= 20) {
+            qtyColor = '#ffc107'; // yellow
+          } else {
+            qtyColor = '#dc3545'; // red
+          }
+
+          // Drug row: name, batch controls, quantity, and delete drug button.
+          drugItem.innerHTML = `
+            <span>
+              ${drug.name} ${batchDisplay}
+              <input type="text" id="${batchInputId}" placeholder="Add batch" style="width:90px;font-size:12px;margin-left:6px;">
+              <button type="button" class="add-batch-btn" data-cat="${cat}" data-idx="${idx}" style="font-size:12px;padding:2px 8px;margin-left:2px;">Add</button>
+            </span>
+            <span class="inventory-cell" data-quantity="${drug.quantity}" style="color:${qtyColor};font-weight:bold;">${drug.quantity}</span>
+            <span class="delete-drug" title="Remove Drug" data-name="${drug.name}" data-category="${cat}">🗑️</span>
+          `;
           drugList.appendChild(drugItem);
         });
+
         drugCategory.appendChild(categoryHeader);
         drugCategory.appendChild(drugList);
         inventoryColumn.appendChild(drugCategory);
       });
     }
 
+    // Returns a user-friendly label for each category.
     function getCategoryLabel(cat) {
       switch(cat) {
         case 'antacids': return 'Antacids/PPIs';
@@ -644,20 +803,48 @@
         case 'antidepressants': return 'Antidepressants';
         case 'corticosteroids': return 'Corticosteroids';
         case 'antivirals': return 'Antivirals';
-        default: return cat.charAt(0).toUpperCase() + cat.slice(1);
+        case 'analgesics': return 'Analgesics';
+        default: return cat.charAt(0).toUpperCase() + cat.slice(1).replace(/_/g, ' ');
       }
     }
 
-    // --- Category Toggle ---
+    // --- Category Toggle (dropdown for each category) ---
+    // Expands/collapses the drug list for a category.
     window.toggleCategory = function(categoryId) {
       const list = document.getElementById(categoryId);
       if (!list) return;
-      const icon = list.previousElementSibling.querySelector('.toggle-icon');
+      const icon = document.getElementById(`toggle-icon-${categoryId}`);
       list.classList.toggle('expanded');
-      icon.textContent = list.classList.contains('expanded') ? '↓' : '→';
+      if (icon) icon.textContent = list.classList.contains('expanded') ? '▼' : '►';
+      list.style.maxHeight = list.classList.contains('expanded') ? '500px' : '0';
+    };
+
+    // --- Inventory Section Minimizer (retracted by default) ---
+    // Controls the visibility of the entire inventory section.
+    const inventorySection = document.getElementById('inventory-section');
+    const inventoryToggleHeader = document.getElementById('inventory-toggle-header');
+    const inventoryToggleArrow = document.getElementById('inventory-toggle-arrow');
+    let inventoryVisible = false;
+    inventoryToggleHeader.onclick = function() {
+      inventoryVisible = !inventoryVisible;
+      inventorySection.style.display = inventoryVisible ? '' : 'none';
+      inventoryToggleArrow.textContent = inventoryVisible ? '▼' : '►';
+    };
+
+    // --- Transfer Section Minimizer (retracted by default) ---
+    // Controls the visibility of the transfer medication section.
+    const transferSection = document.getElementById('transfer-section');
+    const transferToggleHeader = document.getElementById('transfer-toggle-header');
+    const transferToggleArrow = document.getElementById('transfer-toggle-arrow');
+    let transferVisible = false;
+    transferToggleHeader.onclick = function() {
+      transferVisible = !transferVisible;
+      transferSection.style.display = transferVisible ? '' : 'none';
+      transferToggleArrow.textContent = transferVisible ? '▼' : '►';
     };
 
     // --- Category Info Popup ---
+    // Shows a modal with the description of the selected drug category.
     function showCategoryInfo(category) {
       const popup = document.getElementById('categoryPopup');
       document.getElementById('popupCategoryTitle').textContent = getCategoryLabel(category);
@@ -672,6 +859,7 @@
     });
 
     // --- Theme Toggle ---
+    // Switches between light and dark mode, and persists the choice.
     window.toggleTheme = function() {
       document.body.classList.toggle('dark-mode');
       const btn = document.querySelector('.theme-toggle');
@@ -679,17 +867,19 @@
       btn.textContent = isDark ? '🌞' : '🌙';
       localStorage.setItem('darkMode', isDark);
     };
-    // Initialize theme from localStorage
+    // Initialize theme from localStorage on page load.
     if (localStorage.getItem('darkMode') === 'true') {
       document.body.classList.add('dark-mode');
       document.querySelector('.theme-toggle').textContent = '🌞';
     }
 
     // --- Dynamic Drug Selection for Transfer ---
+    // Populates the drug dropdown based on the selected category.
     document.getElementById('drugCategory').addEventListener('change', function() {
       const drugSelect = document.getElementById('drugSelection');
       drugSelect.innerHTML = '<option value="">Select Drug</option>';
       drugSelect.disabled = !this.value;
+      document.getElementById('transferQuantity').max = ""; // Reset max when category changes
       if (this.value && drugDatabase[this.value]) {
         drugDatabase[this.value].forEach(drug => {
           const option = document.createElement('option');
@@ -702,67 +892,91 @@
     });
 
     // --- Quantity Validation for Transfer ---
+    // Sets the max attribute for the quantity input based on selected drug.
     document.getElementById('drugSelection').addEventListener('change', function() {
       const maxQuantity = this.selectedOptions[0]?.dataset.quantity;
-      if (maxQuantity) {
-        document.getElementById('transferQuantity').max = maxQuantity;
-      }
+      document.getElementById('transferQuantity').max = maxQuantity || "";
     });
 
-    // --- Transfer Form Logic ---
-    document.getElementById('transferForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const cat = document.getElementById('drugCategory').value;
-      const drugName = document.getElementById('drugSelection').value;
-      const quantity = parseInt(document.getElementById('transferQuantity').value, 10);
-      const destination = document.getElementById('destination').value;
+    // --- Add batch number to existing drugs and handle batch deletion ---
+    // Handles batch addition, batch deletion (with in-app confirmation), and drug deletion.
+    document.getElementById('inventory-column').addEventListener('click', function(e) {
+      // Add batch number to a drug.
+      if (e.target.classList.contains('add-batch-btn')) {
+        const cat = e.target.dataset.cat;
+        const idx = parseInt(e.target.dataset.idx, 10);
+        const input = e.target.previousElementSibling;
+        const batchNum = input.value.trim();
+        if (batchNum.length === 0) {
+          alert('Please enter a batch number.');
+          return;
+        }
+        if (!drugDatabase[cat][idx].batchNumbers.includes(batchNum)) {
+          drugDatabase[cat][idx].batchNumbers.push(batchNum);
+          renderInventory();
+        } else {
+          alert('Batch number already exists for this drug.');
+        }
+      }
+      // Delete a drug from the inventory.
+      if (e.target.classList.contains('delete-drug')) {
+        const drugName = e.target.dataset.name;
+        const category = e.target.dataset.category;
+        if (confirm(`Are you sure you want to remove "${drugName}" from ${getCategoryLabel(category)}?`)) {
+          const index = drugDatabase[category].findIndex(d => d.name === drugName);
+          if (index > -1) {
+            drugDatabase[category].splice(index, 1);
+            renderInventory();
+          }
+        }
+      }
+      // Handle batch deletion with in-app notification.
+      if (e.target.classList.contains('delete-batch')) {
+        const cat = e.target.getAttribute('data-cat');
+        const idx = parseInt(e.target.getAttribute('data-idx'), 10);
+        const batchidx = parseInt(e.target.getAttribute('data-batchidx'), 10);
 
-      // Inventory decrement
-      const drug = drugDatabase[cat]?.find(d => d.name === drugName);
-      if (drug && drug.quantity >= quantity) {
-        drug.quantity -= quantity;
-      } else {
-        alert("Not enough quantity available!");
+        // Show an in-app notification for confirmation.
+        const parent = e.target.closest('.drug-item');
+        // Remove any previous notification in this drug row.
+        const prevNotif = parent.querySelector('.batch-delete-notif');
+        if (prevNotif) prevNotif.remove();
+
+        const notif = document.createElement('div');
+        notif.className = 'batch-delete-notif';
+        notif.style.background = '#fff3cd';
+        notif.style.color = '#856404';
+        notif.style.border = '1px solid #ffeeba';
+        notif.style.padding = '8px 12px';
+        notif.style.borderRadius = '5px';
+        notif.style.position = 'absolute';
+        notif.style.zIndex = '10';
+        notif.style.top = '-30px';
+        notif.style.right = '0';
+        notif.style.fontSize = '13px';
+        notif.innerHTML = `
+          Delete this batch number?
+          <button class="confirm-delete-batch" style="margin-left:8px;background:#dc3545;color:#fff;border:none;padding:2px 8px;border-radius:3px;cursor:pointer;">Yes</button>
+          <button class="cancel-delete-batch" style="margin-left:4px;background:#ccc;color:#333;border:none;padding:2px 8px;border-radius:3px;cursor:pointer;">No</button>
+        `;
+        parent.style.position = 'relative';
+        parent.appendChild(notif);
+
+        notif.querySelector('.confirm-delete-batch').onclick = function() {
+          drugDatabase[cat][idx].batchNumbers.splice(batchidx, 1);
+          renderInventory();
+        };
+        notif.querySelector('.cancel-delete-batch').onclick = function() {
+          notif.remove();
+        };
         return;
       }
-
-      // Add to transfer log
-      const logItem = document.createElement('div');
-      logItem.className = 'transfer-log-item';
-      const now = new Date().toLocaleString();
-      logItem.innerHTML = `
-        <div>${drugName}</div>
-        <div>${quantity}</div>
-        <div>${destination}</div>
-        <div>${now}</div>
-      `;
-      document.getElementById('transferLog').prepend(logItem);
-
-      // Show success message
-      const successMsg = document.createElement('div');
-      successMsg.className = 'success';
-      successMsg.textContent = `Transfer of ${quantity} ${drugName} to ${destination} initiated!`;
-      this.parentNode.insertBefore(successMsg, this.nextSibling);
-
-      // Reset form
-      this.reset();
-      document.getElementById('drugSelection').disabled = true;
-
-      // Remove success message after 5 seconds
-      setTimeout(() => successMsg.remove(), 5000);
-
-      // Analytics update
-      transferCounts[drugName] = (transferCounts[drugName] || 0) + 1;
-      locationCounts[destination] = (locationCounts[destination] || 0) + 1;
-      updateAnalytics();
-
-      // Re-render inventory and category counts
-      renderInventory();
     });
 
     // --- Analytics Rendering ---
+    // Updates the analytics UI for top drugs and locations.
     function updateAnalytics() {
-      // Top 5 drugs
+      // Top 5 drugs by transfer count.
       const drugsList = document.getElementById('topDrugsList');
       drugsList.innerHTML = '';
       Object.entries(transferCounts)
@@ -773,7 +987,7 @@
           li.innerHTML = `<span>${drug}</span> <span>${count} transfers</span>`;
           drugsList.appendChild(li);
         });
-      // Top 5 locations
+      // Top 5 delivery locations.
       const locationsList = document.getElementById('topLocationsList');
       locationsList.innerHTML = '';
       Object.entries(locationCounts)
@@ -786,22 +1000,47 @@
         });
     }
 
-    // --- Add Drug Form Logic ---
+    // --- Add Drug Form Logic (with batch number and in-app error notification) ---
+    // Handles adding new drugs or batches to the inventory.
     document.getElementById('addDrugForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const category = document.getElementById('newDrugCategory').value;
-      const name = document.getElementById('newDrugName').value;
+      const name = document.getElementById('newDrugName').value.trim();
       const quantity = parseInt(document.getElementById('newDrugQuantity').value, 10);
+      const batch_id = document.getElementById('add_batch_id').value;
+      const manufacturingDate = document.getElementById('manufacturing_date').value;
+      const expiryDate = document.getElementById('expiry_date').value;
+
+      // Remove any previous error messages.
+      const prevError = this.parentNode.querySelector('.error');
+      if (prevError) prevError.remove();
+
+      // Validation for all required fields.
+      if (!category || !name || !quantity || !batch_id || !manufacturingDate || !expiryDate) {
+        showError(this, "Please fill in all fields!");
+        return;
+      }
+      if (name.length === 0) {
+        showError(this, "Drug name cannot be empty!");
+        return;
+      }
+      if (new Date(expiryDate) <= new Date(manufacturingDate)) {
+        showError(this, "Expiry date must be after manufacturing date!");
+        return;
+      }
       if (!drugDatabase[category]) drugDatabase[category] = [];
       const existingDrug = drugDatabase[category].find(drug => drug.name.toLowerCase() === name.toLowerCase());
       if (existingDrug) {
         existingDrug.quantity += quantity;
+        if (!existingDrug.batchNumbers.includes(batch_id)) {
+          existingDrug.batchNumbers.push(batch_id);
+        }
       } else {
-        drugDatabase[category].push({ name, quantity });
+        drugDatabase[category].push({ name, quantity, batchNumbers: [batch_id] });
       }
-      // Update inventory display
+      // Update inventory display after adding.
       renderInventory();
-      // Show success message
+      // Show a success message for user feedback.
       const successMsg = document.createElement('div');
       successMsg.className = 'success';
       successMsg.textContent = `${quantity} ${name} added to ${getCategoryLabel(category)} inventory!`;
@@ -810,21 +1049,48 @@
       setTimeout(() => successMsg.remove(), 5000);
     });
 
-    
-    // Inventory Section Toggle
-    window.toggleInventory = function () {
-      const wrapper = document.getElementById('inventoryWrapper');
-      const button = document.getElementById('inventoryToggleBtn');
-      const isVisible = wrapper.style.display === 'block';
-      wrapper.style.display = isVisible ? 'none' : 'block';
-      button.textContent = isVisible ? 'Show Drug Inventory ▼' : 'Hide Drug Inventory ▲';
-    };
+    // --- Helper to show in-app error messages ---
+    // Displays a temporary error message below the form.
+    function showError(form, message) {
+      const prevError = form.parentNode.querySelector('.error');
+      if (prevError) prevError.remove();
+      const errorMsg = document.createElement('div');
+      errorMsg.className = 'error';
+      errorMsg.textContent = message;
+      form.parentNode.insertBefore(errorMsg, form.nextSibling);
+      setTimeout(() => errorMsg.remove(), 5000);
+    }
 
+    // --- Keyboard accessibility for category toggle ---
+    // Allows toggling categories with keyboard for accessibility.
+    document.getElementById('inventory-column').addEventListener('keydown', function(e) {
+      if (e.target.classList.contains('category-header') && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        const cat = e.target.getAttribute('data-cat');
+        window.toggleCategory(cat);
+      }
+    });
+
+    // --- Dynamic suggestions for Add New Batch drug name ---
+    // Populates the datalist for drug name suggestions based on selected category.
+    document.getElementById('newDrugCategory').addEventListener('change', function() {
+      const category = this.value;
+      const datalist = document.getElementById('drugSuggestions');
+      datalist.innerHTML = '';
+      if (category && drugDatabase[category] && drugDatabase[category].length > 0) {
+        drugDatabase[category].forEach(drug => {
+          const option = document.createElement('option');
+          option.value = drug.name;
+          datalist.appendChild(option);
+        });
+      }
+      // If no drugs in category, datalist will be empty, so user can type a new drug name
+    });
 
     // --- Initial Rendering ---
+    // Renders inventory, analytics, and animates sections on page load.
     renderInventory();
     updateAnalytics();
-    // Make all sections visible (for animation)
     document.querySelectorAll('.section').forEach(s => s.classList.add('visible'));
   });
   </script>
