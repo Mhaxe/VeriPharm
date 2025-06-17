@@ -20,7 +20,7 @@ def verify_distribution(request, distribution_id):
     distribution = get_object_or_404(BatchDistribution, id=distribution_id, distributor=request.user)
     distribution.verified = True
     distribution.save()
-    return redirect('dashboard') 
+    return redirect('distributor:dashboard') 
 
 
 

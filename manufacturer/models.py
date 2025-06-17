@@ -17,7 +17,7 @@ class Batch(models.Model):
     quantity_left = models.IntegerField(blank=True, null=True)
     manufacture_date = models.DateField()
     expiry_date = models.DateField()
-    verified = models.BooleanField(default=False)
+    
 
     def __str__(self):
         return self.batch_id
@@ -54,6 +54,7 @@ class BatchDistribution(models.Model):
     distributor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, limit_choices_to={'role': 'distributor'})
     quantity_sent = models.IntegerField()
     distribution_date = models.DateField(auto_now_add=True)
+    verified = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.quantity} units of {self.drug.name} to {self.distributor.username}"
+        return f"{self.quantity_sent} units of {self.batch.drug_name} to {self.distributor.username}"
