@@ -3,11 +3,21 @@
         <title>Send to Pharmacy</title>
     </head>
     <body>
-        <h2>Send Drugs to Pharmacy</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Send</button>
+        <h2>Send Batch to Pharmacy</h2>
+        <form method="POST">
+        {% csrf_token %}
+
+        <label for="id_batch">Batch</label>
+        {{ form.batch }}
+
+        <label for="id_pharmacy">Pharmacy</label>
+        {{ form.pharmacy }}
+
+        <label for="id_quantity_sent">Quantity</label>
+        {{ form.quantity_sent }}
+
+        <button type="submit">Send</button>
         </form>
+
     </body>    
 <html>        
