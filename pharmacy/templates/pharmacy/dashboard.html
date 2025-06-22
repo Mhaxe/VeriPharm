@@ -5,6 +5,37 @@
 </head>
 <body>
     <h1>Pharm dashboarde</h1>
-    
+    <h1>Batches Received from Distributor</h1>
+        {% if received_batches %}
+        <table border="1" cellpadding="10">
+            <tr>
+                <th>Batch ID</th>
+                <th>Drug Name</th>
+                <th>Quantity</th>
+                <th>Sent On</th>
+                <th>Action</th>
+            </tr>
+            {% for item in received_batches %}
+            <tr>
+                <td>{{ item.batch.batch_id }}</td>
+                <td>{{ item.batch.drug_name }}</td>
+                <td>{{ item.quantity_sent }}</td>
+                <td>{{ item.sent_date }}</td>
+                <td>
+                    {% if item.verified %}
+                        ✅ Verified
+                    {% else %}
+                        <form method="post" action="{% url 'pharmacy:verify_receipt' item.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Verify</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <p>No batches received yet.</p>
+        {% endif %}
 </body>
 </html>
