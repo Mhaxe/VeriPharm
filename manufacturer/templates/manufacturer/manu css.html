@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manufacturer Dashboard | Veripharm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #007BFF;
+            --hover-blue: #0056b3;
+            --light-bg: #f0f8ff;
+            --white: #ffffff;
+            --gray: #555;
+            --font: 'Plus Jakarta Sans', sans-serif;
+            --bubble-bg: #e9f4ff;
+            --bubble-shadow: rgba(0, 123, 255, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font);
+            background: linear-gradient(145deg, #f0f8ff, #ffffff);
+            color: #333;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .dashboard-title {
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.8;
+            margin-left: 10px;
+        }
+
+        /* Main Content */
+        .content-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 30px;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+
+        /* Form Styling */
+        form {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: var(--bubble-bg);
+            border-radius: 15px;
+            box-shadow: 0 6px 12px var(--bubble-shadow);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: var(--font);
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        button[type="submit"] {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--hover-blue);
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 40px 0;
+        }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <div class="top-bar">
+        <div>Veripharm <span class="dashboard-title">Manufacturer Dashboard</span></div>
+        <div class="nav-links">
+            <a href="hhome.html">Home</a>
+            <a href="about page.html">About</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-container">
+        <h1>Test Batch Form</h1>
+        <form method="POST">
+          {% csrf_token %}
+          
+          <label for="id_batch_id">Batch ID</label>
+          {{ batch_form.batch_id }}
+
+          <label for="id_drug_name">Drug Name</label>
+          {{ batch_form.drug_name }}
+
+          <label for="id_drug_category">Drug Category</label>
+          {{ batch_form.drug_category }}
+
+          <label for="id_quantity">Quantity</label>
+          {{ batch_form.quantity }}
+
+          <label for="id_manufacture_date">Manufacture Date</label>
+          {{ batch_form.manufacture_date }}
+
+          <label for="id_expiry_date">Expiry Date</label>
+          {{ batch_form.expiry_date }}
+
+          <button type="submit">Submit Batch Form</button>
+        </form>
+
+        <hr />
+
+        <h1>Test Drug Form</h1>
+        <form method="POST">
+          {% csrf_token %}
+
+          <label for="id_name">Drug Name</label>
+          {{ drug_form.name }}
+
+          <label for="id_batch">Batch</label>
+          {{ drug_form.batch }}
+
+          <button type="submit">Submit Drug Form</button>
+        </form>
+
+        <h1>Test Distro Form</h1>
+        <form method="POST">
+          {% csrf_token %}
+
+          <label for="id_batch">Batch</label>
+          {{ distributor_form.batch }}
+
+          <label for="id_distributor">Distributor</label>
+          {{ distributor_form.distributor }}
+
+          <label for="id_quantity_sent">Quantity Sent</label>
+          {{ distributor_form.quantity_sent }}
+
+          <button type="submit">Submit Distro Form</button>
+        </form>
+    </div>
+  </body>
+</html>
