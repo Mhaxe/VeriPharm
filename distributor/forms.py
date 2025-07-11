@@ -9,9 +9,20 @@ class PharmacyDistributionForm(forms.ModelForm):
         fields = ['batch', 'pharmacy', 'quantity_sent']
 
     def __init__(self, *args, **kwargs):
-        distributor = kwargs.pop('distributor', None)
+        self.distributor = kwargs.pop('distributor', None)
         super().__init__(*args, **kwargs)
-        if distributor:
-            self.fields['batch'].queryset = Batch.objects.filter(batchdistribution__distributor=distributor)
-        self.fields['pharmacy'].queryset = CustomUser.objects.filter(role='pharmacy')
-        
+        if self.distributor:
+            self.fields['batch'].queryset = Batch.objects.filter(
+                batchdistribution__distributor=self.distributor
+            )
+        self.fields['pharmacy'].queryset = CustomUser.objects.filter(
+            role='pharmacist'
+        ).order_by('username')
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if self.distributor:
+            instance.distributor = self.distributor
+        if commit:
+            instance.save()
+        return instance

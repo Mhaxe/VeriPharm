@@ -171,7 +171,9 @@
     <header>
         <div class="header-title">Veripharm Distributor Portal</div>
         <div class="header-controls">
+            <a href="{% url 'distributor:pass_to_pharmacy' %}" class="header-link">Transfer</a>
             <a href="{% url 'distributor:about' %}" class="header-link">About</a>
+
             <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
         </div>
     </header>
@@ -229,6 +231,8 @@
             </div>
         {% endif %}
     </div>
+
+     
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {

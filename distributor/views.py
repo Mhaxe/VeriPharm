@@ -32,7 +32,10 @@ def pass_to_pharmacy(request):
         form = PharmacyDistributionForm(request.POST, distributor=request.user)
         if form.is_valid():
             form.save()
+            print("valid form")
             return redirect('distributor:dashboard')  # or any other success view
+        else:
+            print(f"not valid,{form.errors}")
     else:
         form = PharmacyDistributionForm(distributor=request.user)
 

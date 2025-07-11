@@ -1,41 +1,122 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Pharm Page</title>
-</head>
-<body>
-    <h1>Pharm dashboarde</h1>
-    <h1>Batches Received from Distributor</h1>
-        {% if received_batches %}
-        <table border="1" cellpadding="10">
-            <tr>
-                <th>Batch ID</th>
-                <th>Drug Name</th>
-                <th>Quantity</th>
-                <th>Sent On</th>
-                <th>Action</th>
-            </tr>
-            {% for item in received_batches %}
-            <tr>
-                <td>{{ item.batch.batch_id }}</td>
-                <td>{{ item.batch.drug_name }}</td>
-                <td>{{ item.quantity_sent }}</td>
-                <td>{{ item.sent_date }}</td>
-                <td>
-                    {% if item.verified %}
-                        ✅ Verified
-                    {% else %}
-                        <form method="post" action="{% url 'pharmacy:verify_receipt' item.id %}">
-                            {% csrf_token %}
-                            <button type="submit">Verify</button>
-                        </form>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-        {% else %}
-            <p>No batches received yet.</p>
-        {% endif %}
-</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pharmacy Dashboard</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f2fdf6;
+        margin: 0;
+        padding: 2rem;
+      }
+
+      h1 {
+        text-align: center;
+        color: #1b5e20;
+      }
+
+      .dashboard-container {
+        max-width: 1000px;
+        margin: 2rem auto;
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5rem;
+      }
+
+      th,
+      td {
+        padding: 0.9rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #e0f2f1;
+        color: #004d40;
+      }
+
+      tr:hover {
+        background-color: #f1f8e9;
+      }
+
+      button {
+        background-color: #2e7d32;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.95rem;
+      }
+
+      button:hover {
+        background-color: #1b5e20;
+      }
+
+      .verified {
+        color: green;
+        font-weight: bold;
+      }
+
+      .no-batches {
+        text-align: center;
+        color: #888;
+        margin-top: 2rem;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <h1>Pharmacy Dashboard</h1>
+      <h2 style="text-align: center">Batches Received from Distributor</h2>
+
+      {% if received_batches %}
+      <table>
+        <thead>
+          <tr>
+            <th>Batch ID</th>
+            <th>Drug Name</th>
+            <th>Quantity</th>
+            <th>Sent On</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in received_batches %}
+          <tr>
+            <td>{{ item.batch.batch_id }}</td>
+            <td>{{ item.batch.drug_name }}</td>
+            <td>{{ item.quantity_sent }}</td>
+            <td>{{ item.sent_date|date:"Y-m-d H:i" }}</td>
+            <td>
+              {% if item.verified %}
+              <span class="verified">✅ Verified</span>
+              {% else %}
+              <form
+                method="post"
+                action="{% url 'pharmacy:verify_receipt' item.id %}"
+              >
+                {% csrf_token %}
+                <button type="submit">Verify</button>
+              </form>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="no-batches">No batches received yet.</p>
+      {% endif %}
+    </div>
+  </body>
 </html>

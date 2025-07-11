@@ -1,22 +1,100 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Send to Pharmacy</title>
-    </head>
-    <body>
+<head>
+    <title>Send to Pharmacy</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f9f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 2rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #1a4d2e;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            color: #333333;
+        }
+
+        select,
+        input[type="number"] {
+            width: 100%;
+            padding: 0.6rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #fafafa;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2e8b57;
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #256d47;
+        }
+
+        .errorlist {
+            color: red;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
         <h2>Send Batch to Pharmacy</h2>
         <form method="POST">
-        {% csrf_token %}
+            {% csrf_token %}
 
-        <label for="id_batch">Batch</label>
-        {{ form.batch }}
+            {% if form.errors %}
+                <div class="errorlist">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <p><strong>{{ field.label }}:</strong> {{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-        <label for="id_pharmacy">Pharmacy</label>
-        {{ form.pharmacy }}
+            <label for="id_batch">Batch</label>
+            {{ form.batch }}
 
-        <label for="id_quantity_sent">Quantity</label>
-        {{ form.quantity_sent }}
+            <label for="id_pharmacy">Pharmacy</label>
+            {{ form.pharmacy }}
 
-        <button type="submit">Send</button>
+            <label for="id_quantity_sent">Quantity</label>
+            {{ form.quantity_sent }}
+
+            <button type="submit">Send</button>
         </form>
-    </body>    
-<html>        
+    </div>
+</body>
+</html>
