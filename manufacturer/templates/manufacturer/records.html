@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Batch Records</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        padding: 40px;
+      }
+      h1 {
+        color: #007bff;
+        margin-bottom: 30px;
+      }
+      table {
+        width: 100%;
+        background: white;
+        border-collapse: collapse;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      th,
+      td {
+        padding: 12px 15px;
+        border: 1px solid #eee;
+        text-align: left;
+      }
+      th {
+        background-color: #007bff;
+        color: white;
+      }
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      .status {
+        font-weight: bold;
+        color: #28a745;
+      }
+      .pending {
+        color: #dc3545;
+      }
+
+      .navbar {
+        background-color: #0084ff;
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      .navbar-logo {
+        font-size: 22px;
+        font-weight: bold;
+      }
+
+      .navbar-links {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+      }
+
+      .navbar-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 500;
+        transition: opacity 0.2s;
+      }
+
+      .navbar-links a:hover {
+        opacity: 0.8;
+      }
+
+      .scan-btn {
+        background-color: white;
+        color: #0084ff;
+        padding: 8px 20px;
+        border-radius: 999px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: background-color 0.3s;
+      }
+
+      .scan-btn:hover {
+        background-color: #e6f0ff;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar-logo">Veripharm</div>
+      <div class="navbar-links">
+        <a href="{% url 'manufacturer:dashboard' %}">Dashboard</a>
+        <a href="{% url 'manufacturer:about' %}">About</a>
+        <a href="{% url 'manufacturer:records' %}">Records</a>
+        <a href="{% url 'manufacturer:scan_camera' %}" class="scan-btn">Scan Here</a>
+      </div>
+    </nav>
+
+    <h1>All Your Batches & Supply Chain Status</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Batch ID</th>
+          <th>Drug</th>
+          <th>Quantity</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rec in records %}
+        <tr>
+          <td>{{ rec.batch.batch_id }}</td>
+          <td>{{ rec.batch.drug_name }}</td>
+          <td>{{ rec.batch.quantity }}</td>
+          <td>
+            <div class="supply-line">
+              <span class="step manufacturer">✅ Manufacturer</span>
+              <span class="arrow">→</span>
+              
+              <span class="step {% if rec.sent_to_distributor %}distributor-done{% else %}distributor-pending{% endif %}">
+                {% if rec.sent_to_distributor %}✔️ Distributor{% else %}❌ Distributor{% endif %}
+              </span>
+              
+              <span class="arrow">→</span>
+              
+              <span class="step {% if rec.sent_to_pharmacy %}pharmacy-done{% else %}pharmacy-pending{% endif %}">
+                {% if rec.sent_to_pharmacy %}✔️ Pharmacy{% else %}⏳ Pharmacy{% endif %}
+              </span>
+            </div>
+          </td>
+          
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

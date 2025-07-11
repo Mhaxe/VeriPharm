@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Received Batches</title>
+</head>
+<body>
+    <a href = {%url 'distributor:pass_to_pharmacy'%}>pass_to_pharmacy</a>
+    <h1>Batches You Have Received</h1>
+    {% if distributions %}
+        <table border="1" cellpadding="10">
+            <tr>
+                <th>Batch ID</th>
+                <th>Drug Name</th>
+                <th>Quantity Sent</th>
+                <th>Distribution Date</th>
+            </tr>
+            {% for dist in distributions %}
+            <tr>
+                <td>{{ dist.batch.id }}</td>
+                <td>{{ dist.batch.drug_name }}</td>
+                <td>{{ dist.quantity_sent }}</td>
+                <td>{{ dist.distribution_date }}</td>
+                <td>
+                    {% if dist.verified %}
+                        ✅ Verified
+                    {% else %}
+                        <form method="post" action="{% url 'distributor:verify_distribution' dist.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Verify</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>You haven't received any batches yet.</p>
+    {% endif %}
+
+    
+
+</body>
+</html>
+

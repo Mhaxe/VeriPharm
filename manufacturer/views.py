@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from accounts.decorators import manufacturer_required 
 from accounts.views import logout
 from .forms import *
+from distributor.models import PharmacyDistribution
+
 
 @login_required
 @manufacturer_required  
@@ -54,8 +56,63 @@ def manufacturer_dashboard(request):
    
 
 
-    return render(request, 'manufacturer/dashboard.html', {
+    return render(request, 'manufacturer/dashboard2.html', {
         'batch_form': batch_form,
         'drug_form': drug_form,
         'distributor_form': distributor_form,
     })
+
+
+def about(request):
+    return render(request,"manufacturer/about.html")
+
+
+def scan(request):
+    query = request.GET.get("code")
+    drug = None
+    error = None
+
+    if query:
+        try:
+            drug = Drug.objects.get(qr_code_string=query)
+        except Drug.DoesNotExist:
+            error = "Invalid or unregistered QR code."
+
+    return render(request, "manufacturer/scan.html", {"drug": drug, "error": error}) 
+
+def scan_camera(request):
+    return render(request, "manufacturer/scan_camera.html")
+
+
+def manufacturer_records(request):
+    batches = Batch.objects.filter(manufacturer=request.user).order_by('-manufacture_date')
+    records = []
+
+    for batch in batches:
+        status = {
+            'batch': batch,
+            'sent_to_distributor': False,
+            'sent_to_pharmacy': False,
+            'distributor_verified': False,
+            'pharmacy_verified': False,
+        }
+
+        # Check if batch was sent to distributor
+        dist = BatchDistribution.objects.filter(batch=batch).first()
+        if dist:
+            status['sent_to_distributor'] = True
+            status['distributor_verified'] = getattr(dist, 'verified', False)
+
+            # Check if it reached pharmacy
+            pharmacy_dist = PharmacyDistribution.objects.filter(batch=batch).first()
+            if pharmacy_dist:
+                status['sent_to_pharmacy'] = True
+                status['pharmacy_verified'] = getattr(pharmacy_dist, 'verified', False)
+
+        records.append(status)
+
+
+    context = {"batches" : batches,
+               "records" : records,}
+    return render(request,"manufacturer/records.html",context=context)
+

@@ -7,4 +7,5 @@ urlpatterns = [
     path('dashboard/', views.distributor_dashboard, name='dashboard'),
     path('verify/<int:distribution_id>/', views.verify_distribution, name='verify_distribution'),
     path('pass/',views.pass_to_pharmacy,name = 'pass_to_pharmacy'),
+    path('about/',views.about,name = 'about'),
 ]

@@ -1,44 +1,263 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Received Batches</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Received Batches | Veripharm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --primary-blue: #007BFF;
+        --light-bg: #f0f8ff;
+        --white: #ffffff;
+        --gray: #666;
+        --font: 'Plus Jakarta Sans', sans-serif;
+        --success-green: #28a745;
+        --warning-yellow: #ffc107;
+    }
+    body {
+        margin: 0;
+        font-family: var(--font);
+        background: var(--light-bg);
+        color: #333;
+        transition: background 0.5s, color 0.5s;
+    }
+    body.dark-mode {
+        background-color: #1e1e2f;
+        color: #f0f0f0;
+    }
+    body.dark-mode .container {
+        background-color: #2e2e3e;
+    }
+    body.dark-mode .batch-table {
+        color: #f0f0f0;
+    }
+    body.dark-mode .batch-table td {
+        border-bottom-color: #444;
+    }
+    body.dark-mode .batch-table tr:hover {
+        background-color: rgba(102,178,255,0.05);
+    }
+    header {
+        background: var(--primary-blue);
+        color: white;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .header-title {
+        font-size: 20px;
+        font-weight: 700;
+    }
+    .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .header-link {
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        transition: opacity 0.3s;
+    }
+    .header-link:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+    .theme-toggle {
+        background: none;
+        border: 2px solid white;
+        color: white;
+        border-radius: 20px;
+        padding: 6px 12px;
+        cursor: pointer;
+        font-size: 18px;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+        background: var(--white);
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        transition: background 0.5s;
+    }
+    h1 {
+        color: var(--primary-blue);
+        margin-bottom: 30px;
+        font-size: 28px;
+    }
+    body.dark-mode h1 {
+        color: #66b2ff;
+    }
+    .batch-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .batch-table th {
+        background-color: var(--primary-blue);
+        color: white;
+        padding: 12px 15px;
+        text-align: left;
+    }
+    .batch-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #eee;
+    }
+    .batch-table tr:hover {
+        background-color: rgba(0,123,255,0.05);
+    }
+    .status-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    .verified {
+        background-color: rgba(40,167,69,0.1);
+        color: var(--success-green);
+    }
+    .pending {
+        background-color: rgba(255,193,7,0.1);
+        color: var(--warning-yellow);
+    }
+    .verify-btn {
+        background-color: var(--primary-blue);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+    .verify-btn:hover {
+        background-color: #0056b3;
+        transform: scale(1.03);
+    }
+    .empty-state {
+        text-align: center;
+        padding: 40px;
+        color: var(--gray);
+        font-size: 18px;
+    }
+    body.dark-mode .empty-state {
+        color: #aaa;
+    }
+    .actions-cell {
+        width: 150px;
+    }
+    @media (max-width: 768px) {
+        .batch-table {
+            display: block;
+            overflow-x: auto;
+        }
+        .container {
+            margin: 20px;
+            padding: 15px;
+        }
+        header {
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px;
+        }
+    }
+    </style>
 </head>
 <body>
-    <a href = {%url 'distributor:pass_to_pharmacy'%}>pass_to_pharmacy</a>
-    <h1>Batches You Have Received</h1>
-    {% if distributions %}
-        <table border="1" cellpadding="10">
-            <tr>
-                <th>Batch ID</th>
-                <th>Drug Name</th>
-                <th>Quantity Sent</th>
-                <th>Distribution Date</th>
-            </tr>
-            {% for dist in distributions %}
-            <tr>
-                <td>{{ dist.batch.id }}</td>
-                <td>{{ dist.batch.drug_name }}</td>
-                <td>{{ dist.quantity_sent }}</td>
-                <td>{{ dist.distribution_date }}</td>
-                <td>
-                    {% if dist.verified %}
-                        ✅ Verified
-                    {% else %}
-                        <form method="post" action="{% url 'distributor:verify_distribution' dist.id %}">
-                            {% csrf_token %}
-                            <button type="submit">Verify</button>
-                        </form>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>You haven't received any batches yet.</p>
-    {% endif %}
+    <header>
+        <div class="header-title">Veripharm Distributor Portal</div>
+        <div class="header-controls">
+            <a href="{% url 'distributor:about' %}" class="header-link">About</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+    </header>
 
-    
+    <div class="container">
+        <h1>Batches You Have Received</h1>
+        
+        {% if distributions %}
+            <div class="table-responsive">
+                <table class="batch-table">
+                    <thead>
+                        <tr>
+                            <th>Batch ID</th>
+                            <th>Drug Name</th>
+                            <th>Quantity</th>
+                            <th>Date Received</th>
+                            <th class="actions-cell">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dist in distributions %}
+                        <tr>
+                            <td>{{ dist.batch.id }}</td>
+                            <td>{{ dist.batch.drug_name }}</td>
+                            <td>{{ dist.quantity_sent }}</td>
+                            <td>{{ dist.distribution_date|date:"M d, Y" }}</td>
+                            <td>
+                                {% if dist.verified %}
+                                    <span class="status-badge verified">✅ Verified</span>
+                                {% else %}
+                                    <form method="post" action="{% url 'distributor:verify_distribution' dist.id %}" class="verify-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="verify-btn">Verify Receipt</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>You haven't received any batches yet.</p>
+            </div>
+        {% endif %}
 
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Theme toggle functionality
+        window.toggleTheme = function() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.querySelector('.theme-toggle');
+            const isDark = document.body.classList.contains('dark-mode');
+            btn.textContent = isDark ? '🌞' : '🌙';
+            localStorage.setItem('darkMode', isDark);
+        };
+        
+        // Initialize theme from localStorage
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.querySelector('.theme-toggle').textContent = '🌞';
+        }
+
+        // Verification confirmation
+        const verifyForms = document.querySelectorAll('.verify-form');
+        verifyForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                const batchId = this.action.split('/').slice(-2, -1)[0];
+                if (!confirm(`Are you sure you want to verify receipt of batch ${batchId}?`)) {
+                    e.preventDefault();
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>
-

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Form Test</title>
+  </head>
+  <body>
+    <h1>Test Batch Form</h1>
+    <form method="POST">
+      {% csrf_token %}
+      
+      <label for="id_batch_id">Batch ID</label>
+      {{ batch_form.batch_id }}
+
+      <label for="id_drug_name">Drug Name</label>
+      {{ batch_form.drug_name }}
+
+      <label for="id_drug_category">Drug Category</label>
+      {{ batch_form.drug_category }}
+
+      <label for="id_quantity">Quantity</label>
+      {{ batch_form.quantity }}
+
+      <label for="id_manufacture_date" >Manufacture Date</label>
+      {{ batch_form.manufacture_date }}
+
+      <label for="id_expiry_date">Expiry Date</label>
+      {{ batch_form.expiry_date }}
+
+      <button type="submit">Submit Batch Form</button>
+    </form>
+
+
+    <hr />
+
+    <h1>Test Drug Form</h1>
+    <form method="POST">
+      {% csrf_token %}
+
+      <label for="id_name">Drug Name</label>
+      {{ drug_form.name }}
+
+      <label for="id_batch">Batch</label>
+      {{ drug_form.batch }}
+
+      <button type="submit">Submit Drug Form</button>
+    </form>
+
+
+    <h1>Test Distro Form</h1>
+    <form method="POST">
+      {% csrf_token %}
+
+      <label for="id_batch">Batch</label>
+      {{ distributor_form.batch }}
+
+      <label for="id_distributor">Distributor</label>
+      {{ distributor_form.distributor }}
+
+      <label for="id_quantity_sent">Quantity Sent</label>
+      {{ distributor_form.quantity_sent }}
+
+      <button type="submit">Submit Distro Form</button>
+    </form>
+
+  </body>
+</html>

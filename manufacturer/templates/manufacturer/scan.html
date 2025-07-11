@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan Drug</title>
+</head>
+<body>
+    <h1>Scan Drug Verification</h1>
+
+    
+    <form method="get">
+        <input type="text" name="code" placeholder="Enter or scan QR code" required>
+        <button type="submit">Scan</button>
+    </form>
+
+    <hr/>
+
+    {% if drug %}
+        <h2>Drug Found ✅</h2>
+        <p><strong>Name:</strong> {{ drug.name }}</p>
+        <p><strong>Batch:</strong> {{ drug.batch.batch_id }}</p>
+        <p><string>Scanned by consumer:</strong> {{drug.scanned}}</p>    
+        <p><strong>Category:</strong> {{ drug.batch.drug_category }}</p>
+        <p><strong>Manufactured by:</strong> {{ drug.batch.manufacturer.username }}</p>
+        <p><strong>Expiry Date:</strong> {{ drug.batch.expiry_date }}</p>
+    {% elif error %}
+        <h2 style="color:red">{{ error }}</h2>
+    {% endif %}
+</body>
+</html>

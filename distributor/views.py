@@ -38,5 +38,8 @@ def pass_to_pharmacy(request):
 
     return render(request, 'distributor/transfer_to_pharmacy.html', {'form': form})
 
+def about(request):
+    return render(request, 'distributor/about_page.html')
+
 
 
