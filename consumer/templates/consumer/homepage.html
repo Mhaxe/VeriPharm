@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{%load static%}
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -56,7 +57,7 @@
       }
 
       .scan-button {
-        background-color: var(--white);
+        background-color: rgb(37, 72, 125);
         color: var(--primary-blue);
         border: none;
         border-radius: 25px;
@@ -69,7 +70,7 @@
       }
 
       .scan-button:hover {
-        background-color: #e6f0ff;
+        background-color:rgb(8, 47, 107);
         transform: scale(1.05);
       }
 
@@ -182,7 +183,7 @@
       <div class="nav-links">
         <a href="hhome.html">Home</a>
         <a href="{%url 'consumer:about'%}">About</a>
-        <button class="scan-button">Scan Here</button>
+        <a class="scan-button" href ="{%url 'consumer:scan_camera'%}">Scan Here</button>
       </div>
     </div>
 
@@ -195,7 +196,7 @@
         <div class="step-number">1</div>
         <div class="step-text">Take out your medication package</div>
         <img
-          src="img/checking out medicine.webp"
+          src="{% static "img/com.webp" %}"
           alt="Step 1"
           class="step-image"
         />
@@ -204,7 +205,7 @@
       <div class="step">
         <div class="step-number">2</div>
         <div class="step-text">Locate the QR code on the drug label</div>
-        <img src="img/qr code found.webp" alt="Step 2" class="step-image" />
+        <img src="{%static "img/qcf.webp"%}" alt="Step 2" class="step-image" />
       </div>
 
       <div class="step">
@@ -213,7 +214,7 @@
           Tap <strong>"Scan Here"</strong> and scan the code. Wait for
           verification
         </div>
-        <img src="img/scanning the code.jpeg" alt="Step 3" class="step-image" />
+        <img src="{%static "img/stc.jpeg"%}" alt="Step 3" class="step-image" />
       </div>
 
       <div class="step">
@@ -222,7 +223,7 @@
           If verified, you’re safe to use. If not, contact your nearest hospital
           immediately
         </div>
-        <img src="img/medicine checked.avif" alt="Step 4" class="step-image" />
+        <img src="{%static "img/mc.avif"%}" alt="Step 4" class="step-image" />
       </div>
 
       <p class="final-note">
