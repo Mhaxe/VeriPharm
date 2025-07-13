@@ -4,3 +4,5 @@ Add scan funtionalities to Distributor
 make ui consistent 
 add restritions to functions to prevent lenght extension attacks
 consumer scan redirect to manufacturer scan 
+
+fix css of scan button on consumer page
