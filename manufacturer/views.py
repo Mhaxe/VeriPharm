@@ -112,7 +112,6 @@ def manufacturer_records(request):
         records.append(status)
 
 
-    context = {"batches" : batches,
-               "records" : records,}
+    context = {"records" : records,}
     return render(request,"manufacturer/records.html",context=context)
 

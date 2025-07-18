@@ -27,6 +27,21 @@ class Batch(models.Model):
             self.quantity_left = self.quantity
         super().save(*args, **kwargs)
     
+    def latest_distributor(self):
+        last_distribution = self.batchdistribution_set.last()
+        if last_distribution and last_distribution.distributor:
+            return last_distribution.distributor.username
+        else:
+            return "None"
+    
+        
+    
+    def latest_pharmacy(self):
+        last_pharmacy = self.pharmacydistribution_set.last()
+        if last_pharmacy and last_pharmacy.pharmacy:
+            return last_pharmacy.pharmacy.username
+        else:
+            return "None"
 
 
 class Drug(models.Model):

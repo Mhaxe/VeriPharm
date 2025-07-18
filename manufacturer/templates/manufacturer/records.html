@@ -121,14 +121,23 @@
               <span class="arrow">→</span>
               
               <span class="step {% if rec.sent_to_distributor %}distributor-done{% else %}distributor-pending{% endif %}">
-                {% if rec.sent_to_distributor %}✔️ Distributor{% else %}❌ Distributor{% endif %}
+                {% if rec.sent_to_distributor %}
+                  ✔️ Distributor: {{ rec.batch.latest_distributor }}
+                {% else %}
+                  ❌ Distributor: {{ rec.batch.latest_distributor }}
+                {% endif %}
               </span>
               
               <span class="arrow">→</span>
               
               <span class="step {% if rec.sent_to_pharmacy %}pharmacy-done{% else %}pharmacy-pending{% endif %}">
-                {% if rec.sent_to_pharmacy %}✔️ Pharmacy{% else %}⏳ Pharmacy{% endif %}
+                {% if rec.sent_to_pharmacy %}
+                  ✔️ Pharmacy: {{ rec.batch.latest_pharmacy }}
+                {% else %}
+                  ⏳ Pharmacy: {{ rec.batch.latest_pharmacy }}
+                {% endif %}
               </span>
+              
             </div>
           </td>
           

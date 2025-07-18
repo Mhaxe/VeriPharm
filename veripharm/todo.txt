@@ -1,4 +1,4 @@
-Add batches sent to Distributor
+
 Add scan funtionalities to Distributor
 
 make ui consistent 
