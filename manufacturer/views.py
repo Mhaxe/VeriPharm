@@ -44,15 +44,27 @@ def manufacturer_dashboard(request):
         if drug_form.is_valid():
             drug_form.save()
         if distributor_form.is_valid():
-            distribution = distributor_form.save(commit=False)  # Don't save yet
-            batch = distribution.batch  # Get the related batch
-        if distribution.quantity_sent <= batch.quantity_left:
-            batch.quantity_left -= distribution.quantity_sent  # Subtract sent quantity
-            batch.save()  # Save the updated batch
-            distribution.save()  # Now save the distribution record
+            distribution = distributor_form.save(commit=False)
+            original_batch = distribution.batch
+        if distribution.quantity_sent <= original_batch.quantity_left:
+            # Create sub-batch
+            sub_batch = Batch.objects.create(
+                batch_id=f"{original_batch.batch_id}-D{original_batch.sub_batches.count() + 1}", 
+                drug_name=original_batch.drug_name,
+                quantity=distribution.quantity_sent,
+                quantity_left=distribution.quantity_sent,
+                parent_batch=original_batch
+            )   
+            # Link the distribution to the sub-batch
+            distribution.batch = sub_batch
+            # Update quantity left in original batch
+            original_batch.quantity_left -= distribution.quantity_sent
+            original_batch.save()
+            # Save distribution
+            distribution.save()
         else:
-            # Handle the case where sent quantity is more than available
-            print(request, "Cannot send more than available quantity.")
+            print("Cannot send more than available quantity.")
+
    
 
 

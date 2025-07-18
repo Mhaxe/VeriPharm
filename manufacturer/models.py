@@ -17,6 +17,9 @@ class Batch(models.Model):
     quantity_left = models.IntegerField(blank=True, null=True)
     manufacture_date = models.DateField()
     expiry_date = models.DateField()
+    batch_qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
+    batch_qr_code_string = models.CharField(max_length=255,unique=True)
+    parent_batch = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='sub_batches')
     
 
     def __str__(self):
@@ -25,6 +28,12 @@ class Batch(models.Model):
     def save(self, *args, **kwargs):
         if self._state.adding and self.quantity_left is None:
             self.quantity_left = self.quantity
+        self.batch_qr_code_string = generate_qr_code()
+        if not self.batch_qr_code:
+            qr = qrcode.make(str(self.batch_qr_code_string))
+            buffer = BytesIO()
+            qr.save(buffer, format='PNG')
+            self.batch_qr_code.save(f'{self.batch_qr_code_string}.png', File(buffer), save=False)    
         super().save(*args, **kwargs)
     
     def latest_distributor(self):
@@ -35,13 +44,15 @@ class Batch(models.Model):
             return "None"
     
         
-    
     def latest_pharmacy(self):
         last_pharmacy = self.pharmacydistribution_set.last()
         if last_pharmacy and last_pharmacy.pharmacy:
             return last_pharmacy.pharmacy.username
         else:
             return "None"
+        
+    def is_sub_batch(self):
+        return self.parent_batch is not None    
 
 
 class Drug(models.Model):
@@ -70,6 +81,9 @@ class BatchDistribution(models.Model):
     quantity_sent = models.IntegerField()
     distribution_date = models.DateField(auto_now_add=True)
     verified = models.BooleanField(default=False)
+
+
+
 
     def __str__(self):
         return f"{self.quantity_sent} units of {self.batch.drug_name} to {self.distributor.username}"
