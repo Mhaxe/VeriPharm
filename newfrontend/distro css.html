@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Received Batches | Veripharm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #007BFF;
+            --hover-blue: #0056b3;
+            --light-bg: #f0f8ff;
+            --white: #ffffff;
+            --gray: #555;
+            --font: 'Plus Jakarta Sans', sans-serif;
+            --bubble-bg: #e9f4ff;
+            --bubble-shadow: rgba(0, 123, 255, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font);
+            background: linear-gradient(145deg, #f0f8ff, #ffffff);
+            color: #333;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .dashboard-title {
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.8;
+            margin-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Main Content */
+        .content-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 30px;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 6px 12px var(--bubble-shadow);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: var(--primary-blue);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--bubble-bg);
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Button Styling */
+        button {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--hover-blue);
+        }
+
+        .verified-badge {
+            color: green;
+            font-weight: 600;
+        }
+
+        .action-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: var(--primary-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .action-link:hover {
+            background-color: var(--hover-blue);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="top-bar">
+        <div>Veripharm <span class="dashboard-title">Distributor Dashboard</span></div>
+        <div class="nav-links">
+            <a href="hhome.html">Home</a>
+            <a href="about page.html">About</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-container">
+        <a href="{% url 'distributor:pass_to_pharmacy' %}" class="action-link">Pass to Pharmacy</a>
+        <h1>Batches You Have Received</h1>
+        
+        {% if distributions %}
+        <table>
+            <tr>
+                <th>Batch ID</th>
+                <th>Drug Name</th>
+                <th>Quantity Sent</th>
+                <th>Distribution Date</th>
+                <th>Verification</th>
+            </tr>
+            {% for dist in distributions %}
+            <tr>
+                <td>{{ dist.batch.id }}</td>
+                <td>{{ dist.batch.drug_name }}</td>
+                <td>{{ dist.quantity_sent }}</td>
+                <td>{{ dist.distribution_date }}</td>
+                <td>
+                    {% if dist.verified %}
+                        <span class="verified-badge">✅ Verified</span>
+                    {% else %}
+                        <form method="post" action="{% url 'distributor:verify_distribution' dist.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Verify</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <p>You haven't received any batches yet.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

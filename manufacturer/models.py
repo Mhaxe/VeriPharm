@@ -52,7 +52,28 @@ class Batch(models.Model):
             return "None"
         
     def is_sub_batch(self):
-        return self.parent_batch is not None    
+        return self.parent_batch is not None
+
+    # inside your Batch model
+    def create_sub_batch(self, quantity_to_be_sent):
+        sub_batch = Batch.objects.create(
+            batch_id=f"{self.batch_id}-D{self.sub_batches.count() + 1}", 
+            drug_name=self.drug_name,
+            manufacturer = self.manufacturer,
+            drug_category = self.drug_category,
+            quantity=quantity_to_be_sent,
+            quantity_left=quantity_to_be_sent,
+            manufacture_date=self.manufacture_date,  # required field
+            parent_batch=self,
+            expiry_date=self.expiry_date,
+        )
+        sub_batch.save()
+        
+        self.quantity_left -= quantity_to_be_sent
+        self.save()
+        return sub_batch  
+
+          
 
 
 class Drug(models.Model):
