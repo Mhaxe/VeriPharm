@@ -1,5 +1,8 @@
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
+
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -190,7 +193,8 @@
                             <th>Drug Name</th>
                             <th>Quantity</th>
                             <th>Date Received</th>
-                            <th class="actions-cell">Status</th>
+                            <th class="actions-cell">Action</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -210,7 +214,46 @@
                                     </form>
                                 {% endif %}
                             </td>
-                        </tr>
+                            <td>
+                                <div class="supply-line">
+                                    <!-- Manufacturer: Always completed -->
+                                    <span class="step manufacturer" title="Batch created by manufacturer">
+                                        ✅ Manufacturer: {{ dist.batch.manufacturer.username }}
+                                    </span>
+                                    
+                                    <span class="arrow">→</span>
+                            
+                                    <!-- Distributor: Dynamic based on whether sent_to_distributor is True -->
+                                    <span class="step {% if dist.distributor_verified %}distributor-done{% else %}distributor-pending{% endif %}" 
+                                        title="{% if dist.verified %}Batch verified by distributor{% else %}Awaiting distributor verification{% endif %}">
+                                        {% if dist.verified %}
+                                            ✔️ Distributor: {{ dist.distributor.username }}
+                                        {% else %}
+                                            ⏳ Distributor: {{ dist.distributor.username }} 
+                                        {% endif %}
+                                    </span>
+
+                            
+                                    <span class="arrow">→</span>
+                            
+                                    
+                                    <span class="step {% if dist.pharmacy %}pharmacy-done{% else %}pharmacy-pending{% endif %}" 
+                                    title="{% if dist.pharmacy %}Batch forwarded to pharmacy{% else %}Awaiting pharmacy transfer{% endif %}">
+                                        {% with pharmacy=pharmacy_map|default_if_none:''|dict_get:dist.batch.id %}
+                                            {% if pharmacy %}
+                                                {% if pharmacy.verified %}
+                                                  ✔️ Pharmacy: {{ pharmacy.pharmacy.username }}
+                                                {% else %}
+                                                  ⏳ Pharmacy: {{ pharmacy.pharmacy.username }}
+                                                {% endif %}
+                                            {% else %}
+                                              ❌ Pharmacy: None
+                                            {% endif %}
+                                        {% endwith %}                                      
+                                    </span>
+                                </div>
+                            </td>
+                            
                         {% endfor %}
                     </tbody>
                 </table>

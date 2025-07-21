@@ -5,17 +5,24 @@ from accounts.decorators import distributor_required  # optional role check
 from django.shortcuts import redirect, get_object_or_404
 from manufacturer.models import BatchDistribution,Drug,Batch
 from django.http import JsonResponse
+from .models import PharmacyDistribution
 
 
 
 @login_required
 @distributor_required  
 def distributor_dashboard(request):
-    distributions = BatchDistribution.objects.filter(distributor=request.user)
-    context = {
-        'distributions': distributions
+    distributions = BatchDistribution.objects.filter(distributor=request.user).order_by('-distribution_date')
+    pharmacy_map = {
+        pd.batch.id: pd for pd in PharmacyDistribution.objects.filter(distributor=request.user).select_related('pharmacy')
     }
-    return render(request, 'distributor/dashboard.html',context)
+
+
+    context = {
+        'distributions': distributions,
+        'pharmacy_map': pharmacy_map,
+    }
+    return render(request, 'distributor/dashboard.html', context)
 
 @login_required
 def verify_distribution(request, distribution_id):
