@@ -24,7 +24,7 @@ def scan(request):
         except Drug.DoesNotExist:
             error = "Invalid or unregistered QR code."
 
-    return render(request, "manufacturer/scan.html", {"drug": drug, "error": error}) 
+    return render(request, "consumer/scan.html", {"drug": drug, "error": error}) 
 
 def scan_camera(request):
-    return render(request, "manufacturer/scan_camera.html")
+    return render(request, "consumer/scan_camera.html")

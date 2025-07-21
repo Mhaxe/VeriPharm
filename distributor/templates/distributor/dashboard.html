@@ -196,7 +196,7 @@
                     <tbody>
                         {% for dist in distributions %}
                         <tr>
-                            <td>{{ dist.batch.id }}</td>
+                            <td>{{ dist.batch.batch_id }}</td>
                             <td>{{ dist.batch.drug_name }}</td>
                             <td>{{ dist.quantity_sent }}</td>
                             <td>{{ dist.distribution_date|date:"M d, Y" }}</td>
@@ -204,9 +204,9 @@
                                 {% if dist.verified %}
                                     <span class="status-badge verified">✅ Verified</span>
                                 {% else %}
-                                    <form method="post" action="{% url 'distributor:verify_distribution' dist.id %}" class="verify-form">
+                                    <form method="post" action="{% url 'distributor:scan_camera' %}" class="verify-form">
                                         {% csrf_token %}
-                                        <button type="submit" class="verify-btn">Verify Receipt</button>
+                                        <button type="submit" class="verify-btn">Verify</button>
                                     </form>
                                 {% endif %}
                             </td>

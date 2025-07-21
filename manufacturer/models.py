@@ -17,9 +17,10 @@ class Batch(models.Model):
     quantity_left = models.IntegerField(blank=True, null=True)
     manufacture_date = models.DateField()
     expiry_date = models.DateField()
-    batch_qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
+    batch_qr_code = models.ImageField(upload_to='batch_codes/', blank=True, null=True)
     batch_qr_code_string = models.CharField(max_length=255,unique=True)
     parent_batch = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='sub_batches')
+   
     
 
     def __str__(self):
@@ -28,7 +29,7 @@ class Batch(models.Model):
     def save(self, *args, **kwargs):
         if self._state.adding and self.quantity_left is None:
             self.quantity_left = self.quantity
-        self.batch_qr_code_string = generate_qr_code()
+            self.batch_qr_code_string = self.batch_id
         if not self.batch_qr_code:
             qr = qrcode.make(str(self.batch_qr_code_string))
             buffer = BytesIO()
