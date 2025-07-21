@@ -39,7 +39,7 @@ def manufacturer_dashboard(request):
                     qr_code_string=unique_qr_string,
                 )
                 drug.save()  # This will auto-generate the QR image in .save()
-                print(f'{quantity} drugs added successfully.')
+            print(f'{quantity} drugs added successfully.')    
         
         if drug_form.is_valid():
             drug_form.save()

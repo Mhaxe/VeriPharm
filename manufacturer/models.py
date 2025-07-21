@@ -27,15 +27,24 @@ class Batch(models.Model):
         return self.batch_id
     
     def save(self, *args, **kwargs):
-        if self._state.adding and self.quantity_left is None:
-            self.quantity_left = self.quantity
-            self.batch_qr_code_string = self.batch_id
+        if self._state.adding:
+            if self.quantity_left is None:
+                self.quantity_left = self.quantity
+
+            # Assign a fallback string if batch_id is None
+            if not self.batch_qr_code_string:
+                self.batch_qr_code_string = str(self.batch_id) or "batch_qr"
+
         if not self.batch_qr_code:
             qr = qrcode.make(str(self.batch_qr_code_string))
             buffer = BytesIO()
             qr.save(buffer, format='PNG')
-            self.batch_qr_code.save(f'{self.batch_qr_code_string}.png', File(buffer), save=False)    
+            buffer.seek(0)  # Reset the buffer position before saving
+            file_name = f'{self.batch_qr_code_string}.png'
+            self.batch_qr_code.save(file_name, File(buffer), save=False)
+
         super().save(*args, **kwargs)
+
     
     def latest_distributor(self):
         last_distribution = self.batchdistribution_set.last()

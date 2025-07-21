@@ -37,8 +37,9 @@ def scan(request):
             drug = None
 
         try:
-            batch = Batch.objects.get(batch_qr_code=query)
-            
+            print("trying batch")
+            batch = Batch.objects.get(batch_qr_code_string=query)
+            print(f"batch:{batch}")
             # Get the related distribution record for this batch and current distributor
             if request.user.is_authenticated and request.user.role == "distributor":
                 try:
@@ -53,6 +54,11 @@ def scan(request):
 
         if not drug and not batch:
             error = "Invalid or unregistered QR code."
+
+        print(error)
+        print(query)
+    return render(request, "distributor/scan.html", {"drug": drug, "error": error})  
+
 
     
 

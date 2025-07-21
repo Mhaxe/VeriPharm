@@ -1,4 +1,4 @@
-Add scan funtionalities to Distributor(done)
+Add scan funtionalities to Distributor(scan returning invalid )
 
 make ui consistent 
 add restritions to functions to prevent lenght extension attacks
