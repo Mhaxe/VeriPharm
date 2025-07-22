@@ -88,6 +88,7 @@
             <th>Quantity</th>
             <th>Sent On</th>
             <th>Action</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -103,13 +104,50 @@
               {% else %}
               <form
                 method="post"
-                action="{% url 'pharmacy:verify_receipt' item.id %}"
+                action="{% url 'pharmacy:scan_camera'%}"
               >
                 {% csrf_token %}
                 <button type="submit">Verify</button>
               </form>
               {% endif %}
             </td>
+            <td>
+              <div class="supply-line">
+                  <!-- Manufacturer: Always completed -->
+                  <span class="step manufacturer" title="Batch created by manufacturer">
+                      ✅ Manufacturer: {{ item.batch.manufacturer.username }}
+                  </span>
+                  
+                  <span class="arrow">→</span>
+          
+                  <!-- Distributor: Dynamic based on whether sent_to_distributor is True -->
+                  <span class="step {% if dist.distributor_verified %}distributor-done{% else %}distributor-pending{% endif %}" 
+                      title="{% if dist.verified %}Batch verified by distributor{% else %}Awaiting distributor verification{% endif %}">
+                      {% if item.distributor %}
+                          ✔️ Distributor: {{ item.distributor.username }}
+                      {% else %}
+                          ⏳ Distributor: None
+                      {% endif %}
+                  </span>
+
+          
+                  <span class="arrow">→</span>
+          
+                  
+                  <span class="step {% if dist.pharmacy %}pharmacy-done{% else %}pharmacy-pending{% endif %}" 
+                  title="{% if dist.pharmacy %}Batch forwarded to pharmacy{% else %}Awaiting pharmacy transfer{% endif %}">
+                      {% if item.pharmacy %}
+                        {% if item.verified %}
+                         ✔️ Pharmacy: {{ current_user}}
+                        {% else %}
+                          ⏳ Pharmacy: {{ current_user}}
+                        {% endif %}
+                      {% else %}
+                        ❌ Pharmacy: None
+                      {% endif %}                                      
+                  </span>
+              </div>
+          </td>
           </tr>
           {% endfor %}
         </tbody>

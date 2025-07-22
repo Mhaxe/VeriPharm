@@ -39,7 +39,7 @@
         html5QrcodeScanner
           .clear()
           .then((_) => {
-            window.location.href = `/consumer/scan/?code=${encodeURIComponent(
+            window.location.href = `/pharmacy/scan/?code=${encodeURIComponent(
               decodedText
             )}`;
           })

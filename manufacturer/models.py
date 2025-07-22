@@ -92,12 +92,22 @@ class Drug(models.Model):
     qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
     qr_code_string = models.CharField(max_length=255,unique=True)
     scanned = models.BooleanField(default=False)
+    scanned_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="scanned_drugs"
+    )
+    
 
     def __str__(self):
         return self.qr_code_string
     
+    
     def save(self, *args, **kwargs):
-        self.qr_code_string = generate_qr_code()
+        if not self.qr_code_string:
+            self.qr_code_string = generate_qr_code()
         if not self.qr_code:
             qr = qrcode.make(str(self.qr_code_string))
             buffer = BytesIO()
