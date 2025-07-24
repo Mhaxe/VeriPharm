@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>QR Code Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f8f9fa;
+      }
+      #reader {
+        width: 100%;
+        max-width: 500px;
+        margin: auto;
+      }
+      #result {
+        margin-top: 20px;
+        padding: 10px;
+        font-size: 18px;
+      }
+      .success {
+        color: green;
+      }
+      .error {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Scan Drug QR Code</h1>
+    <div id="reader"></div>
+    <div id="result"></div>
+
+    <script>
+      function onScanSuccess(decodedText, decodedResult) {
+        // Stop scanning once code is detected
+        html5QrcodeScanner
+          .clear()
+          .then((_) => {
+            window.location.href = `/distributor/scan/?code=${encodeURIComponent(
+              decodedText
+            )}`;
+          })
+          .catch((error) => {
+            document.getElementById("result").innerHTML =
+              "<div class='error'>Error stopping scanner</div>";
+          });
+      }
+
+      const html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+        fps: 10,
+        qrbox: 250,
+      });
+
+      html5QrcodeScanner.render(onScanSuccess);
+    </script>
+  </body>
+</html>

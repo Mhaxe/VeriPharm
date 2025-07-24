@@ -1,5 +1,8 @@
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
+
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -190,13 +193,14 @@
                             <th>Drug Name</th>
                             <th>Quantity</th>
                             <th>Date Received</th>
-                            <th class="actions-cell">Status</th>
+                            <th class="actions-cell">Action</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for dist in distributions %}
                         <tr>
-                            <td>{{ dist.batch.id }}</td>
+                            <td>{{ dist.batch.batch_id }}</td>
                             <td>{{ dist.batch.drug_name }}</td>
                             <td>{{ dist.quantity_sent }}</td>
                             <td>{{ dist.distribution_date|date:"M d, Y" }}</td>
@@ -204,13 +208,52 @@
                                 {% if dist.verified %}
                                     <span class="status-badge verified">✅ Verified</span>
                                 {% else %}
-                                    <form method="post" action="{% url 'distributor:verify_distribution' dist.id %}" class="verify-form">
+                                    <form method="post" action="{% url 'distributor:scan_camera' %}" class="verify-form">
                                         {% csrf_token %}
-                                        <button type="submit" class="verify-btn">Verify Receipt</button>
+                                        <button type="submit" class="verify-btn">Verify</button>
                                     </form>
                                 {% endif %}
                             </td>
-                        </tr>
+                            <td>
+                                <div class="supply-line">
+                                    <!-- Manufacturer: Always completed -->
+                                    <span class="step manufacturer" title="Batch created by manufacturer">
+                                        ✅ Manufacturer: {{ dist.batch.manufacturer.username }}
+                                    </span>
+                                    
+                                    <span class="arrow">→</span>
+                            
+                                    <!-- Distributor: Dynamic based on whether sent_to_distributor is True -->
+                                    <span class="step {% if dist.distributor_verified %}distributor-done{% else %}distributor-pending{% endif %}" 
+                                        title="{% if dist.verified %}Batch verified by distributor{% else %}Awaiting distributor verification{% endif %}">
+                                        {% if dist.verified %}
+                                            ✔️ Distributor: {{ dist.distributor.username }}
+                                        {% else %}
+                                            ⏳ Distributor: {{ dist.distributor.username }} 
+                                        {% endif %}
+                                    </span>
+
+                            
+                                    <span class="arrow">→</span>
+                            
+                                    
+                                    <span class="step {% if dist.pharmacy %}pharmacy-done{% else %}pharmacy-pending{% endif %}" 
+                                    title="{% if dist.pharmacy %}Batch forwarded to pharmacy{% else %}Awaiting pharmacy transfer{% endif %}">
+                                        {% with pharmacy=pharmacy_map|default_if_none:''|dict_get:dist.batch.id %}
+                                            {% if pharmacy %}
+                                                {% if pharmacy.verified %}
+                                                  ✔️ Pharmacy: {{ pharmacy.pharmacy.username }}
+                                                {% else %}
+                                                  ⏳ Pharmacy: {{ pharmacy.pharmacy.username }}
+                                                {% endif %}
+                                            {% else %}
+                                              ❌ Pharmacy: None
+                                            {% endif %}
+                                        {% endwith %}                                      
+                                    </span>
+                                </div>
+                            </td>
+                            
                         {% endfor %}
                     </tbody>
                 </table>

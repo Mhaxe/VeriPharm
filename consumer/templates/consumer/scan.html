@@ -96,11 +96,19 @@
                 <p><strong>Category:</strong> {{ drug.batch.drug_category }}</p>
                 <p><strong>Manufactured by:</strong> {{ drug.batch.manufacturer.username }}</p>
                 <p><strong>Expiry Date:</strong> {{ drug.batch.expiry_date }}</p>
+                {% if drug.scanned_by %}
+                <p><strong>Scanned by:</strong> {{ drug.scanned_by.username }}</p>
+                {% endif %}
             </div>
         {% elif error %}
             <div class="error">
                 <h2>{{ error }}</h2>
             </div>
+        {% elif message %}
+            <div class="error">
+                <h2>{{ message }}</h2>
+            </div>    
+
         {% endif %}
     </div>
 </body>

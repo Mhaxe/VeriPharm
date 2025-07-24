@@ -17,24 +17,34 @@ class Batch(models.Model):
     quantity_left = models.IntegerField(blank=True, null=True)
     manufacture_date = models.DateField()
     expiry_date = models.DateField()
-    batch_qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
+    batch_qr_code = models.ImageField(upload_to='batch_codes/', blank=True, null=True)
     batch_qr_code_string = models.CharField(max_length=255,unique=True)
     parent_batch = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='sub_batches')
+   
     
 
     def __str__(self):
         return self.batch_id
     
     def save(self, *args, **kwargs):
-        if self._state.adding and self.quantity_left is None:
-            self.quantity_left = self.quantity
-        self.batch_qr_code_string = generate_qr_code()
+        if self._state.adding:
+            if self.quantity_left is None:
+                self.quantity_left = self.quantity
+
+            # Assign a fallback string if batch_id is None
+            if not self.batch_qr_code_string:
+                self.batch_qr_code_string = str(self.batch_id) or "batch_qr"
+
         if not self.batch_qr_code:
             qr = qrcode.make(str(self.batch_qr_code_string))
             buffer = BytesIO()
             qr.save(buffer, format='PNG')
-            self.batch_qr_code.save(f'{self.batch_qr_code_string}.png', File(buffer), save=False)    
+            buffer.seek(0)  # Reset the buffer position before saving
+            file_name = f'{self.batch_qr_code_string}.png'
+            self.batch_qr_code.save(file_name, File(buffer), save=False)
+
         super().save(*args, **kwargs)
+
     
     def latest_distributor(self):
         last_distribution = self.batchdistribution_set.last()
@@ -52,7 +62,28 @@ class Batch(models.Model):
             return "None"
         
     def is_sub_batch(self):
-        return self.parent_batch is not None    
+        return self.parent_batch is not None
+
+    # inside your Batch model
+    def create_sub_batch(self, quantity_to_be_sent):
+        sub_batch = Batch.objects.create(
+            batch_id=f"{self.batch_id}-D{self.sub_batches.count() + 1}", 
+            drug_name=self.drug_name,
+            manufacturer = self.manufacturer,
+            drug_category = self.drug_category,
+            quantity=quantity_to_be_sent,
+            quantity_left=quantity_to_be_sent,
+            manufacture_date=self.manufacture_date,  # required field
+            parent_batch=self,
+            expiry_date=self.expiry_date,
+        )
+        sub_batch.save()
+        
+        self.quantity_left -= quantity_to_be_sent
+        self.save()
+        return sub_batch  
+
+          
 
 
 class Drug(models.Model):
@@ -61,12 +92,22 @@ class Drug(models.Model):
     qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
     qr_code_string = models.CharField(max_length=255,unique=True)
     scanned = models.BooleanField(default=False)
+    scanned_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="scanned_drugs"
+    )
+    
 
     def __str__(self):
         return self.qr_code_string
     
+    
     def save(self, *args, **kwargs):
-        self.qr_code_string = generate_qr_code()
+        if not self.qr_code_string:
+            self.qr_code_string = generate_qr_code()
         if not self.qr_code:
             qr = qrcode.make(str(self.qr_code_string))
             buffer = BytesIO()
