@@ -73,17 +73,17 @@
       }
 
       .scan-btn {
-        background-color: white;
+        background-color: blue;
         color: #0084ff;
         padding: 8px 20px;
         border-radius: 999px;
         font-weight: bold;
         text-decoration: none;
-        transition: background-color 0.3s;
+        
       }
 
       .scan-btn:hover {
-        background-color: #e6f0ff;
+        background-color: #e6f0ff3c;
       }
     </style>
   </head>
@@ -95,6 +95,7 @@
         <a href="{% url 'manufacturer:about' %}">About</a>
         <a href="{% url 'manufacturer:records' %}">Records</a>
         <a href="{% url 'manufacturer:scan_camera' %}" class="scan-btn">Scan Here</a>
+        <a href="{% url 'manufacturer:logout' %}">Logout</a>
       </div>
     </nav>
 
@@ -148,3 +149,4 @@
     </table>
   </body>
 </html>
+  

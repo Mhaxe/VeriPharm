@@ -1,122 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <title>Pharmacy Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pharm Dashboard | Veripharm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f2fdf6;
-        margin: 0;
-        padding: 2rem;
-      }
+        :root {
+            --primary-blue: #007BFF;
+            --hover-blue: #0056b3;
+            --light-bg: #f0f8ff;
+            --white: #ffffff;
+            --gray: #555;
+            --font: 'Plus Jakarta Sans', sans-serif;
+            --bubble-bg: #e9f4ff;
+            --bubble-shadow: rgba(0, 123, 255, 0.15);
+        }
 
-      h1 {
-        text-align: center;
-        color: #1b5e20;
-      }
+        * {
+            box-sizing: border-box;
+        }
 
-      .dashboard-container {
-        max-width: 1000px;
-        margin: 2rem auto;
-        background-color: #ffffff;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      }
+        body {
+            margin: 0;
+            font-family: var(--font);
+            background: linear-gradient(145deg, #f0f8ff, #ffffff);
+            color: #333;
+        }
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 1.5rem;
-      }
+        /* Top Bar */
+        .top-bar {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            font-size: 20px;
+            font-weight: 600;
+        }
 
-      th,
-      td {
-        padding: 0.9rem 1rem;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-      }
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+            font-weight: 500;
+        }
 
-      th {
-        background-color: #e0f2f1;
-        color: #004d40;
-      }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
 
-      tr:hover {
-        background-color: #f1f8e9;
-      }
+        .scan-button {
+            background-color: var(--white);
+            color: var(--primary-blue);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 24px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-left: 15px;
+        }
 
-      button {
-        background-color: #2e7d32;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 0.95rem;
-      }
+        .scan-button:hover {
+            background-color: #e6f0ff;
+            transform: scale(1.05);
+        }
 
-      button:hover {
-        background-color: #1b5e20;
-      }
+        /* Main Content */
+        .content-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 30px;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+        }
 
-      .verified {
-        color: green;
-        font-weight: bold;
-      }
+        h1 {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-      .no-batches {
-        text-align: center;
-        color: #888;
-        margin-top: 2rem;
-        font-style: italic;
-      }
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 6px 12px var(--bubble-shadow);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: var(--primary-blue);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--bubble-bg);
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Button Styling */
+        button {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--hover-blue);
+        }
+
+        .verified-badge {
+            color: green;
+            font-weight: 600;
+        }
     </style>
-  </head>
-  <body>
-    <div class="dashboard-container">
-      <h1>Pharmacy Dashboard</h1>
-      <h2 style="text-align: center">Batches Received from Distributor</h2>
-
-      {% if received_batches %}
-      <table>
-        <thead>
-          <tr>
-            <th>Batch ID</th>
-            <th>Drug Name</th>
-            <th>Quantity</th>
-            <th>Sent On</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in received_batches %}
-          <tr>
-            <td>{{ item.batch.batch_id }}</td>
-            <td>{{ item.batch.drug_name }}</td>
-            <td>{{ item.quantity_sent }}</td>
-            <td>{{ item.sent_date|date:"Y-m-d H:i" }}</td>
-            <td>
-              {% if item.verified %}
-              <span class="verified">✅ Verified</span>
-              {% else %}
-              <form
-                method="post"
-                action="{% url 'pharmacy:verify_receipt' item.id %}"
-              >
-                {% csrf_token %}
-                <button type="submit">Verify</button>
-              </form>
-              {% endif %}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      <p class="no-batches">No batches received yet.</p>
-      {% endif %}
+</head>
+<body>
+    <!-- Navigation and Scan Button -->
+    <div class="top-bar">
+        <div>Veripharm</div>
+        <div class="nav-links">
+            <a href="hhome.html">Home</a>
+            <a href="about page.html">About</a>
+           
+        </div>
     </div>
-  </body>
+
+    <!-- Main Content -->
+    <div class="content-container">
+        <h1>Pharm Dashboard</h1>
+        <h1>Batches Received from Distributor</h1>
+        
+        {% if received_batches %}
+        <table>
+            <tr>
+                <th>Batch ID</th>
+                <th>Drug Name</th>
+                <th>Quantity</th>
+                <th>Sent On</th>
+                <th>Action</th>
+            </tr>
+            {% for item in received_batches %}
+            <tr>
+                <td>{{ item.batch.batch_id }}</td>
+                <td>{{ item.batch.drug_name }}</td>
+                <td>{{ item.quantity_sent }}</td>
+                <td>{{ item.sent_date }}</td>
+                <td>
+                    {% if item.verified %}
+                        <span class="verified-badge">✅ Verified</span>
+                    {% else %}
+                        <form method="post" action="{% url 'pharmacy:verify_receipt' item.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Verify</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <p>No batches received yet.</p>
+        {% endif %}
+    </div>
+</body>
 </html>
