@@ -12,3 +12,4 @@ class PharmacyDistribution(models.Model):
 
     def __str__(self):
         return f"{self.quantity_sent} units to {self.pharmacy.username}"
+    

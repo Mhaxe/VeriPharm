@@ -13,7 +13,8 @@ class PharmacyDistributionForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if self.distributor:
             self.fields['batch'].queryset = Batch.objects.filter(
-                batchdistribution__distributor=self.distributor
+                batchdistribution__distributor=self.distributor,
+                batchdistribution__verified=True
             )
         self.fields['pharmacy'].queryset = CustomUser.objects.filter(
             role='pharmacist'

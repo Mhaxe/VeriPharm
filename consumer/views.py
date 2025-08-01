@@ -17,14 +17,31 @@ def scan(request):
     query = request.GET.get("code")
     drug = None
     error = None
+    message = None
 
     if query:
         try:
             drug = Drug.objects.get(qr_code_string=query)
+            # Mark the drug as verified
+            if not drug.scanned:
+                drug.scanned = True
+                if request.user.is_authenticated:
+                    drug.scanned_by = request.user
+                drug.save()
+            elif drug.scanned==True:
+                message = "Drug has already been scanned"           
         except Drug.DoesNotExist:
             error = "Invalid or unregistered QR code."
 
-    return render(request, "manufacturer/scan.html", {"drug": drug, "error": error}) 
+    context = {
+        "drug": drug,
+        "error": error,
+        'message': message,
+    }
+
+
+    return render(request, "consumer/scan.html", context)
+
 
 def scan_camera(request):
-    return render(request, "manufacturer/scan_camera.html")
+    return render(request, "consumer/scan_camera.html")

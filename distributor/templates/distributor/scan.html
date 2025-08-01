@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scan Drug</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            background-color: #eafaf1;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .error {
+            background-color: #fcebea;
+            border-left: 5px solid #e3342f;
+            padding: 20px;
+            border-radius: 6px;
+            color: #cc1f1a;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Scan Drug Verification</h1>
+
+        <form method="get">
+            <input type="text" name="code" placeholder="Enter or scan QR code" required>
+            <button type="submit">Scan</button>
+        </form>
+
+        {% if drug %}
+            <div class="result">
+                <h2>✅ Drug Found</h2>
+                <p><strong>Name:</strong> {{ drug.name }}</p>
+                <p><strong>Batch:</strong> {{ drug.batch.batch_id }}</p>
+                <p><strong>Scanned by consumer:</strong> {{ drug.scanned }}</p>
+                <p><strong>Category:</strong> {{ drug.batch.drug_category }}</p>
+                <p><strong>Manufactured by:</strong> {{ drug.batch.manufacturer.username }}</p>
+                <p><strong>Expiry Date:</strong> {{ drug.batch.expiry_date }}</p>
+            </div>
+        
+        {% elif batch %}
+            <div class="result">
+                <h2>📦 Batch Found</h2>
+                <p><strong>Batch ID:</strong> {{ batch.batch_id }}</p>
+                <p><strong>Drug Category:</strong> {{ batch.drug_category }}</p>
+                <p><strong>Manufacturer:</strong> {{ batch.manufacturer.username }}</p>
+                <p><strong>Expiry Date:</strong> {{ batch.expiry_date }}</p>
+                <p><strong>Verified by Distributor:</strong> {{ batch.verified_by_distributor }}</p>
+            </div>
+
+        {% elif error %}
+            <div class="error">
+                <h2>{{ error }}</h2>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

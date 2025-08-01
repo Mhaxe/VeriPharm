@@ -8,8 +8,18 @@
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         background-color: #f4f6f8;
         margin: 0;
-        padding: 40px;
+        padding: 0;
         color: #333;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      .content-container {
+        padding: 40px;
       }
 
       h1 {
@@ -44,6 +54,13 @@
         font-size: 14px;
         border: 1px solid #ccc;
         border-radius: 6px;
+        transition: all 0.3s ease;
+      }
+
+      input:focus, select:focus {
+        outline: none;
+        border-color: #0084ff;
+        box-shadow: 0 0 0 2px rgba(0, 132, 255, 0.2);
       }
 
       button {
@@ -55,11 +72,15 @@
         border-radius: 6px;
         font-size: 16px;
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
       }
 
       button:hover {
         background-color: #004099;
+      }
+
+      button:active {
+        transform: scale(0.98);
       }
 
       hr {
@@ -67,6 +88,7 @@
         border: none;
         border-top: 1px solid #ddd;
       }
+
       .navbar {
         background-color: #0084ff;
         padding: 15px 40px;
@@ -75,6 +97,8 @@
         align-items: center;
         color: white;
         font-family: "Segoe UI", sans-serif;
+        width: 100%;
+        box-sizing: border-box;
       }
 
       .navbar-logo {
@@ -94,6 +118,22 @@
         font-size: 16px;
         font-weight: 500;
         transition: opacity 0.2s;
+        position: relative;
+      }
+
+      .navbar-links a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: white;
+        transition: width 0.3s ease;
+      }
+
+      .navbar-links a:hover::after {
+        width: 100%;
       }
 
       .navbar-links a:hover {
@@ -101,13 +141,21 @@
       }
 
       .scan-btn {
-        background-color: white;
-        color: #0084ff;
+        background-color: --hover-blue(255, 255, 255);
+        color: #0022ff;
         padding: 8px 20px;
         border-radius: 999px;
         font-weight: bold;
         text-decoration: none;
         transition: background-color 0.3s;
+        animation: pulse 1s infinite;
+
+      }
+
+      @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.918); }
+        70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
       }
 
       .scan-btn:hover {
@@ -120,69 +168,104 @@
       <div class="navbar-logo">Veripharm</div>
       <div class="navbar-links">
         <a href="{% url 'manufacturer:records' %}">Records</a>
-        <a href="{% url 'manufacturer:scan_camera' %}" class="scan-btn"
-          >Scan Here</a
-        >
+        <a href="{% url 'manufacturer:scan_camera' %}" class="scan-btn">Scan Here</a>
         <a href="{% url 'manufacturer:about' %}">About</a>
         <a href="{% url 'manufacturer:dashboard' %}">Dashboard</a>
-        <a href="{% url 'manufacturer:logout' %}">Logout</a>
+        <a href="{% url 'logout' %}">Logout</a>
       </div>
     </nav>
 
-    <h1>Test Batch Form</h1>
-    <form method="POST">
-      {% csrf_token %}
+    <div class="content-container">
+      <h1>Batch Form</h1>
+      <form method="POST">
+        {% csrf_token %}
 
-      <label for="id_batch_id">Batch ID</label>
-      {{ batch_form.batch_id }}
+        <label for="id_batch_id">Batch ID</label>
+        {{ batch_form.batch_id }}
 
-      <label for="id_drug_name">Drug Name</label>
-      {{ batch_form.drug_name }}
+        <label for="id_drug_name">Drug Name</label>
+        {{ batch_form.drug_name }}
 
-      <label for="id_drug_category">Drug Category</label>
-      {{ batch_form.drug_category }}
+        <label for="id_drug_category">Drug Category</label>
+        <select name="drug_category" id="id_drug_category" required>
+            <option value="" disabled selected>Select a category</option>
+            <option value="Antibiotics">Antibiotics</option>
+            <option value="Antimalarials">Antimalarials</option>
+            <option value="Analgesics">Analgesics</option>
+            <option value="Opioids">Opioids</option>
+            <option value="Antihypertensives">Antihypertensives</option>
+            <option value="Antidiabetics">Antidiabetics</option>
+            <option value="Antacids/PPIs">Antacids/PPIs</option>
+            <option value="Vitamin supplements">Vitamin supplements</option>
+            <option value="Antifungals">Antifungals</option>
+            <option value="Antivirals">Antivirals</option>
+            <option value="Antidepressants">Antidepressants</option>
+            <option value="General creams">General creams</option>
+            <option value="Other">Other (specify below)</option>
+        </select>
 
-      <label for="id_quantity">Quantity</label>
-      {{ batch_form.quantity }}
+        <label for="new_category" style="margin-top: 10px; display: none;" id="new_category_label">New Category</label>
+        <input type="text" name="new_category" id="new_category" style="display: none; margin-top: 5px;">
 
-      <label for="id_manufacture_date">Manufacture Date</label>
-      {{ batch_form.manufacture_date }}
+        <label for="id_quantity">Quantity</label>
+        {{ batch_form.quantity }}
 
-      <label for="id_expiry_date">Expiry Date</label>
-      {{ batch_form.expiry_date }}
+        <label for="id_manufacture_date">Manufacture Date</label>
+        {{ batch_form.manufacture_date }}
 
-      <button type="submit">Submit Batch Form</button>
-    </form>
+        <label for="id_expiry_date">Expiry Date</label>
+        {{ batch_form.expiry_date }}
 
-    <hr />
+        <button type="submit">Submit Batch Form</button>
+      </form>
 
-    <h1>Test Drug Form</h1>
-    <form method="POST">
-      {% csrf_token %}
+      <hr />
 
-      <label for="id_name">Drug Name</label>
-      {{ drug_form.name }}
+      <h1> Drug Form</h1>
+      <form method="POST">
+        {% csrf_token %}
 
-      <label for="id_batch">Batch</label>
-      {{ drug_form.batch }}
+        <label for="id_name">Drug Name</label>
+        {{ drug_form.name }}
 
-      <button type="submit">Submit Drug Form</button>
-    </form>
+        <label for="id_batch">Batch</label>
+        {{ drug_form.batch }}
 
-    <h1>Test Distro Form</h1>
-    <form method="POST">
-      {% csrf_token %}
+        <button type="submit">Submit Drug Form</button>
+      </form>
 
-      <label for="id_batch">Batch</label>
-      {{ distributor_form.batch }}
+      <h1>Distro Form</h1>
+      <form method="POST">
+        {% csrf_token %}
 
-      <label for="id_distributor">Distributor</label>
-      {{ distributor_form.distributor }}
+        <label for="id_batch">Batch</label>
+        {{ distributor_form.batch }}
 
-      <label for="id_quantity_sent">Quantity Sent</label>
-      {{ distributor_form.quantity_sent }}
+        <label for="id_distributor">Distributor</label>
+        {{ distributor_form.distributor }}
 
-      <button type="submit">Submit Distro Form</button>
-    </form>
+        <label for="id_quantity_sent">Quantity Sent</label>
+        {{ distributor_form.quantity_sent }}
+
+        <button type="submit">Submit Distro Form</button>
+      </form>
+    </div>
+
+    <script>
+        document.getElementById('id_drug_category').addEventListener('change', function() {
+            const newCategoryLabel = document.getElementById('new_category_label');
+            const newCategoryInput = document.getElementById('new_category');
+            
+            if (this.value === 'Other') {
+                newCategoryLabel.style.display = 'block';
+                newCategoryInput.style.display = 'block';
+                newCategoryInput.required = true;
+            } else {
+                newCategoryLabel.style.display = 'none';
+                newCategoryInput.style.display = 'none';
+                newCategoryInput.required = false;
+            }
+        });
+    </script>
   </body>
 </html>

@@ -3,33 +3,57 @@
   <head>
     <title>Batch Records</title>
     <style>
+      :root {
+        --bg-color: #f9f9f9;
+        --text-color: #333;
+        --primary-color: #007bff;
+        --table-bg: white;
+        --table-border: #eee;
+        --table-even-row: #f2f2f2;
+        --nav-bg: #0084ff;
+        --nav-text: white;
+      }
+
+      .dark-mode {
+        --bg-color: #1a1a1a;
+        --text-color: #f0f0f0;
+        --primary-color: #4da6ff;
+        --table-bg: #2d2d2d;
+        --table-border: #444;
+        --table-even-row: #3a3a3a;
+        --nav-bg: #0066cc;
+        --nav-text: #f0f0f0;
+      }
+
       body {
         font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
+        background-color: var(--bg-color);
+        color: var(--text-color);
         padding: 40px;
+        transition: background-color 0.3s, color 0.3s;
       }
       h1 {
-        color: #007bff;
+        color: var(--primary-color);
         margin-bottom: 30px;
       }
       table {
         width: 100%;
-        background: white;
+        background: var(--table-bg);
         border-collapse: collapse;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
       th,
       td {
         padding: 12px 15px;
-        border: 1px solid #eee;
+        border: 1px solid var(--table-border);
         text-align: left;
       }
       th {
-        background-color: #007bff;
+        background-color: var(--primary-color);
         color: white;
       }
       tr:nth-child(even) {
-        background-color: #f2f2f2;
+        background-color: var(--table-even-row);
       }
       .status {
         font-weight: bold;
@@ -40,12 +64,12 @@
       }
 
       .navbar {
-        background-color: #0084ff;
+        background-color: var(--nav-bg);
         padding: 15px 40px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        color: white;
+        color: var(--nav-text);
         font-family: "Segoe UI", sans-serif;
       }
 
@@ -61,11 +85,27 @@
       }
 
       .navbar-links a {
-        color: white;
+        color: var(--nav-text);
         text-decoration: none;
         font-size: 16px;
         font-weight: 500;
-        transition: opacity 0.2s;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .navbar-links a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: var(--nav-text);
+        transition: width 0.3s ease;
+      }
+
+      .navbar-links a:hover::after {
+        width: 100%;
       }
 
       .navbar-links a:hover {
@@ -73,17 +113,93 @@
       }
 
       .scan-btn {
-        background-color: blue;
+        background-color: white;
         color: #0084ff;
         padding: 8px 20px;
         border-radius: 999px;
         font-weight: bold;
         text-decoration: none;
-        
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .scan-btn::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: #0084ff;
+        transition: width 0.3s ease;
+      }
+
+      .scan-btn:hover::after {
+        width: 100%;
       }
 
       .scan-btn:hover {
-        background-color: #e6f0ff3c;
+        background-color: #e6f0ff;
+      }
+
+      .dark-mode-toggle {
+        background: none;
+        border: none;
+        color: var(--nav-text);
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: opacity 0.3s;
+      }
+
+      .dark-mode-toggle:hover {
+        opacity: 0.8;
+      }
+
+      .supply-line {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .step {
+        padding: 5px 10px;
+        border-radius: 4px;
+      }
+
+      .manufacturer {
+        background-color: rgba(40, 167, 69, 0.1);
+      }
+
+      .distributor-done {
+        background-color: rgba(40, 167, 69, 0.1);
+      }
+
+      .distributor-pending {
+        background-color: rgba(220, 53, 69, 0.1);
+      }
+
+      .pharmacy-done {
+        background-color: rgba(40, 167, 69, 0.1);
+      }
+
+      .pharmacy-pending {
+        background-color: rgba(255, 193, 7, 0.1);
+      }
+
+      @media (max-width: 768px) {
+        .supply-line {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        
+        .arrow {
+          display: none;
+        }
       }
     </style>
   </head>
@@ -92,10 +208,13 @@
       <div class="navbar-logo">Veripharm</div>
       <div class="navbar-links">
         <a href="{% url 'manufacturer:dashboard' %}">Dashboard</a>
-        <a href="{% url 'manufacturer:about' %}">About</a>
-        <a href="{% url 'manufacturer:records' %}">Records</a>
-        <a href="{% url 'manufacturer:scan_camera' %}" class="scan-btn">Scan Here</a>
-        <a href="{% url 'manufacturer:logout' %}">Logout</a>
+        
+        
+        
+        <button class="dark-mode-toggle" id="darkModeToggle">
+          <span id="darkModeIcon">🌙</span> Dark Mode
+        </button>
+        
       </div>
     </nav>
 
@@ -141,12 +260,38 @@
               
             </div>
           </td>
-          
         </tr>
-
         {% endfor %}
       </tbody>
     </table>
+
+    <script>
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      const darkModeIcon = document.getElementById('darkModeIcon');
+      const body = document.body;
+
+      // Check for saved user preference
+      const currentTheme = localStorage.getItem('theme');
+      if (currentTheme === 'dark') {
+        body.classList.add('dark-mode');
+        darkModeIcon.textContent = '☀️';
+        darkModeToggle.querySelector('span:last-child').textContent = ' Light Mode';
+      }
+
+      // Toggle dark mode
+      darkModeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        
+        if (body.classList.contains('dark-mode')) {
+          localStorage.setItem('theme', 'dark');
+          darkModeIcon.textContent = '☀️';
+          darkModeToggle.querySelector('span:last-child').textContent = ' Light Mode';
+        } else {
+          localStorage.setItem('theme', 'light');
+          darkModeIcon.textContent = '🌙';
+          darkModeToggle.querySelector('span:last-child').textContent = ' Dark Mode';
+        }
+      });
+    </script>
   </body>
 </html>
-  

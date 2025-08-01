@@ -3,85 +3,184 @@
 <head>
     <title>Send to Pharmacy</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f9f6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        :root {
+            --primary-blue: #2e448b;
+            --primary-green: #256d47;
+            --light-bg: #f4f9f6;
+            --white: #ffffff;
+            --dark-bg: #1a1a2e;
+            --dark-container: #2a2a3e;
+            --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
+        body {
+            font-family: var(--font);
+            background-color: var(--light-bg);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: #f0f0f0;
+        }
+        
+        .navbar {
+            background-color: var(--primary-blue);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        
+        .navbar-logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .navbar-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            opacity: 0.8;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
         .form-container {
-            background-color: #ffffff;
+            background-color: var(--white);
             padding: 2rem 2.5rem;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 450px;
+            margin: 40px auto;
+            transition: background-color 0.3s;
         }
-
+        
+        body.dark-mode .form-container {
+            background-color: var(--dark-container);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
         h2 {
             text-align: center;
             margin-bottom: 1.5rem;
-            color: #1a444d;
+            color: var(--primary-blue);
         }
-
+        
+        body.dark-mode h2 {
+            color: #66b2ff;
+        }
+        
         label {
             display: block;
             margin-bottom: 0.3rem;
             font-weight: 600;
             color: #333333;
         }
-
+        
+        body.dark-mode label {
+            color: #e0e0e0;
+        }
+        
         select,
         input[type="number"] {
             width: 100%;
-            padding: 0.6rem;
+            padding: 0.8rem;
             margin-bottom: 1.2rem;
             border: 1px solid #ccc;
             border-radius: 6px;
             background-color: #fafafa;
             font-size: 1rem;
+            transition: all 0.3s;
         }
-
+        
+        body.dark-mode select,
+        body.dark-mode input[type="number"] {
+            background-color: #333344;
+            border-color: #444;
+            color: #f0f0f0;
+        }
+        
         button {
             width: 100%;
             padding: 0.75rem;
-            background-color: #2e448b;
+            background-color: var(--primary-blue);
             border: none;
             border-radius: 6px;
             color: #fff;
             font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s;
         }
-
+        
         button:hover {
-            background-color: #256d47;
+            background-color: var(--primary-green);
+            transform: translateY(-2px);
         }
-
+        
         .errorlist {
-            color: red;
+            color: #ff4444;
             font-size: 0.9rem;
             margin-bottom: 1rem;
+            padding: 0;
+            list-style: none;
+        }
+        
+        body.dark-mode .errorlist {
+            color: #ff6666;
         }
     </style>
 </head>
 <body>
+    <nav class="navbar">
+        <div class="navbar-logo">Veripharm</div>
+        <div class="navbar-controls">
+            <a href="{% url 'distributor:dashboard' %}" class="back-btn">
+                ← Back to Dashboard
+            </a>
+            <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
+        </div>
+    </nav>
+
     <div class="form-container">
         <h2>Send Batch to Pharmacy</h2>
         <form method="POST">
             {% csrf_token %}
 
             {% if form.errors %}
-                <div class="errorlist">
+                <ul class="errorlist">
                     {% for field in form %}
                         {% for error in field.errors %}
-                            <p><strong>{{ field.label }}:</strong> {{ error }}</p>
+                            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
                         {% endfor %}
                     {% endfor %}
-                </div>
+                </ul>
             {% endif %}
 
             <label for="id_batch">Batch</label>
@@ -93,8 +192,24 @@
             <label for="id_quantity_sent">Quantity</label>
             {{ form.quantity_sent }}
 
-            <button type="submit">Send</button>
+            <button type="submit">Send to Pharmacy</button>
         </form>
     </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.querySelector('.theme-toggle');
+            const isDark = document.body.classList.contains('dark-mode');
+            btn.textContent = isDark ? '🌙' : '☀️';
+            localStorage.setItem('darkMode', isDark);
+        }
+        
+        // Initialize theme from localStorage
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.querySelector('.theme-toggle').textContent = '🌙';
+        }
+    </script>
 </body>
 </html>
