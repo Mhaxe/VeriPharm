@@ -1,257 +1,384 @@
 <!DOCTYPE html>
-{%load static%}
+{% load static %}
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Consumer Dashboard | Veripharm</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --primary-blue: #007bff;
-        --hover-blue: #0056b3;
-        --light-bg: #f0f8ff;
-        --white: #ffffff;
-        --gray: #555;
-        --font: "Plus Jakarta Sans", sans-serif;
-        --bubble-bg: #e9f4ff;
-        --bubble-shadow: rgba(0, 123, 255, 0.15);
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Consumer Dashboard | Veripharm</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue: #007bff;
+      --blue-dark: #0056b3;
+      --white: #ffffff;
+      --gray: #555;
+      --font-main: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'Share Tech Mono', monospace;
+    }
 
-      * {
-        box-sizing: border-box;
-      }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-      body {
-        margin: 0;
-        font-family: var(--font);
-        background: linear-gradient(145deg, #f0f8ff, #ffffff);
-        color: #333;
-      }
+    body {
+      font-family: var(--font-main);
+      background: linear-gradient(145deg, #f0f8ff, #ffffff);
+      overflow-x: hidden;
+      position: relative;
+      height: 100vh;
+    }
 
-      /* Top Bar */
+    canvas#pillCanvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .top-bar {
+      background-color: var(--blue);
+      color: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 25px;
+      font-size: 20px;
+      font-weight: 600;
+      position: relative;
+      z-index: 2;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      position: relative;
+      padding: 5px 0;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: var(--white);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .scan-button {
+      background-color: var(--blue);
+      color: var(--white);
+      border: 2px solid white;
+      border-radius: 25px;
+      padding: 10px 24px;
+      font-family: var(--font-mono);
+      font-size: 16px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: pulse 1.5s infinite;
+      text-transform: uppercase;
+    }
+
+    .scan-button:hover {
+      background-color: var(--blue-dark);
+      transform: scale(1.05);
+      animation: none;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
+
+    .steps-container {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 30px;
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+      position: relative;
+      z-index: 2;
+    }
+
+    .steps-container h2 {
+      font-size: 32px;
+      text-align: center;
+      margin-bottom: 50px;
+      color: var(--blue);
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      background: #e9f4ff;
+      border-radius: 20px;
+      margin-bottom: 40px;
+      padding: 25px;
+      gap: 30px;
+      box-shadow: 0 6px 12px rgba(0, 123, 255, 0.15);
+      opacity: 0;
+      transform: translateY(60px) scale(0.95);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .step.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .step:nth-child(2) { transition-delay: 0.1s; }
+    .step:nth-child(3) { transition-delay: 0.2s; }
+    .step:nth-child(4) { transition-delay: 0.3s; }
+
+    .step-number {
+      font-size: 64px;
+      color: var(--blue);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      flex: 1;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .step-image {
+      width: 220px;
+      height: 220px;
+      border-radius: 20px;
+      object-fit: cover;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .final-note {
+      margin-top: 40px;
+      font-size: 16px;
+      color: var(--gray);
+      text-align: center;
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
       .top-bar {
-        background-color: var(--primary-blue);
-        color: var(--white);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 25px;
-        font-size: 20px;
-        font-weight: 600;
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
       }
 
-      .nav-links a {
-        color: var(--white);
-        text-decoration: none;
-        margin-left: 20px;
-        font-size: 16px;
-        font-weight: 500;
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
       }
 
-      .nav-links a:hover {
-        text-decoration: underline;
-      }
-
-      .scan-button {
-        background-color: rgb(37, 72, 125);
-        color: var(--primary-blue);
-        border: none;
-        border-radius: 25px;
-        padding: 10px 24px;
-        font-weight: 600;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.2s;
-        margin-left: 15px;
-      }
-
-      .scan-button:hover {
-        background-color:rgb(8, 47, 107);
-        transform: scale(1.05);
-      }
-
-      /* Main Steps Container */
-      .steps-container {
-        max-width: 1100px;
-        margin: 60px auto;
-        padding: 30px;
-        background: var(--white);
-        border-radius: 20px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
-      }
-
-      .steps-container h2 {
-        font-size: 32px;
-        text-align: center;
-        margin-bottom: 50px;
-        color: var(--primary-blue);
-      }
-
-      /* Step Styles */
       .step {
-        display: flex;
-        align-items: center;
-        background: var(--bubble-bg);
-        border-radius: 20px;
-        margin-bottom: 40px;
-        padding: 25px;
-        gap: 30px;
-        box-shadow: 0 6px 12px var(--bubble-shadow);
-
-        opacity: 0;
-        transform: translateY(60px) scale(0.95);
-        transition: opacity 0.4s ease, transform 0.4s ease;
-      }
-
-      /* Animate in */
-      .step.show {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-
-      /* Custom delays for staggered effect */
-      .step:nth-child(2) {
-        transition-delay: 0.1s;
-      }
-      .step:nth-child(3) {
-        transition-delay: 0.2s;
-      }
-      .step:nth-child(4) {
-        transition-delay: 0.3s;
-      }
-      .step:nth-child(5) {
-        transition-delay: 0.4s;
-      }
-
-      .step-number {
-        font-size: 64px;
-        color: var(--primary-blue);
-        font-weight: 700;
-        flex-shrink: 0;
-      }
-
-      .step-text {
-        flex: 1;
-        font-size: 22px;
-        font-weight: 600;
+        flex-direction: column;
+        text-align: center;
       }
 
       .step-image {
-        width: 220px;
-        height: 220px;
-        border-radius: 20px;
-        object-fit: cover;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 15px;
+        width: 100%;
+        max-width: 320px;
+        height: auto;
       }
 
-      .final-note {
-        margin-top: 40px;
-        font-size: 16px;
-        color: var(--gray);
-        text-align: center;
-        font-style: italic;
+      .step-number {
+        font-size: 52px;
       }
+    }
+  </style>
+</head>
+<body>
+<canvas id="pillCanvas"></canvas>
 
-      /* Responsive Layout */
-      @media (max-width: 768px) {
-        .step {
-          flex-direction: column;
-          text-align: center;
-        }
+<div class="top-bar">
+  <div>Veripharm</div>
+  <div class="nav-links">
+    <a href="hhome.html">Home</a>
+    <a href="{% url 'consumer:about' %}">About</a>
+    <a class="scan-button" href="{% url 'consumer:scan_camera' %}">SCAN HERE</a>
+    <a href="{% url 'logout' %}">Logout</a>
+  </div>
+</div>
 
-        .step-image {
-          margin-top: 15px;
-          width: 100%;
-          max-width: 320px;
-          height: auto;
-        }
+<div class="steps-container">
+  <h2>Verify Your Medication in 4 Easy Steps</h2>
 
-        .step-number {
-          font-size: 52px;
-        }
+  <div class="step"><div class="step-number">1</div><div class="step-text">Take out your medication package</div><img src="{% static 'img/com.webp' %}" class="step-image" /></div>
+  <div class="step"><div class="step-number">2</div><div class="step-text">Locate the QR code on the drug label</div><img src="{% static 'img/qcf.webp' %}" class="step-image" /></div>
+  <div class="step"><div class="step-number">3</div><div class="step-text">Tap "SCAN HERE" and scan the code</div><img src="{% static 'img/stc.jpeg' %}" class="step-image" /></div>
+  <div class="step"><div class="step-number">4</div><div class="step-text">If verified, you're safe to use</div><img src="{% static 'img/mc.avif' %}" class="step-image" /></div>
+
+  <p class="final-note">Your safety is our priority. Stay informed, stay safe.</p>
+</div>
+
+<script>
+  const canvas = document.getElementById("pillCanvas");
+  const ctx = canvas.getContext("2d");
+  let width, height;
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  const pills = [];
+  const totalDrawn = 50;
+  const totalSVG = 50;
+  const all = [];
+
+  const colorLeft = ['#007bff','#f94144','#00c1d4'];
+  const colorRight = ['#74c0fc','#f3722c','#90e0ef'];
+  const svgColors = ['#ffa600','#ff6b6b','#6bcB77','#6b8cff'];
+
+  for (let i = 0; i < totalDrawn; i++) {
+    const w = 40, h = 16;
+    pills.push({
+      type: "drawn",
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 2,
+      vy: (Math.random() - 0.5) * 2,
+      w, h,
+      angle: Math.random() * Math.PI,
+      colorLeft: colorLeft[Math.floor(Math.random() * colorLeft.length)],
+      colorRight: colorRight[Math.floor(Math.random() * colorRight.length)]
+    });
+  }
+
+  for (let i = 0; i < totalSVG; i++) {
+    all.push({
+      type: "svg",
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 2,
+      vy: (Math.random() - 0.5) * 2,
+      r: 12,
+      color: svgColors[Math.floor(Math.random() * svgColors.length)]
+    });
+  }
+
+  all.push(...pills);
+
+  function drawCapsule(p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.angle);
+
+    const half = p.w / 2;
+
+    ctx.beginPath();
+    ctx.moveTo(0, -p.h / 2);
+    ctx.arc(-half / 2, 0, p.h / 2, -Math.PI / 2, Math.PI / 2, true);
+    ctx.lineTo(0, p.h / 2);
+    ctx.closePath();
+    ctx.fillStyle = p.colorLeft;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(0, -p.h / 2);
+    ctx.arc(half / 2, 0, p.h / 2, -Math.PI / 2, Math.PI / 2, false);
+    ctx.lineTo(0, p.h / 2);
+    ctx.closePath();
+    ctx.fillStyle = p.colorRight;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(-half / 2, -p.h / 4);
+    ctx.lineTo(half / 2, -p.h / 4);
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function drawSVG(p) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+  }
+
+  function bounce(p1, p2) {
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    const dist = Math.hypot(dx, dy);
+    const minDist = ((p1.r || p1.w / 2) + (p2.r || p2.w / 2));
+    if (dist < minDist && dist > 0) {
+      const angle = Math.atan2(dy, dx);
+      const tx = p1.x + Math.cos(angle) * minDist;
+      const ty = p1.y + Math.sin(angle) * minDist;
+      const ax = (tx - p2.x) * 0.02;
+      const ay = (ty - p2.y) * 0.02;
+
+      p1.vx -= ax; p1.vy -= ay;
+      p2.vx += ax; p2.vy += ay;
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    for (let i = 0; i < all.length; i++) {
+      for (let j = i + 1; j < all.length; j++) {
+        bounce(all[i], all[j]);
       }
-    </style>
-  </head>
-  <body>
-    <!-- Navigation and Scan Button -->
-    <div class="top-bar">
-      <div>Veripharm</div>
-      <div class="nav-links">
-        <a href="hhome.html">Home</a>
-        <a href="{%url 'consumer:about'%}">About</a>
-        <a class="scan-button" href ="{%url 'consumer:scan_camera'%}">Scan Here</a>
-        <a href="{% url 'logout' %}">Logout</a>
-      </div>
-    </div>
+    }
 
-    <!-- Steps Section -->
-    <div class="steps-container">
-      <h2>Verify Your Medication in 4 Easy Steps</h2>
+    for (const p of all) {
+      p.x += p.vx;
+      p.y += p.vy;
 
-      <!-- Each Step -->
-      <div class="step">
-        <div class="step-number">1</div>
-        <div class="step-text">Take out your medication package</div>
-        <img
-          src="{% static "img/com.webp" %}"
-          alt="Step 1"
-          class="step-image"
-        />
-      </div>
+      if (p.type === "drawn") p.angle += 0.002;
 
-      <div class="step">
-        <div class="step-number">2</div>
-        <div class="step-text">Locate the QR code on the drug label</div>
-        <img src="{%static "img/qcf.webp"%}" alt="Step 2" class="step-image" />
-      </div>
+      if (p.x < -50) p.x = width + 50;
+      if (p.x > width + 50) p.x = -50;
+      if (p.y < -50) p.y = height + 50;
+      if (p.y > height + 50) p.y = -50;
 
-      <div class="step">
-        <div class="step-number">3</div>
-        <div class="step-text">
-          Tap <strong>"Scan Here"</strong> and scan the code. Wait for
-          verification
-        </div>
-        <img src="{%static "img/stc.jpeg"%}" alt="Step 3" class="step-image" />
-      </div>
+      if (p.type === "drawn") drawCapsule(p);
+      else drawSVG(p);
+    }
 
-      <div class="step">
-        <div class="step-number">4</div>
-        <div class="step-text">
-          If verified, you’re safe to use. If not, contact your nearest hospital
-          immediately
-        </div>
-        <img src="{%static "img/mc.avif"%}" alt="Step 4" class="step-image" />
-      </div>
+    requestAnimationFrame(animate);
+  }
 
-      <p class="final-note">
-        Your safety is our priority. Stay informed, stay safe.
-      </p>
-    </div>
+  animate();
 
-    <!-- Scroll Animation Logic -->
-    <script>
-      const steps = document.querySelectorAll(".step");
+  const steps = document.querySelectorAll(".step");
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+      } else {
+        entry.target.classList.remove("show");
+      }
+    });
+  }, { threshold: 0.3 });
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("show");
-            } else {
-              entry.target.classList.remove("show"); // persistently replay animation
-            }
-          });
-        },
-        {
-          threshold: 0.3, // Trigger when ~30% of step is visible
-        }
-      );
+  steps.forEach(step => observer.observe(step));
+</script>
 
-      steps.forEach((step) => observer.observe(step));
-    </script>
-  </body>
+</body>
 </html>
