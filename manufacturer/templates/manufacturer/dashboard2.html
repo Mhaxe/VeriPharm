@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,16 +11,82 @@
         margin: 0;
         padding: 0;
         color: #333;
-        animation: fadeIn 0.5s ease-out;
+        animation: fadeIn 1.5s ease-in-out;
+        position: relative;
+        overflow-x: hidden;
       }
 
       @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
       }
 
+      /* Enhanced Video Background */
+      video.bg-video {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        transform: translateX(-50%) translateY(-50%);
+        z-index: -1;
+        opacity: 0.3;
+        object-fit: cover;
+      }
+
+      /* Scrollable Date Picker */
+      .date-input-group {
+        display: flex;
+        gap: 10px;
+      }
+      
+      .date-input-component {
+        position: relative;
+        flex: 1;
+      }
+      
+      .date-input-component input {
+        width: 100%;
+        padding: 10px;
+        -moz-appearance: textfield;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+      
+      .date-input-component input::-webkit-outer-spin-button,
+      .date-input-component input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      
+      .date-input-arrows {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      
+      .date-input-arrows button {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        color: #0057b8;
+        font-size: 12px;
+        line-height: 1;
+      }
+
+      /* Rest of your existing CSS */
       .content-container {
         padding: 40px;
+        position: relative;
+        z-index: 2;
       }
 
       h1 {
@@ -38,6 +105,8 @@
         margin-top: 20px;
         margin-bottom: 50px;
         max-width: 600px;
+        position: relative;
+        z-index: 3;
       }
 
       label {
@@ -63,7 +132,7 @@
         box-shadow: 0 0 0 2px rgba(0, 132, 255, 0.2);
       }
 
-      button {
+      button[type="submit"] {
         margin-top: 30px;
         padding: 12px 20px;
         background-color: #0057b8;
@@ -75,11 +144,11 @@
         transition: all 0.3s ease;
       }
 
-      button:hover {
+      button[type="submit"]:hover {
         background-color: #004099;
       }
 
-      button:active {
+      button[type="submit"]:active {
         transform: scale(0.98);
       }
 
@@ -99,6 +168,8 @@
         font-family: "Segoe UI", sans-serif;
         width: 100%;
         box-sizing: border-box;
+        position: relative;
+        z-index: 5;
       }
 
       .navbar-logo {
@@ -141,131 +212,203 @@
       }
 
       .scan-btn {
-        background-color: --hover-blue(255, 255, 255);
-        color: #0022ff;
+        background-color: #0057b8;
+        color: white;
         padding: 8px 20px;
         border-radius: 999px;
         font-weight: bold;
         text-decoration: none;
         transition: background-color 0.3s;
         animation: pulse 1s infinite;
-
       }
 
       @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.918); }
+        0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
         70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
         100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
       }
 
       .scan-btn:hover {
-        background-color: #e6f0ff;
+        background-color: #004099;
       }
     </style>
   </head>
   <body>
+    <!-- Video Background with static path -->
+    <video class="bg-video" autoplay muted loop playsinline>
+      <source src="{% static 'img/videos/factory_bg.mp4' %}" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+
+
     <nav class="navbar">
       <div class="navbar-logo">Veripharm</div>
       <div class="navbar-links">
-        <a href="{% url 'manufacturer:records' %}">Records</a>
-        <a href="{% url 'manufacturer:scan_camera' %}" class="scan-btn">Scan Here</a>
-        <a href="{% url 'manufacturer:about' %}">About</a>
-        <a href="{% url 'manufacturer:dashboard' %}">Dashboard</a>
-        <a href="{% url 'logout' %}">Logout</a>
+        <a href="#">Records</a>
+        <a href="#" class="scan-btn">Scan Here</a>
+        <a href="#">About</a>
+        <a href="#">Logout</a>
       </div>
     </nav>
 
     <div class="content-container">
       <h1>Batch Form</h1>
       <form method="POST">
-        {% csrf_token %}
+        <label for="batch_id">Batch ID</label>
+        <input type="text" id="batch_id" name="batch_id">
 
-        <label for="id_batch_id">Batch ID</label>
-        {{ batch_form.batch_id }}
+        <label for="drug_name">Drug Name</label>
+        <input type="text" id="drug_name" name="drug_name">
 
-        <label for="id_drug_name">Drug Name</label>
-        {{ batch_form.drug_name }}
-
-        <label for="id_drug_category">Drug Category</label>
-        <select name="drug_category" id="id_drug_category" required>
-            <option value="" disabled selected>Select a category</option>
-            <option value="Antibiotics">Antibiotics</option>
-            <option value="Antimalarials">Antimalarials</option>
-            <option value="Analgesics">Analgesics</option>
-            <option value="Opioids">Opioids</option>
-            <option value="Antihypertensives">Antihypertensives</option>
-            <option value="Antidiabetics">Antidiabetics</option>
-            <option value="Antacids/PPIs">Antacids/PPIs</option>
-            <option value="Vitamin supplements">Vitamin supplements</option>
-            <option value="Antifungals">Antifungals</option>
-            <option value="Antivirals">Antivirals</option>
-            <option value="Antidepressants">Antidepressants</option>
-            <option value="General creams">General creams</option>
-            <option value="Other">Other (specify below)</option>
+        <label for="drug_category">Drug Category</label>
+        <select name="drug_category" id="drug_category" required>
+          <option value="" disabled selected>Select a category</option>
+          <option value="Antibiotics">Antibiotics</option>
+          <option value="Antimalarials">Antimalarials</option>
+          <option value="Analgesics">Analgesics</option>
+          <option value="Opioids">Opioids</option>
+          <option value="Antihypertensives">Antihypertensives</option>
+          <option value="Antidiabetics">Antidiabetics</option>
+          <option value="Antacids/PPIs">Antacids/PPIs</option>
+          <option value="Vitamin supplements">Vitamin supplements</option>
+          <option value="Antifungals">Antifungals</option>
+          <option value="Antivirals">Antivirals</option>
+          <option value="Antidepressants">Antidepressants</option>
+          <option value="General creams">General creams</option>
+          <option value="Other">Other (specify below)</option>
         </select>
 
         <label for="new_category" style="margin-top: 10px; display: none;" id="new_category_label">New Category</label>
         <input type="text" name="new_category" id="new_category" style="display: none; margin-top: 5px;">
 
-        <label for="id_quantity">Quantity</label>
-        {{ batch_form.quantity }}
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" name="quantity">
 
-        <label for="id_manufacture_date">Manufacture Date</label>
-        {{ batch_form.manufacture_date }}
+        <!-- Scrollable Date Inputs -->
+        <label>Manufacture Date</label>
+        <div class="date-input-group">
+          <div class="date-input-component">
+            <input type="number" id="manufacture_day" name="manufacture_day" min="1" max="31" placeholder="DD">
+            <div class="date-input-arrows">
+              <button type="button" class="date-up">▲</button>
+              <button type="button" class="date-down">▼</button>
+            </div>
+          </div>
+          <div class="date-input-component">
+            <input type="number" id="manufacture_month" name="manufacture_month" min="1" max="12" placeholder="MM">
+            <div class="date-input-arrows">
+              <button type="button" class="date-up">▲</button>
+              <button type="button" class="date-down">▼</button>
+            </div>
+          </div>
+          <div class="date-input-component">
+            <input type="number" id="manufacture_year" name="manufacture_year" min="2020" max="2030" placeholder="YYYY">
+            <div class="date-input-arrows">
+              <button type="button" class="date-up">▲</button>
+              <button type="button" class="date-down">▼</button>
+            </div>
+          </div>
+        </div>
 
-        <label for="id_expiry_date">Expiry Date</label>
-        {{ batch_form.expiry_date }}
+        <label>Expiry Date</label>
+        <div class="date-input-group">
+          <div class="date-input-component">
+            <input type="number" id="expiry_day" name="expiry_day" min="1" max="31" placeholder="DD">
+            <div class="date-input-arrows">
+              <button type="button" class="date-up">▲</button>
+              <button type="button" class="date-down">▼</button>
+            </div>
+          </div>
+          <div class="date-input-component">
+            <input type="number" id="expiry_month" name="expiry_month" min="1" max="12" placeholder="MM">
+            <div class="date-input-arrows">
+              <button type="button" class="date-up">▲</button>
+              <button type="button" class="date-down">▼</button>
+            </div>
+          </div>
+          <div class="date-input-component">
+            <input type="number" id="expiry_year" name="expiry_year" min="2020" max="2030" placeholder="YYYY">
+            <div class="date-input-arrows">
+              <button type="button" class="date-up">▲</button>
+              <button type="button" class="date-down">▼</button>
+            </div>
+          </div>
+        </div>
 
         <button type="submit">Submit Batch Form</button>
       </form>
 
       <hr />
 
-      <h1> Drug Form</h1>
+      <h1>Drug Form</h1>
       <form method="POST">
-        {% csrf_token %}
+        <label for="drug_form_name">Drug Name</label>
+        <input type="text" id="drug_form_name" name="drug_form_name">
 
-        <label for="id_name">Drug Name</label>
-        {{ drug_form.name }}
-
-        <label for="id_batch">Batch</label>
-        {{ drug_form.batch }}
+        <label for="drug_form_batch">Batch</label>
+        <input type="text" id="drug_form_batch" name="drug_form_batch">
 
         <button type="submit">Submit Drug Form</button>
       </form>
 
       <h1>Distro Form</h1>
       <form method="POST">
-        {% csrf_token %}
+        <label for="distro_batch">Batch</label>
+        <input type="text" id="distro_batch" name="distro_batch">
 
-        <label for="id_batch">Batch</label>
-        {{ distributor_form.batch }}
+        <label for="distributor">Distributor</label>
+        <input type="text" id="distributor" name="distributor">
 
-        <label for="id_distributor">Distributor</label>
-        {{ distributor_form.distributor }}
-
-        <label for="id_quantity_sent">Quantity Sent</label>
-        {{ distributor_form.quantity_sent }}
+        <label for="quantity_sent">Quantity Sent</label>
+        <input type="number" id="quantity_sent" name="quantity_sent">
 
         <button type="submit">Submit Distro Form</button>
       </form>
     </div>
 
     <script>
-        document.getElementById('id_drug_category').addEventListener('change', function() {
-            const newCategoryLabel = document.getElementById('new_category_label');
-            const newCategoryInput = document.getElementById('new_category');
-            
-            if (this.value === 'Other') {
-                newCategoryLabel.style.display = 'block';
-                newCategoryInput.style.display = 'block';
-                newCategoryInput.required = true;
-            } else {
-                newCategoryLabel.style.display = 'none';
-                newCategoryInput.style.display = 'none';
-                newCategoryInput.required = false;
-            }
+      // Category selection handler
+      document.getElementById('drug_category').addEventListener('change', function() {
+        const newCategoryLabel = document.getElementById('new_category_label');
+        const newCategoryInput = document.getElementById('new_category');
+
+        if (this.value === 'Other') {
+          newCategoryLabel.style.display = 'block';
+          newCategoryInput.style.display = 'block';
+          newCategoryInput.required = true;
+        } else {
+          newCategoryLabel.style.display = 'none';
+          newCategoryInput.style.display = 'none';
+          newCategoryInput.required = false;
+        }
+      });
+
+      // Scrollable date picker functionality
+      document.querySelectorAll('.date-input-component').forEach(component => {
+        const input = component.querySelector('input');
+        const upBtn = component.querySelector('.date-up');
+        const downBtn = component.querySelector('.date-down');
+        
+        upBtn.addEventListener('click', () => {
+          input.stepUp();
+          input.dispatchEvent(new Event('change'));
         });
+        
+        downBtn.addEventListener('click', () => {
+          input.stepDown();
+          input.dispatchEvent(new Event('change'));
+        });
+        
+        // Mouse wheel support
+        input.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          if (e.deltaY < 0) {
+            input.stepUp();
+          } else {
+            input.stepDown();
+          }
+        });
+      });
     </script>
   </body>
 </html>
