@@ -79,7 +79,7 @@ class Batch(models.Model):
         )
         sub_batch.save()
         
-        self.quantity_left -= quantity_to_be_sent
+        self.quantity_left = self.quantity_left - quantity_to_be_sent
         self.save()
         return sub_batch  
 

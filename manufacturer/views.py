@@ -4,6 +4,7 @@ from accounts.decorators import manufacturer_required
 from accounts.views import logout
 from .forms import *
 from distributor.models import PharmacyDistribution
+from contract.blockchain import log_event
 
 
 @login_required
@@ -20,27 +21,45 @@ def manufacturer_dashboard(request):
     batch_form = BatchForm()
     drug_form = DrugForm()
     distributor_form = BatchDistributionForm()
+    batch_form_error = ''
+    distributor_form_error=''
 
     if request.method == 'POST':
+        print("post req made")
         batch_form = BatchForm(request.POST)
         drug_form = DrugForm(request.POST)
         distributor_form = BatchDistributionForm(request.POST)
-        if batch_form.is_valid():
-            batch = batch_form.save(commit=False)
-            batch.manufacturer = request.user  
-            batch.save()
-            quantity = batch_form.cleaned_data['quantity']
-            from .utils import generate_qr_code
-            for _ in range(quantity):
-                unique_qr_string = generate_qr_code()  # you define this in utils.py
-                drug = Drug(
-                    name=batch.drug_name,
-                    batch=batch,
-                    qr_code_string=unique_qr_string,
-                )
-                drug.save()  # This will auto-generate the QR image in .save()
-            print(f'{quantity} drugs added successfully.')    
         
+    
+        if batch_form.is_valid():
+            manufacture_date = batch_form.cleaned_data['manufacture_date']
+            expiry_date = batch_form.cleaned_data['expiry_date']
+
+            # Check that expiry is not before manufacture
+            if expiry_date < manufacture_date:
+                print("exp_date<man_date")
+                batch_form_error ='Expiry date cannot be earlier than manufacture date.'
+            else:
+                print("valid date")
+                batch = batch_form.save(commit=False)
+                batch.manufacturer = request.user  
+                batch.save()
+
+                quantity = batch_form.cleaned_data['quantity']
+                from .utils import generate_qr_code
+
+                for _ in range(quantity):
+                    unique_qr_string = generate_qr_code()
+                    drug = Drug(
+                        name=batch.drug_name,
+                        batch=batch,
+                        qr_code_string=unique_qr_string,
+                    )
+                    drug.save()
+                
+                print(f'{quantity} drugs added successfully.')
+        
+            
         if drug_form.is_valid():
             drug_form.save()
 
@@ -52,14 +71,20 @@ def manufacturer_dashboard(request):
                 distribution.batch = sub_batch
                 distribution.save()
                 print(f"sent {distribution.quantity_sent}")
+                success = log_event(f"Batch ({distribution.batch}) sent to distributor({distribution.distributor})")  
             else:
                 print("Cannot send more than available quantity.")
-            
+                distributor_form_error = "Cannot send more than available quantity."
+
+
     return render(request, 'manufacturer/dashboard2.html', {
         'batch_form': batch_form,
         'drug_form': drug_form,
         'distributor_form': distributor_form,
+        'batch_form_error': batch_form_error,
+        'distributor_form_error':distributor_form_error,
     })
+
 
 
 def about(request):
@@ -106,8 +131,7 @@ def manufacturer_records(request):
             pharmacy_dist = PharmacyDistribution.objects.filter(batch=batch).first()
             if pharmacy_dist:
                 status['sent_to_pharmacy'] = True
-                status['pharmacy_verified'] = getattr(pharmacy_dist, 'verified', False)
-
+                status['pharmacy_verified'] = getattr(pharmacy_dist, 'verified', False)      
         records.append(status)
 
 

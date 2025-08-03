@@ -1,0 +1,26 @@
+<!-- templates/blockchain/logs.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blockchain Logs</title>
+</head>
+<body>
+    <h1>Blockchain Logs</h1>
+    {% if events %}
+        <table border="1">
+            <tr>
+                <th>Message</th>
+                <th>Block Number</th>
+            </tr>
+            {% for event in events %}
+                <tr>
+                    <td>{{ event.message }}</td>
+                    <td>{{ event.block }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No logs found.</p>
+    {% endif %}
+</body>
+</html>
