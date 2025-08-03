@@ -1,11 +1,5 @@
-Add scan funtionalities to Distributor(scan returning invalid )
-add status to distributor and pharmacy dashboards
-
-
 make ui consistent 
 add restritions to functions to prevent lenght extension attacks
-consumer scan redirect to manufacturer scan 
-
 fix css of scan button on consumer page
-
 implement profile settings
+
