@@ -1,204 +1,333 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Manufacturer Dashboard | Veripharm</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Consumer Dashboard | Veripharm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
     <style>
-        :root {
-            --primary-blue: #007BFF;
-            --hover-blue: #0056b3;
-            --light-bg: #f0f8ff;
-            --white: #ffffff;
-            --gray: #555;
-            --font: 'Plus Jakarta Sans', sans-serif;
-            --bubble-bg: #e9f4ff;
-            --bubble-shadow: rgba(0, 123, 255, 0.15);
-        }
+      :root {
+        --primary-blue: #007bff;
+        --hover-blue: #0056b3;
+        --light-bg: #f0f8ff;
+        --white: #ffffff;
+        --gray: #555;
+        --font: "Plus Jakarta Sans", sans-serif;
+        --tech-font: 'Share Tech Mono', monospace;
+        --bubble-bg: #e9f4ff;
+        --bubble-shadow: rgba(0, 123, 255, 0.15);
+      }
 
-        * {
-            box-sizing: border-box;
-        }
+      * {
+        box-sizing: border-box;
+      }
 
-        body {
-            margin: 0;
-            font-family: var(--font);
-            background: linear-gradient(145deg, #f0f8ff, #ffffff);
-            color: #333;
-        }
+      body {
+        margin: 0;
+        font-family: var(--font);
+        background:
+          linear-gradient(145deg, #f0f8ff, #ffffff),
+          url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='2' fill='%23007bff' fill-opacity='0.05'/%3E%3Ccircle cx='30' cy='30' r='2' fill='%23007bff' fill-opacity='0.05'/%3E%3Ccircle cx='70' cy='30' r='2' fill='%23007bff' fill-opacity='0.05'/%3E%3Ccircle cx='30' cy='70' r='2' fill='%23007bff' fill-opacity='0.05'/%3E%3Ccircle cx='70' cy='70' r='2' fill='%23007bff' fill-opacity='0.05'/%3E%3Cline x1='50' y1='50' x2='30' y2='30' stroke='%23007bff' stroke-opacity='0.03' stroke-width='1'/%3E%3Cline x1='50' y1='50' x2='70' y2='30' stroke='%23007bff' stroke-opacity='0.03' stroke-width='1'/%3E%3Cline x1='50' y1='50' x2='30' y2='70' stroke='%23007bff' stroke-opacity='0.03' stroke-width='1'/%3E%3Cline x1='50' y1='50' x2='70' y2='70' stroke='%23007bff' stroke-opacity='0.03' stroke-width='1'/%3E%3C/svg%3E");
+        background-size: cover;
+        position: relative;
+        z-index: 1;
+      }
 
-        /* Top Bar */
+      #particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+      }
+
+      /* Top Bar */
+      .top-bar {
+        background-color: var(--primary-blue);
+        color: var(--white);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 25px;
+        font-size: 20px;
+        font-weight: 600;
+        z-index: 2;
+        position: relative;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .nav-links a {
+        color: var(--white);
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 500;
+        position: relative;
+        padding: 5px 0;
+        transition: all 0.3s ease;
+      }
+
+      .nav-links a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--white);
+        transition: width 0.3s ease;
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      .nav-links a:hover {
+        opacity: 0.8;
+      }
+
+      .scan-button {
+        background-color: var(--primary-blue);
+        color: var(--white);
+        border: 2px solid white;
+        border-radius: 25px;
+        padding: 10px 24px;
+        font-family: var(--tech-font);
+        font-weight: 400;
+        font-size: 16px;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        animation: pulse 1.5s infinite;
+        text-transform: uppercase;
+      }
+
+      .scan-button:hover {
+        background-color: var(--hover-blue);
+        transform: scale(1.05);
+        animation: none;
+        letter-spacing: 1.2px;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+        }
+      }
+
+      .steps-container {
+        max-width: 1100px;
+        margin: 60px auto;
+        padding: 30px;
+        background: var(--white);
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+        position: relative;
+        z-index: 2;
+      }
+
+      .steps-container h2 {
+        font-size: 32px;
+        text-align: center;
+        margin-bottom: 50px;
+        color: var(--primary-blue);
+      }
+
+      .step {
+        display: flex;
+        align-items: center;
+        background: var(--bubble-bg);
+        border-radius: 20px;
+        margin-bottom: 40px;
+        padding: 25px;
+        gap: 30px;
+        box-shadow: 0 6px 12px var(--bubble-shadow);
+        opacity: 0;
+        transform: translateY(60px) scale(0.95);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+      }
+
+      .step.show {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      .step:nth-child(2) { transition-delay: 0.1s; }
+      .step:nth-child(3) { transition-delay: 0.2s; }
+      .step:nth-child(4) { transition-delay: 0.3s; }
+      .step:nth-child(5) { transition-delay: 0.4s; }
+
+      .step-number {
+        font-size: 64px;
+        color: var(--primary-blue);
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .step-text {
+        flex: 1;
+        font-size: 22px;
+        font-weight: 600;
+      }
+
+      .step-image {
+        width: 220px;
+        height: 220px;
+        border-radius: 20px;
+        object-fit: cover;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .final-note {
+        margin-top: 40px;
+        font-size: 16px;
+        color: var(--gray);
+        text-align: center;
+        font-style: italic;
+      }
+
+      @media (max-width: 768px) {
         .top-bar {
-            background-color: var(--primary-blue);
-            color: var(--white);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 25px;
-            font-size: 20px;
-            font-weight: 600;
+          flex-direction: column;
+          gap: 15px;
+          padding: 15px;
         }
 
-        .nav-links a {
-            color: var(--white);
-            text-decoration: none;
-            margin-left: 20px;
-            font-size: 16px;
-            font-weight: 500;
+        .nav-links {
+          flex-wrap: wrap;
+          justify-content: center;
         }
 
-        .nav-links a:hover {
-            text-decoration: underline;
+        .step {
+          flex-direction: column;
+          text-align: center;
         }
 
-        .dashboard-title {
-            font-size: 14px;
-            font-weight: 500;
-            opacity: 0.8;
-            margin-left: 10px;
+        .step-image {
+          margin-top: 15px;
+          width: 100%;
+          max-width: 320px;
+          height: auto;
         }
 
-        /* Main Content */
-        .content-container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 30px;
-            background: var(--white);
-            border-radius: 20px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+        .step-number {
+          font-size: 52px;
         }
-
-        h1 {
-            color: var(--primary-blue);
-            margin-bottom: 25px;
-            font-size: 28px;
-        }
-
-        /* Form Styling */
-        form {
-            margin-bottom: 40px;
-            padding: 25px;
-            background: var(--bubble-bg);
-            border-radius: 15px;
-            box-shadow: 0 6px 12px var(--bubble-shadow);
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--gray);
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: var(--font);
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-        }
-
-        button[type="submit"] {
-            background-color: var(--primary-blue);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            padding: 12px 30px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button[type="submit"]:hover {
-            background-color: var(--hover-blue);
-        }
-
-        hr {
-            border: none;
-            height: 1px;
-            background-color: #e0e0e0;
-            margin: 40px 0;
-        }
+      }
     </style>
   </head>
   <body>
-    <!-- Navigation Bar -->
+    <canvas id="particles"></canvas>
+
     <div class="top-bar">
-        <div>Veripharm <span class="dashboard-title">Manufacturer Dashboard</span></div>
-        <div class="nav-links">
-            <a href="hhome.html">Home</a>
-            <a href="about page.html">About</a>
+      <div>Veripharm</div>
+      <div class="nav-links">
+        <a href="hhome.html">Home</a>
+        <a href="{% url 'consumer:about' %}">About</a>
+        <a class="scan-button" href="{% url 'consumer:scan_camera' %}">SCAN HERE</a>
+        <a href="{% url 'logout' %}">Logout</a>
+      </div>
+    </div>
+
+    <div class="steps-container">
+      <h2>Verify Your Medication in 4 Easy Steps</h2>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-text">Take out your medication package</div>
+        <img src="{% static 'img/com.webp' %}" alt="Step 1" class="step-image" />
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-text">Locate the QR code on the drug label</div>
+        <img src="{% static 'img/qcf.webp' %}" alt="Step 2" class="step-image" />
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-text">
+          Tap <strong>"SCAN HERE"</strong> and scan the code. Wait for verification
         </div>
+        <img src="{% static 'img/stc.jpeg' %}" alt="Step 3" class="step-image" />
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-text">
+          If verified, you're safe to use. If not, contact your nearest hospital immediately
+        </div>
+        <img src="{% static 'img/mc.avif' %}" alt="Step 4" class="step-image" />
+      </div>
+
+      <p class="final-note">
+        Your safety is our priority. Stay informed, stay safe.
+      </p>
     </div>
 
-    <!-- Main Content -->
-    <div class="content-container">
-        <h1>Test Batch Form</h1>
-        <form method="POST">
-          {% csrf_token %}
-          
-          <label for="id_batch_id">Batch ID</label>
-          {{ batch_form.batch_id }}
+    <script>
+      const steps = document.querySelectorAll(".step");
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          } else {
+            entry.target.classList.remove("show");
+          }
+        });
+      }, { threshold: 0.3 });
 
-          <label for="id_drug_name">Drug Name</label>
-          {{ batch_form.drug_name }}
+      steps.forEach(step => observer.observe(step));
 
-          <label for="id_drug_category">Drug Category</label>
-          {{ batch_form.drug_category }}
+      // Particles background animation
+      const canvas = document.getElementById("particles");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
 
-          <label for="id_quantity">Quantity</label>
-          {{ batch_form.quantity }}
+      const particles = [];
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 3 + 1,
+          speedX: Math.random() * 1 - 0.5,
+          speedY: Math.random() * 1 - 0.5
+        });
+      }
 
-          <label for="id_manufacture_date">Manufacture Date</label>
-          {{ batch_form.manufacture_date }}
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(0, 123, 255, 0.15)';
+        particles.forEach(p => {
+          p.x += p.speedX;
+          p.y += p.speedY;
+          if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
 
-          <label for="id_expiry_date">Expiry Date</label>
-          {{ batch_form.expiry_date }}
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        requestAnimationFrame(animate);
+      }
 
-          <button type="submit">Submit Batch Form</button>
-        </form>
+      animate();
+    </script>
 
-        <hr />
-
-        <h1>Test Drug Form</h1>
-        <form method="POST">
-          {% csrf_token %}
-
-          <label for="id_name">Drug Name</label>
-          {{ drug_form.name }}
-
-          <label for="id_batch">Batch</label>
-          {{ drug_form.batch }}
-
-          <button type="submit">Submit Drug Form</button>
-        </form>
-
-        <h1>Test Distro Form</h1>
-        <form method="POST">
-          {% csrf_token %}
-
-          <label for="id_batch">Batch</label>
-          {{ distributor_form.batch }}
-
-          <label for="id_distributor">Distributor</label>
-          {{ distributor_form.distributor }}
-
-          <label for="id_quantity_sent">Quantity Sent</label>
-          {{ distributor_form.quantity_sent }}
-
-          <button type="submit">Submit Distro Form</button>
-        </form>
-    </div>
   </body>
 </html>

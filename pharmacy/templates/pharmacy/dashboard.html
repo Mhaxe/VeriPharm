@@ -1,160 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <title>Pharmacy Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pharm Dashboard | Veripharm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f2fdf6;
-        margin: 0;
-        padding: 2rem;
-      }
+        :root {
+            --primary-blue: #007BFF;
+            --hover-blue: #0056b3;
+            --light-bg: #f0f8ff;
+            --white: #ffffff;
+            --gray: #555;
+            --font: 'Plus Jakarta Sans', sans-serif;
+            --bubble-bg: #e9f4ff;
+            --bubble-shadow: rgba(0, 123, 255, 0.15);
+            --dark-bg: #1e1e2f;
+            --dark-container: #2e2e3e;
+        }
 
-      h1 {
-        text-align: center;
-        color: #1b5e20;
-      }
+        * {
+            box-sizing: border-box;
+        }
 
-      .dashboard-container {
-        max-width: 1000px;
-        margin: 2rem auto;
-        background-color: #ffffff;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      }
+        body {
+            margin: 0;
+            font-family: var(--font);
+            background: linear-gradient(145deg, #f0f8ff, #ffffff);
+            color: #333;
+            transition: background 0.5s, color 0.5s;
+        }
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 1.5rem;
-      }
+        body.dark-mode {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            color: #f0f0f0;
+        }
 
-      th,
-      td {
-        padding: 0.9rem 1rem;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-      }
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: 600;
+        }
 
-      th {
-        background-color: #e0f2f1;
-        color: #004d40;
-      }
+        .navbar-logo {
+            font-weight: 700;
+        }
 
-      tr:hover {
-        background-color: #f1f8e9;
-      }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
-      button {
-        background-color: #2e7d32;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 0.95rem;
-      }
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            position: relative;
+            transition: opacity 0.3s;
+        }
 
-      button:hover {
-        background-color: #1b5e20;
-      }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--white);
+            transition: width 0.3s ease;
+        }
 
-      .verified {
-        color: green;
-        font-weight: bold;
-      }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
 
-      .no-batches {
-        text-align: center;
-        color: #888;
-        margin-top: 2rem;
-        font-style: italic;
-      }
+        .nav-links a:hover {
+            opacity: 0.9;
+        }
+
+        .scan-button {
+            background-color: var(--primary-blue);
+            color: var(--primary-blue);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 24px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+
+        .scan-button:hover {
+            background-color: #e6f0ff;
+            transform: scale(1.05);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+            transition: transform 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .content-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 30px;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+            transition: background 0.5s, box-shadow 0.5s;
+        }
+
+        body.dark-mode .content-container {
+            background-color: var(--dark-container);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            transition: color 0.5s;
+        }
+
+        body.dark-mode h1 {
+            color: #66b2ff;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 6px 12px var(--bubble-shadow);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: box-shadow 0.5s;
+        }
+
+        body.dark-mode table {
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+        }
+
+        body.dark-mode th,
+        body.dark-mode td {
+            border-bottom-color: #444;
+        }
+
+        th {
+            background-color: var(--primary-blue);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--bubble-bg);
+            transition: background-color 0.5s;
+        }
+
+        body.dark-mode tr:nth-child(even) {
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode tr:hover {
+            background-color: rgba(102, 178, 255, 0.1);
+        }
+
+        /* Button Styling */
+        button {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--hover-blue);
+            transform: scale(1.05);
+        }
+
+        .verified-badge {
+            color: green;
+            font-weight: 600;
+            transition: color 0.5s;
+        }
+
+        body.dark-mode .verified-badge {
+            color: #4CAF50;
+        }
+
+        .no-batches {
+            text-align: center;
+            color: var(--gray);
+            transition: color 0.5s;
+        }
+
+        body.dark-mode .no-batches {
+            color: #aaa;
+        }
     </style>
-  </head>
-  <body>
-    <div class="dashboard-container">
-      <h1>Pharmacy Dashboard</h1>
-      <h2 style="text-align: center">Batches Received from Distributor</h2>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">Veripharm</div>
+        <div class="nav-links">
+            <a href="{% url 'pharmacy:scan_camera' %}" class="scan-button">Scan Here</a>
+            
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </nav>
 
-      {% if received_batches %}
-      <table>
-        <thead>
-          <tr>
-            <th>Batch ID</th>
-            <th>Drug Name</th>
-            <th>Quantity</th>
-            <th>Sent On</th>
-            <th>Action</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in received_batches %}
-          <tr>
-            <td>{{ item.batch.batch_id }}</td>
-            <td>{{ item.batch.drug_name }}</td>
-            <td>{{ item.quantity_sent }}</td>
-            <td>{{ item.sent_date|date:"Y-m-d H:i" }}</td>
-            <td>
-              {% if item.verified %}
-              <span class="verified">✅ Verified</span>
-              {% else %}
-              <form
-                method="post"
-                action="{% url 'pharmacy:scan_camera'%}"
-              >
-                {% csrf_token %}
-                <button type="submit">Verify</button>
-              </form>
-              {% endif %}
-            </td>
-            <td>
-              <div class="supply-line">
-                  <!-- Manufacturer: Always completed -->
-                  <span class="step manufacturer" title="Batch created by manufacturer">
-                      ✅ Manufacturer: {{ item.batch.manufacturer.username }}
-                  </span>
-                  
-                  <span class="arrow">→</span>
-          
-                  <!-- Distributor: Dynamic based on whether sent_to_distributor is True -->
-                  <span class="step {% if dist.distributor_verified %}distributor-done{% else %}distributor-pending{% endif %}" 
-                      title="{% if dist.verified %}Batch verified by distributor{% else %}Awaiting distributor verification{% endif %}">
-                      {% if item.distributor %}
-                          ✔️ Distributor: {{ item.distributor.username }}
-                      {% else %}
-                          ⏳ Distributor: None
-                      {% endif %}
-                  </span>
+    <div class="content-container">
+        <h1>Pharmacy Dashboard</h1>
+        <h2 style="text-align: center">Batches Received from Distributor</h2>
 
-          
-                  <span class="arrow">→</span>
-          
-                  
-                  <span class="step {% if dist.pharmacy %}pharmacy-done{% else %}pharmacy-pending{% endif %}" 
-                  title="{% if dist.pharmacy %}Batch forwarded to pharmacy{% else %}Awaiting pharmacy transfer{% endif %}">
-                      {% if item.pharmacy %}
+        {% if received_batches %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Batch ID</th>
+                    <th>Drug Name</th>
+                    <th>Quantity</th>
+                    <th>Sent On</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in received_batches %}
+                <tr>
+                    <td>{{ item.batch.batch_id }}</td>
+                    <td>{{ item.batch.drug_name }}</td>
+                    <td>{{ item.quantity_sent }}</td>
+                    <td>{{ item.sent_date|date:"Y-m-d H:i" }}</td>
+                    <td>
                         {% if item.verified %}
-                         ✔️ Pharmacy: {{ current_user}}
+                        <span class="verified-badge">✅ Verified</span>
                         {% else %}
-                          ⏳ Pharmacy: {{ current_user}}
+                        <form method="post" action="{% url 'pharmacy:verify_receipt' item.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Verify</button>
+                        </form>
                         {% endif %}
-                      {% else %}
-                        ❌ Pharmacy: None
-                      {% endif %}                                      
-                  </span>
-              </div>
-          </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      <p class="no-batches">No batches received yet.</p>
-      {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="no-batches">No batches received yet.</p>
+        {% endif %}
     </div>
-  </body>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.querySelector('.theme-toggle');
+            const isDark = document.body.classList.contains('dark-mode');
+            btn.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('darkMode', isDark);
+        }
+        
+        // Initialize theme from localStorage
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.querySelector('.theme-toggle').textContent = '☀️';
+        }
+    </script>
+</body>
 </html>

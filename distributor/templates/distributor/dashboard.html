@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,11 +61,24 @@
         color: white;
         text-decoration: none;
         font-size: 16px;
-        transition: opacity 0.3s;
+        transition: all 0.3s;
+        position: relative;
+    }
+    .header-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: white;
+        transition: width 0.3s ease;
+    }
+    .header-link:hover::after {
+        width: 100%;
     }
     .header-link:hover {
         opacity: 0.8;
-        text-decoration: underline;
     }
     .theme-toggle {
         background: none;
@@ -76,6 +88,10 @@
         padding: 6px 12px;
         cursor: pointer;
         font-size: 18px;
+        transition: all 0.3s;
+    }
+    .theme-toggle:hover {
+        background-color: rgba(255,255,255,0.1);
     }
     .container {
         max-width: 1200px;
@@ -135,7 +151,7 @@
         border-radius: 5px;
         cursor: pointer;
         font-weight: 600;
-        transition: background-color 0.3s, transform 0.2s;
+        transition: all 0.3s;
     }
     .verify-btn:hover {
         background-color: #0056b3;
@@ -153,6 +169,62 @@
     .actions-cell {
         width: 150px;
     }
+    .scan-btn {
+        background-color: white;
+        color: var(--primary-blue);
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: all 0.3s;
+        animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+        70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
+    .scan-btn:hover {
+        background-color: #e6f0ff;
+        transform: scale(1.05);
+    }
+    .supply-line {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    .step {
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-size: 13px;
+    }
+    .manufacturer {
+        background-color: rgba(40,167,69,0.1);
+        color: var(--success-green);
+    }
+    .distributor-done {
+        background-color: rgba(40,167,69,0.1);
+        color: var(--success-green);
+    }
+    .distributor-pending {
+        background-color: rgba(255,193,7,0.1);
+        color: var(--warning-yellow);
+    }
+    .pharmacy-done {
+        background-color: rgba(40,167,69,0.1);
+        color: var(--success-green);
+    }
+    .pharmacy-pending {
+        background-color: rgba(255,193,7,0.1);
+        color: var(--warning-yellow);
+    }
+    .arrow {
+        color: var(--gray);
+    }
+    body.dark-mode .arrow {
+        color: #aaa;
+    }
     @media (max-width: 768px) {
         .batch-table {
             display: block;
@@ -167,6 +239,13 @@
             gap: 15px;
             padding: 15px;
         }
+        .supply-line {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .arrow {
+            display: none;
+        }
     }
     </style>
 </head>
@@ -175,9 +254,11 @@
         <div class="header-title">Veripharm Distributor Portal</div>
         <div class="header-controls">
             <a href="{% url 'distributor:pass_to_pharmacy' %}" class="header-link">Transfer</a>
+            <a href="{% url 'distributor:scan_camera' %}" class="header-link scan-btn">Scan Batch</a>
             <a href="{% url 'distributor:about' %}" class="header-link">About</a>
+            <a href="{% url 'logout' %}" class="header-link">Logout</a>
 
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+            <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
         </div>
     </header>
 
@@ -275,8 +356,6 @@
         {% endif %}
     </div>
 
-     
-
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Theme toggle functionality
@@ -284,14 +363,14 @@
             document.body.classList.toggle('dark-mode');
             const btn = document.querySelector('.theme-toggle');
             const isDark = document.body.classList.contains('dark-mode');
-            btn.textContent = isDark ? '🌞' : '🌙';
+            btn.textContent = isDark ? '🌙' : '☀️';
             localStorage.setItem('darkMode', isDark);
         };
         
         // Initialize theme from localStorage
         if (localStorage.getItem('darkMode') === 'true') {
             document.body.classList.add('dark-mode');
-            document.querySelector('.theme-toggle').textContent = '🌞';
+            document.querySelector('.theme-toggle').textContent = '🌙';
         }
 
         // Verification confirmation
