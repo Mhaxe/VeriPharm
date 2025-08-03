@@ -34,7 +34,7 @@ def view_logs(request):
     logs = []
 
     try:
-        event_filter = contract.events.Log.createFilter(fromBlock=0)
+        event_filter = contract.events.Log.createFilter(from_block=0)
         events = event_filter.get_all_entries()
 
         for event in events:
@@ -56,7 +56,7 @@ from .blockchain import get_contract_instance
 @staff_member_required
 def logs_view(request):
     contract = get_contract_instance()
-    events = contract.events.EventLogged().get_logs(fromBlock=0)
+    events = contract.events.Log().get_logs(from_block=0)
     context = {
         "events": [
             {
@@ -65,6 +65,6 @@ def logs_view(request):
             } for e in events
         ]
     }
-    return render(request, "contact/logs.html", context)
+    return render(request, "contract/logs.html", context)
 
 
