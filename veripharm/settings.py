@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'pharmacy',
     'distributor',
     'consumer',
+    'contract',
 ]
 
 MIDDLEWARE = [
