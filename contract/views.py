@@ -56,7 +56,7 @@ from .blockchain import get_contract_instance
 @staff_member_required
 def logs_view(request):
     contract = get_contract_instance()
-    events = contract.events.Log().get_logs(from_block=0)
+    events = contract.events.LogMessage().get_logs(from_block=0)
     context = {
         "events": [
             {
