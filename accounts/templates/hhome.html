@@ -3,20 +3,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Veripharm</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet" />
     <style>
       :root {
         --primary-blue: #007bff;
         --hover-blue: #0056b3;
-        --light-bg: #f0f8ff;
         --white: #ffffff;
         --gray: #555;
         --dark-bg: #121212;
@@ -26,20 +20,23 @@
         --weak: #ff4757;
         --medium: #ffa502;
         --strong: #2ed573;
+        --success: #28a745;
+        --border-radius: 8px;
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
 
       body {
-        margin: 0;
         font-family: var(--font);
-        background: linear-gradient(
-            rgba(255, 255, 255, 0.6),
-            rgba(255, 255, 255, 0.6)
-          ),
-          url("{% static 'accounts/images/veripharmPill.jpg' %}") no-repeat
-            center center fixed;
-        background-size: cover;
+        background-color: #f5f7fa;
         color: #333;
-        transition: background-color 0.3s, color 0.3s;
+        line-height: 1.6;
+        transition: var(--transition);
       }
 
       body.dark-mode {
@@ -47,14 +44,16 @@
         color: var(--dark-text);
       }
 
+      /* Top Navigation */
       .top-bar {
         background-color: var(--primary-blue);
         color: var(--white);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 10px 20px;
+        padding: 12px 20px;
         position: relative;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       }
 
       .dark-mode .top-bar {
@@ -64,22 +63,35 @@
       .top-bar .nav-links {
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 20px;
       }
 
       .top-bar .nav-links a {
         color: var(--white);
         text-decoration: none;
         font-weight: 600;
-        transition: opacity 0.2s;
-        padding: 8px 12px;
+        transition: var(--transition);
+        padding: 8px 0;
+        position: relative;
       }
 
-      .top-bar .nav-links a:hover {
-        opacity: 0.8;
+      .top-bar .nav-links a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--white);
+        transition: var(--transition);
       }
 
-      /* Navigation controls (dark mode + language) */
+      .top-bar .nav-links a:hover::after,
+      .top-bar .nav-links a:focus::after {
+        width: 100%;
+      }
+
+      /* Navigation Controls */
       .nav-controls {
         display: flex;
         align-items: center;
@@ -90,22 +102,36 @@
         background: none;
         border: none;
         color: var(--white);
-        font-size: 16px;
+        font-size: 1.2rem;
         cursor: pointer;
-        padding: 12px;
+        padding: 8px;
         border-radius: 50%;
         width: 40px;
         height: 40px;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.2s;
+        transition: var(--transition);
+        position: relative;
       }
 
-      .nav-controls button:hover {
-        background: rgba(255, 255, 255, 0.2);
+      .nav-controls button::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--white);
+        transition: var(--transition);
       }
 
+      .nav-controls button:hover::after,
+      .nav-controls button:focus::after {
+        width: 100%;
+      }
+
+      /* Language Dropdown */
       .lang-dropdown {
         display: none;
         position: absolute;
@@ -113,9 +139,10 @@
         top: 60px;
         background: var(--white);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        border-radius: 6px;
+        border-radius: var(--border-radius);
         z-index: 100;
-        min-width: 120px;
+        min-width: 150px;
+        overflow: hidden;
       }
 
       .dark-mode .lang-dropdown {
@@ -130,340 +157,423 @@
         border: none;
         text-align: left;
         color: var(--primary-blue);
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
       }
 
       .dark-mode .lang-dropdown button {
         color: var(--dark-text);
       }
 
-      .lang-dropdown button:hover {
-        background: rgba(0, 0, 0, 0.05);
+      .lang-dropdown button::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--primary-blue);
+        transition: var(--transition);
       }
 
-      .dark-mode .lang-dropdown button:hover {
-        background: rgba(255, 255, 255, 0.05);
+      .dark-mode .lang-dropdown button::after {
+        background-color: var(--dark-text);
       }
 
+      .lang-dropdown button:hover::after,
+      .lang-dropdown button:focus::after {
+        width: 100%;
+      }
+
+      /* Main Container */
       .container {
         display: flex;
-        flex-direction: row;
-        min-height: 100vh;
+        min-height: calc(100vh - 64px);
       }
 
+      /* Left Section */
       .left-section {
-        background: linear-gradient(135deg, var(--primary-blue), #0066cc),
-          url("{% static 'accounts/images/veripharmPill.jpg' %}") no-repeat
-            center center;
-        background-size: cover;
-        color: var(--white);
-        padding: 60px 40px;
+        flex: 1;
+        padding: 60px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        color: var(--white);
         position: relative;
         overflow: hidden;
-        flex: 1;
       }
 
       .left-section::before {
-        content: "";
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("{% static 'accounts/images/pill.jpg' %}") no-repeat center center;
+        background-size: cover;
+        filter: blur(2px);
+        z-index: -2;
+      }
+
+      .left-section::after {
+        content: '';
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
         background: rgba(0, 0, 0, 0.5);
-        z-index: 1;
-      }
-
-      .dark-mode .left-section::before {
-        background: rgba(0, 0, 0, 0.7);
-      }
-
-      .dark-mode .left-section {
-        background: linear-gradient(135deg, #004a99, #003366);
+        z-index: -1;
       }
 
       .left-section h1 {
-        font-size: 48px;
-        margin-bottom: 20px;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
         line-height: 1.2;
-        position: relative;
-        z-index: 2;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
       }
 
       .left-section p {
-        font-size: 18px;
-        max-width: 400px;
-        line-height: 1.5;
-        position: relative;
-        z-index: 2;
+        font-size: 1.1rem;
+        max-width: 500px;
+        opacity: 0.9;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
       }
 
-      .image-gallery {
-        display: flex;
-        gap: 15px;
-        margin-top: 30px;
-        flex-wrap: wrap;
-        position: relative;
-        z-index: 2;
-      }
-
-      .image-gallery img {
-        width: 100%;
-        max-width: 120px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s;
-      }
-
-      .image-gallery img:hover {
-        transform: scale(1.05);
-      }
-
+      /* Right Section */
       .right-section {
         flex: 1;
-        padding: 60px 40px;
-        background-color: var(--white);
+        padding: 60px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        background-color: var(--white);
       }
 
       .dark-mode .right-section {
         background-color: var(--dark-card);
       }
 
+      /* Auth Forms */
       .auth-form {
         background: var(--white);
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
-        transition: background-color 0.3s;
-        max-width: 400px;
-        margin: 0 auto;
+        padding: 40px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        max-width: 450px;
         width: 100%;
+        margin: 0 auto;
+        transition: var(--transition);
+      }
+
+      .dark-mode .auth-form {
+        background: var(--dark-card);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       }
 
       .auth-form.signup-form {
         display: none;
       }
 
-      .dark-mode .auth-form {
-        background: var(--dark-card);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      .auth-form h2 {
+        margin-bottom: 1.5rem;
+        color: var(--primary-blue);
+        text-align: center;
       }
 
+      /* Form Elements */
       .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 1.5rem;
         position: relative;
       }
 
       label {
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 0.5rem;
         font-weight: 600;
-        font-size: 14px;
+        font-size: 0.95rem;
       }
 
       .dark-mode label {
         color: var(--dark-text);
       }
 
+      input[type="text"],
       input[type="email"],
       input[type="password"],
-      input[type="text"],
       select {
         width: 100%;
-        padding: 12px;
+        padding: 12px 15px;
         border: 1px solid #ddd;
-        border-radius: 6px;
+        border-radius: var(--border-radius);
         font-family: var(--font);
-        transition: all 0.3s;
-        font-size: 16px;
+        font-size: 1rem;
+        transition: var(--transition);
       }
 
-      input:focus {
-        border-color: var(--primary-blue);
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
-      }
-
+      .dark-mode input[type="text"],
       .dark-mode input[type="email"],
       .dark-mode input[type="password"],
-      .dark-mode input[type="text"],
       .dark-mode select {
         background-color: #2d2d2d;
         border-color: #444;
         color: var(--dark-text);
       }
 
+      input:focus {
+        border-color: var(--primary-blue);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+      }
+
       .password-wrapper {
         position: relative;
+        margin-bottom: 0.5rem;
       }
 
       .toggle-password {
         position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
+        right: 0;
+        top: 100%;
+        margin-top: 8px;
         background: none;
         border: none;
-        font-size: 18px;
-        cursor: pointer;
         color: #666;
-        padding: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 0;
       }
 
       .dark-mode .toggle-password {
         color: #aaa;
       }
 
-      button:not(.toggle-password):not(.nav-controls button) {
-        padding: 12px 20px;
-        font-size: 16px;
-        font-family: var(--font);
-        cursor: pointer;
+      .toggle-password i {
+        font-size: 1.2rem;
+      }
+
+      /* Buttons */
+      .btn-primary {
+        width: 100%;
+        padding: 14px;
         background-color: var(--primary-blue);
         color: white;
         border: none;
-        border-radius: 6px;
-        transition: background-color 0.2s ease;
-        width: 100%;
-        margin-top: 10px;
+        border-radius: var(--border-radius);
+        font-family: var(--font);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
       }
 
-      button:hover:not(.toggle-password):not(.nav-controls button) {
+      .btn-primary::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--white);
+        transition: var(--transition);
+      }
+
+      .btn-primary:hover::after,
+      .btn-primary:focus::after {
+        width: 100%;
+      }
+
+      .btn-primary:hover {
         background-color: var(--hover-blue);
       }
 
-      .dark-mode button:hover:not(.toggle-password):not(.nav-controls button) {
-        background-color: #003d7a;
+      /* Form Footer Links */
+      .form-footer {
+        margin-top: 1.5rem;
+        text-align: center;
       }
 
       .switch-link {
-        margin-top: 15px;
         display: block;
-        font-size: 14px;
-        text-align: center;
         color: var(--primary-blue);
         text-decoration: none;
-        transition: opacity 0.2s;
-        padding: 8px;
+        font-size: 0.95rem;
+        margin-top: 0.8rem;
+        transition: var(--transition);
+        position: relative;
       }
 
       .dark-mode .switch-link {
         color: #4da6ff;
       }
 
-      .switch-link:hover {
-        opacity: 0.8;
+      .switch-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 1px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--primary-blue);
+        transition: var(--transition);
       }
 
-      footer {
-        text-align: center;
-        padding: 20px;
-        color: var(--gray);
-        font-size: 14px;
-        transition: color 0.3s;
+      .dark-mode .switch-link::after {
+        background-color: #4da6ff;
       }
 
-      .dark-mode footer {
-        color: #888;
+      .switch-link:hover::after,
+      .switch-link:focus::after {
+        width: 100%;
+      }
+
+      /* Remember Me */
+      .remember-me {
+        display: flex;
+        align-items: center;
+        margin: 1rem 0;
+      }
+
+      .remember-me input {
+        margin-right: 10px;
+      }
+
+      /* Validation Messages */
+      .validation-message {
+        font-size: 0.85rem;
+        color: var(--weak);
+        margin-top: 0.5rem;
+        display: none;
+      }
+
+      /* Password Strength */
+      .password-strength-container {
+        margin: 0.5rem 0;
       }
 
       .password-strength {
         height: 4px;
-        margin-top: 8px;
         border-radius: 2px;
-        transition: width 0.3s, background-color 0.3s;
+        margin-bottom: 0.5rem;
+        transition: var(--transition);
         width: 0%;
       }
 
+      .password-strength-text {
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
       .password-rules {
-        font-size: 12px;
+        margin-top: 1rem;
+        font-size: 0.85rem;
         color: var(--gray);
-        margin-top: 8px;
-        line-height: 1.4;
       }
 
       .dark-mode .password-rules {
         color: #aaa;
       }
 
-      .remember-me {
-        display: flex;
-        align-items: center;
-        margin: 15px 0;
+      .password-rules p {
+        margin-bottom: 0.5rem;
+        font-weight: 600;
       }
 
-      .remember-me input {
-        margin-right: 10px;
-        width: 18px;
-        height: 18px;
+      .password-rules ul {
+        list-style: none;
+        padding-left: 1rem;
       }
 
-      .validation-message {
-        font-size: 12px;
-        color: var(--weak);
-        margin-top: 5px;
-        display: none;
-        line-height: 1.4;
+      .password-rules li {
+        position: relative;
+        margin-bottom: 0.3rem;
       }
 
+      .password-rules li::before {
+        content: "•";
+        position: absolute;
+        left: -1rem;
+      }
+
+      .password-rules li.valid {
+        color: var(--success);
+      }
+
+      /* Email Verification */
       .email-verification {
         display: none;
         background: rgba(0, 123, 255, 0.1);
         padding: 15px;
-        border-radius: 6px;
-        margin-top: 20px;
+        border-radius: var(--border-radius);
+        margin: 1.5rem 0;
         text-align: center;
-        font-size: 14px;
+        font-size: 0.9rem;
       }
 
       .dark-mode .email-verification {
         background: rgba(0, 123, 255, 0.2);
       }
 
-      /* Responsive fixes */
-      @media (max-width: 768px) {
+      .email-verification i {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--primary-blue);
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        padding: 20px;
+        color: var(--gray);
+        font-size: 0.9rem;
+      }
+
+      .dark-mode footer {
+        color: #888;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 992px) {
         .container {
           flex-direction: column;
         }
 
         .left-section,
         .right-section {
-          padding: 40px 20px;
+          padding: 40px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .left-section,
+        .right-section {
+          padding: 30px;
         }
 
-        .left-section h1 {
-          font-size: 36px;
+        .auth-form {
+          padding: 30px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .left-section,
+        .right-section {
+          padding: 20px;
         }
 
         .auth-form {
           padding: 25px;
         }
 
-        .nav-controls {
-          gap: 8px;
-        }
-
-        .image-gallery {
-          justify-content: center;
-        }
-
-        .image-gallery img {
-          max-width: 80px;
-        }
-      }
-
-      @media (max-width: 480px) {
-        .top-bar {
-          padding: 10px 15px;
-        }
-
-        .left-section h1 {
-          font-size: 28px;
+        .top-bar .nav-links {
+          gap: 10px;
         }
 
         .nav-controls button {
@@ -471,25 +581,14 @@
           height: 36px;
         }
       }
-
-      /* Mobile tap improvements */
-      button,
-      a {
-        touch-action: manipulation;
-      }
     </style>
   </head>
   <body>
     <div class="top-bar">
       <div><strong>Veripharm</strong></div>
       <div class="nav-links">
-        <a
-          href="{%url "about"%}"
-          target="_blank"
-          rel="noopener noreferrer"
-          target="_blank"
-          >About</a
-        >
+        <a href="#">Home</a>
+        <a href="{% url 'about' %}" target="_blank">About</a>
         <div class="nav-controls">
           <button type="button" id="lang-toggle" aria-label="Language selector">
             🌐
@@ -499,10 +598,10 @@
           </button>
         </div>
         <div class="lang-dropdown" id="lang-dropdown">
-          <button type="button" onclick="translatePage('en')">English</button>
-          <button type="button" onclick="translatePage('fr')">Français</button>
-          <button type="button" onclick="translatePage('ak')">Akan</button>
-          <button type="button" onclick="translatePage('ig')">Igbo</button>
+          <button type="button" data-lang="en">English</button>
+          <button type="button" data-lang="fr">Français</button>
+          <button type="button" data-lang="ak">Akan</button>
+          <button type="button" data-lang="ig">Igbo</button>
         </div>
       </div>
     </div>
@@ -511,20 +610,13 @@
       <div class="left-section">
         <h1 id="main-title">Welcome to Veripharm</h1>
         <p id="main-desc">
-          Your trusted platform for secure, traceable, and authentic
-          pharmaceutical services. Empowering patients, pharmacists, and
-          regulators with real-time access and control.
+          Your trusted platform for secure, traceable, and authentic pharmaceutical services.
         </p>
       </div>
 
       <div class="right-section">
         <!-- Login Form -->
-        <form
-          class="auth-form login-form"
-          id="login-form"
-          action="{%url 'login'%}"
-          method="post"
-        >
+        <form class="auth-form login-form" id="login-form" action="{% url 'login' %}" method="post">
           {% csrf_token %}
           <h2 id="login-title">Login</h2>
           <div class="form-group">
@@ -538,7 +630,7 @@
             />
             <div class="validation-message" id="username-validation"></div>
           </div>
-          <div class="form-group password-wrapper">
+          <div class="form-group">
             <label for="password" id="password-label">Password</label>
             <input
               name="password"
@@ -548,30 +640,24 @@
               required
               placeholder="Enter your password"
             />
-            <label class="show-password-toggle"
-              ><input type="checkbox" onchange="togglePassword('password')" />
-              Show password</label
-            >
+            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+              <i class="ri-eye-line"></i>
+            </button>
             <div class="validation-message" id="password-validation"></div>
           </div>
-          <div class="remember-me">
+          <div class="form-group remember-me">
             <input type="checkbox" id="remember-me" />
-            <label for="remember-me">Remember me</label>
+            <label for="remember-me" id="remember-me-label">Remember me</label>
           </div>
-          <button type="submit" id="login-button">Login</button>
-          <a href="#" class="switch-link" id="register-link"
-            >Don't have an account? Register</a
-          >
-          <a href="#" class="switch-link" id="forgot-link">Forgot Password?</a>
+          <button type="submit" id="login-button" class="btn-primary">Login</button>
+          <div class="form-footer">
+            <a href="#" class="switch-link" id="register-link">Don't have an account? Register</a>
+            <a href="#" class="switch-link" id="forgot-link">Forgot Password?</a>
+          </div>
         </form>
 
         <!-- Sign-Up Form -->
-        <form
-          class="auth-form signup-form"
-          id="signup-form"
-          method="post"
-          action="{% url 'signup'%}"
-        >
+        <form class="auth-form signup-form" id="signup-form" method="post" action="{% url 'signup' %}">
           {% csrf_token %}
           <h2 id="signup-title">Create Account</h2>
           <div class="form-group">
@@ -583,7 +669,7 @@
               required
               placeholder="Enter your username"
             />
-            <div class="validation-message" id="signup-email-validation"></div>
+            <div class="validation-message" id="signup-username-validation"></div>
           </div>
           <div class="form-group">
             <label for="signup-fullname">Full Name</label>
@@ -595,32 +681,34 @@
               placeholder="Enter your Full name"
             />
           </div>
-          <div class="form-group password-wrapper">
+          <div class="form-group">
             <label for="signup-password">Password</label>
             <input
               name="password1"
               type="password"
               id="signup-password"
               required
-              placeholder="Create password (min 6 chars)"
+              placeholder="Create password (min 8 chars)"
             />
-            <label class="show-password-toggle"
-              ><input
-                type="checkbox"
-                onchange="togglePassword('signup-password')"
-              />
-              Show password</label
-            >
-            <div class="password-strength" id="password-strength"></div>
-            <p class="password-rules" id="password-rules-text">
-              Must contain at least 6 characters with 2+ letters
-            </p>
-            <div
-              class="validation-message"
-              id="signup-password-validation"
-            ></div>
+            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+              <i class="ri-eye-line"></i> Show Password
+            </button>
+            <div class="password-strength-container">
+              <div class="password-strength" id="password-strength"></div>
+              <div class="password-strength-text" id="password-strength-text"></div>
+            </div>
+            <div class="password-rules">
+              <p>Password must contain:</p>
+              <ul>
+                <li id="rule-length">Minimum 8 characters</li>
+                <li id="rule-letters">At least 2 letters</li>
+                <li id="rule-numbers">At least 1 number</li>
+                <li id="rule-special">At least 1 special character</li>
+              </ul>
+            </div>
+            <div class="validation-message" id="signup-password-validation"></div>
           </div>
-          <div class="form-group password-wrapper">
+          <div class="form-group">
             <label for="confirm-password">Confirm Password</label>
             <input
               name="password2"
@@ -629,26 +717,20 @@
               required
               placeholder="Repeat password"
             />
-            <label class="show-password-toggle"
-              ><input
-                type="checkbox"
-                onchange="togglePassword('confirm-password')"
-              />
-              Show password</label
-            >
-            <div
-              class="validation-message"
-              id="confirm-password-validation"
-            ></div>
+            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+              <i class="ri-eye-line"></i> Show Password
+            </button>
+            <div class="validation-message" id="confirm-password-validation"></div>
           </div>
           <input type="hidden" id="user-role" value="consumer" name="role" />
           <div class="email-verification" id="email-verification">
+            <i class="ri-mail-check-line"></i>
             <p>Verification email sent! Please check your inbox.</p>
           </div>
-          <button type="submit" id="signup-button">Register</button>
-          <a href="#" class="switch-link" id="login-link"
-            >Already have an account? Login</a
-          >
+          <button type="submit" id="signup-button" class="btn-primary">Register</button>
+          <div class="form-footer">
+            <a href="#" class="switch-link" id="login-link">Already have an account? Login</a>
+          </div>
         </form>
       </div>
     </div>
@@ -658,438 +740,321 @@
     </footer>
 
     <script>
-      // Initialize controls
-      document.addEventListener("DOMContentLoaded", () => {
-        console.log("VeriPharm initialized");
-
-        // Set default button types
-        document.querySelectorAll("button").forEach((btn) => {
-          if (!btn.hasAttribute("type")) {
-            btn.setAttribute("type", "button");
-          }
-        });
-
-        // Language dropdown toggle
-        const langToggle = document.getElementById("lang-toggle");
-        if (langToggle) {
-          langToggle.addEventListener("click", toggleLanguageDropdown);
-          langToggle.addEventListener(
-            "touchstart",
-            function (e) {
-              //e.preventDefault();
-              toggleLanguageDropdown();
-            },
-            { passive: false }
-          );
-        }
-
-        // Theme toggle
-        const themeToggle = document.getElementById("theme-toggle");
-        if (themeToggle) {
-          themeToggle.addEventListener("click", toggleDarkMode);
-          themeToggle.addEventListener(
-            "touchstart",
-            function (e) {
-              //e.preventDefault();
-              toggleDarkMode();
-            },
-            { passive: false }
-          );
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener("click", (e) => {
-          const dropdown = document.getElementById("lang-dropdown");
-          if (dropdown && !e.target.closest(".nav-controls")) {
-            dropdown.style.display = "none";
-          }
-        });
-
-        // Load saved preferences
-        const savedLang = localStorage.getItem("preferredLang") || "en";
+      document.addEventListener("DOMContentLoaded", function() {
+        // Initialize dark mode from localStorage
         const darkMode = localStorage.getItem("darkMode") === "true";
-
         if (darkMode) {
           document.body.classList.add("dark-mode");
           document.getElementById("theme-toggle").textContent = "☀️";
         }
 
-        translatePage(savedLang);
-      });
-
-      // Toggle language dropdown
-      function toggleLanguageDropdown() {
-        const dropdown = document.getElementById("lang-dropdown");
-        if (dropdown) {
-          dropdown.style.display =
-            dropdown.style.display === "block" ? "none" : "block";
-          // Close after selection
-          dropdown.querySelectorAll("button").forEach((btn) => {
-            btn.addEventListener("click", () => {
-              dropdown.style.display = "none";
-            });
-          });
-        }
-      }
-
-      // Toggle dark mode
-      function toggleDarkMode() {
-        document.body.classList.toggle("dark-mode");
-        const isDarkMode = document.body.classList.contains("dark-mode");
-        localStorage.setItem("darkMode", isDarkMode);
-
-        const themeIcon = document.getElementById("theme-toggle");
-        if (themeIcon) {
-          themeIcon.textContent = isDarkMode ? "☀️" : "🌓";
-          themeIcon.setAttribute(
-            "aria-label",
-            isDarkMode ? "Switch to light mode" : "Switch to dark mode"
-          );
-        }
-      }
-
-      // Password visibility toggle
-      function togglePassword(fieldId) {
-        const input = document.getElementById(fieldId);
-        if (input) {
-          input.type = input.type === "password" ? "text" : "password";
-        }
-      }
-
-      // Password strength meter
-      const strengthMeter = document.getElementById("password-strength");
-      const passwordInput = document.getElementById("signup-password");
-
-      if (passwordInput && strengthMeter) {
-        passwordInput.addEventListener("input", function () {
-          const password = this.value;
-          const strength = checkPasswordStrength(password);
-
-          strengthMeter.style.width = strength.percentage + "%";
-          strengthMeter.style.backgroundColor = strength.color;
+        // Theme toggle
+        document.getElementById("theme-toggle").addEventListener("click", function() {
+          document.body.classList.toggle("dark-mode");
+          const isDarkMode = document.body.classList.contains("dark-mode");
+          localStorage.setItem("darkMode", isDarkMode);
+          this.textContent = isDarkMode ? "☀️" : "🌓";
         });
-      }
 
-      function checkPasswordStrength(password) {
-        const hasLetters = /[a-zA-Z]/.test(password);
-        const hasNumbers = /\d/.test(password);
-        const hasSpecial = /[^a-zA-Z0-9]/.test(password);
-        let strength = 0;
+        // Language dropdown toggle
+        document.getElementById("lang-toggle").addEventListener("click", function(e) {
+          e.stopPropagation();
+          const dropdown = document.getElementById("lang-dropdown");
+          dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
 
-        if (password.length > 0) strength += 20;
-        if (password.length >= 6) strength += 20;
-        if (hasLetters && password.length >= 6) strength += 20;
-        if (hasNumbers) strength += 20;
-        if (hasSpecial) strength += 20;
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function() {
+          document.getElementById("lang-dropdown").style.display = "none";
+        });
 
-        return {
-          percentage: strength,
-          color:
-            strength < 40
-              ? "var(--weak)"
-              : strength < 80
-              ? "var(--medium)"
-              : "var(--strong)",
-        };
-      }
+        // Language selection
+        document.querySelectorAll("#lang-dropdown button").forEach(btn => {
+          btn.addEventListener("click", function() {
+            const lang = this.getAttribute("data-lang");
+            translatePage(lang);
+            localStorage.setItem("preferredLang", lang);
+          });
+        });
 
-      // Form validation with real-time feedback
-      function setupValidation(
-        inputId,
-        validationId,
-        validateFn,
-        errorMessage
-      ) {
-        const input = document.getElementById(inputId);
-        const validation = document.getElementById(validationId);
-
-        if (input && validation) {
-          input.addEventListener("input", function () {
-            if (validateFn(this.value)) {
-              validation.style.display = "none";
-              this.style.borderColor = "#ddd";
-            } else {
-              validation.textContent = errorMessage;
-              validation.style.display = "block";
-              this.style.borderColor = "var(--weak)";
+        // Password visibility toggle
+        document.querySelectorAll(".toggle-password").forEach(btn => {
+          btn.addEventListener("click", function() {
+            const input = this.parentElement.querySelector("input");
+            if (input) {
+              input.type = input.type === "password" ? "text" : "password";
+              const icon = this.querySelector("i");
+              if (icon) {
+                icon.className = input.type === "password" ? "ri-eye-line" : "ri-eye-off-line";
+              }
+              this.innerHTML = input.type === "password" 
+                ? '<i class="ri-eye-line"></i> Show Password' 
+                : '<i class="ri-eye-off-line"></i> Hide Password';
             }
           });
-        }
-      }
-
-      // Initialize validations
-      setupValidation(
-        "username",
-        "username-validation",
-        (username) => username.length >= 3,
-        "Username must be at least 3 characters"
-      );
-
-      setupValidation(
-        "signup-username",
-        "signup-username-validation",
-        (username) => username.length >= 3,
-        "Username must be at least 3 characters"
-      );
-
-      setupValidation(
-        "password",
-        "password-validation",
-        (password) => password.length >= 8,
-        "Password must be at least 8 characters"
-      );
-
-      setupValidation(
-        "signup-password",
-        "signup-password-validation",
-        (password) => {
-          const letterCount = (password.match(/[a-zA-Z]/g) || []).length;
-          return password.length >= 6 && letterCount >= 2;
-        },
-        "Must be 6+ chars with 2+ letters"
-      );
-
-      // Password confirmation validation
-      document
-        .getElementById("confirm-password")
-        ?.addEventListener("input", function () {
-          const password = document.getElementById("signup-password").value;
-          const confirm = this.value;
-          const validation = document.getElementById(
-            "confirm-password-validation"
-          );
-
-          if (password !== confirm) {
-            validation.textContent = "Passwords do not match";
-            validation.style.display = "block";
-            this.style.borderColor = "var(--weak)";
-          } else {
-            validation.style.display = "none";
-            this.style.borderColor = "#ddd";
-          }
         });
 
-      // Toggle between login/signup forms
-      document
-        .getElementById("register-link")
-        ?.addEventListener("click", function (e) {
-          //e.preventDefault();
+        // Password strength meter
+        const passwordInput = document.getElementById("signup-password");
+        if (passwordInput) {
+          passwordInput.addEventListener("input", function() {
+            const password = this.value;
+            const strength = checkPasswordStrength(password);
+            const strengthBar = document.getElementById("password-strength");
+            const strengthText = document.getElementById("password-strength-text");
+            
+            strengthBar.style.width = strength.percentage + "%";
+            strengthBar.style.backgroundColor = strength.color;
+            strengthText.textContent = strength.text;
+            strengthText.style.color = strength.color;
+
+            // Update password rules
+            updatePasswordRules(password);
+          });
+        }
+
+        function checkPasswordStrength(password) {
+          const hasMinLength = password.length >= 8;
+          const hasLetters = (password.match(/[a-zA-Z]/g) || []).length >= 2;
+          const hasNumbers = (password.match(/\d/g) || []).length >= 1;
+          const hasSpecial = (password.match(/[^a-zA-Z0-9]/g) || []).length >= 1;
+
+          let strength = 0;
+          if (hasMinLength) strength += 25;
+          if (hasLetters) strength += 25;
+          if (hasNumbers) strength += 25;
+          if (hasSpecial) strength += 25;
+
+          let color, text;
+          if (strength < 50) {
+            color = "var(--weak)";
+            text = "Weak";
+          } else if (strength < 75) {
+            color = "var(--medium)";
+            text = "Medium";
+          } else {
+            color = "var(--strong)";
+            text = "Strong";
+          }
+
+          return {
+            percentage: strength,
+            color: color,
+            text: text
+          };
+        }
+
+        function updatePasswordRules(password) {
+          const rules = {
+            length: password.length >= 8,
+            letters: (password.match(/[a-zA-Z]/g) || []).length >= 2,
+            numbers: (password.match(/\d/g) || []).length >= 1,
+            special: (password.match(/[^a-zA-Z0-9]/g) || []).length >= 1
+          };
+
+          for (const [rule, isValid] of Object.entries(rules)) {
+            const element = document.getElementById(`rule-${rule}`);
+            if (element) {
+              element.classList.toggle("valid", isValid);
+            }
+          }
+        }
+
+        // Form switching
+        document.getElementById("register-link").addEventListener("click", function(e) {
+          e.preventDefault();
           document.getElementById("login-form").style.display = "none";
           document.getElementById("signup-form").style.display = "block";
-          translatePage(localStorage.getItem("preferredLang") || "en");
         });
 
-      document
-        .getElementById("login-link")
-        ?.addEventListener("click", function (e) {
-          //e.preventDefault();
+        document.getElementById("login-link").addEventListener("click", function(e) {
+          e.preventDefault();
           document.getElementById("signup-form").style.display = "none";
           document.getElementById("login-form").style.display = "block";
         });
 
-      // Simulate email verification
-      document
-        .getElementById("signup-button")
-        ?.addEventListener("click", function (e) {
-          //e.preventDefault();
-          const username = document.getElementById("signup-username").value;
-          const password = document.getElementById("signup-password").value;
-          const confirm = document.getElementById("confirm-password").value;
-
-          // Validate username
-          if (username.length < 3) {
-            document.getElementById("signup-username-validation").textContent =
-              "Username must be at least 3 characters";
-            document.getElementById(
-              "signup-username-validation"
-            ).style.display = "block";
-            return;
+        // Form validation
+        function validateInput(input, validationId, isValid, message) {
+          const validation = document.getElementById(validationId);
+          if (isValid) {
+            input.style.borderColor = "#ddd";
+            validation.style.display = "none";
+          } else {
+            input.style.borderColor = "var(--weak)";
+            validation.textContent = message;
+            validation.style.display = "block";
           }
+          return isValid;
+        }
+
+        // Username validation
+        document.getElementById("username").addEventListener("input", function() {
+          validateInput(
+            this,
+            "username-validation",
+            this.value.length >= 3,
+            "Username must be at least 3 characters"
+          );
+        });
+
+        // Password validation
+        document.getElementById("password").addEventListener("input", function() {
+          validateInput(
+            this,
+            "password-validation",
+            this.value.length >= 8,
+            "Password must be at least 8 characters"
+          );
+        });
+
+        // Signup form validation
+        document.getElementById("signup-form").addEventListener("submit", function(e) {
+          let isValid = true;
+          
+          // Validate username
+          const username = document.getElementById("signup-username");
+          isValid = validateInput(
+            username,
+            "signup-username-validation",
+            username.value.length >= 3,
+            "Username must be at least 3 characters"
+          ) && isValid;
 
           // Validate password
-          const letterCount = (password.match(/[a-zA-Z]/g) || []).length;
-          if (password.length < 6 || letterCount < 2) {
-            document.getElementById(
-              "signup-password-validation"
-            ).style.display = "block";
-            return;
-          }
+          const password = document.getElementById("signup-password");
+          const passwordValid = checkPasswordStrength(password.value).percentage >= 50;
+          isValid = validateInput(
+            password,
+            "signup-password-validation",
+            passwordValid,
+            "Password is too weak"
+          ) && isValid;
 
           // Validate password match
-          if (password !== confirm) {
-            document.getElementById("confirm-password-validation").textContent =
-              "Passwords do not match";
-            document.getElementById(
-              "confirm-password-validation"
-            ).style.display = "block";
-            return;
-          }
+          const confirmPassword = document.getElementById("confirm-password");
+          const passwordsMatch = password.value === confirmPassword.value;
+          isValid = validateInput(
+            confirmPassword,
+            "confirm-password-validation",
+            passwordsMatch,
+            "Passwords do not match"
+          ) && isValid;
 
-          // Show verification message
-          document.getElementById("email-verification").style.display = "block";
-
-          // Store user data
-          const user = {
-            username: username,
-            password: password,
-            role: "consumer",
-            verified: false,
-          };
-          localStorage.setItem("currentUser", JSON.stringify(user));
-
-          // Simulate registration process
-          setTimeout(() => {
-            alert("Registration successful! You can now login.");
-            document.getElementById("signup-form").style.display = "none";
-            document.getElementById("login-form").style.display = "block";
-            document.getElementById("email-verification").style.display =
-              "none";
-          }, 1500);
-        });
-
-      // Remember me functionality
-      document
-        .getElementById("remember-me")
-        ?.addEventListener("change", function () {
-          localStorage.setItem("rememberMe", this.checked);
-          if (this.checked) {
-            localStorage.setItem(
-              "savedUsername",
-              document.getElementById("username").value
-            );
+          if (!isValid) {
+            e.preventDefault();
           } else {
-            localStorage.removeItem("savedUsername");
+            // Show verification message
+            document.getElementById("email-verification").style.display = "block";
           }
         });
 
-      // Login handler
-      document
-        .getElementById("login-button")
-        ?.addEventListener("click", function () {
-          const rememberMe = document.getElementById("remember-me").checked;
-          const username = document.getElementById("username").value;
-
-          if (rememberMe) {
-            localStorage.setItem("rememberMe", "true");
-            localStorage.setItem("savedUsername", username);
-          } else {
-            localStorage.removeItem("rememberMe");
-            localStorage.removeItem("savedUsername");
+        // Translations
+        const translations = {
+          en: {
+            mainTitle: "Welcome to Veripharm",
+            mainDesc: "Your trusted platform for secure, traceable, and authentic pharmaceutical services.",
+            loginTitle: "Login",
+            usernameLabel: "Username",
+            passwordLabel: "Password",
+            loginButton: "Login",
+            registerLink: "Don't have an account? Register",
+            forgotLink: "Forgot Password?",
+            rememberMe: "Remember me",
+            signupTitle: "Create Account",
+            signupButton: "Register",
+            loginLink: "Already have an account? Login",
+            verificationMessage: "Verification email sent! Please check your inbox.",
+            showPassword: "Show Password",
+            hidePassword: "Hide Password"
+          },
+          fr: {
+            mainTitle: "Bienvenue à Veripharm",
+            mainDesc: "Votre plateforme de confiance pour des services pharmaceutiques sécurisés et traçables.",
+            loginTitle: "Connexion",
+            usernameLabel: "Nom d'utilisateur",
+            passwordLabel: "Mot de passe",
+            loginButton: "Se connecter",
+            registerLink: "Pas de compte ? Inscrivez-vous",
+            forgotLink: "Mot de passe oublié?",
+            rememberMe: "Se souvenir de moi",
+            signupTitle: "Créer un compte",
+            signupButton: "S'inscrire",
+            loginLink: "Vous avez déjà un compte? Connexion",
+            verificationMessage: "Email de vérification envoyé! Veuillez vérifier votre boîte de réception.",
+            showPassword: "Afficher le mot de passe",
+            hidePassword: "Masquer le mot de passe"
+          },
+          ak: {
+            mainTitle: "Akwaaba ba Veripharm",
+            mainDesc: "Wo gyidi mu nhyehyɛe a ɛhwɛ aduro yiyedi ne nokware so.",
+            loginTitle: "Fa kɔɔ mu",
+            usernameLabel: "Dinom a wɔde kɔ mu",
+            passwordLabel: "Kurow a wɔde kɔɔ mu",
+            loginButton: "Fa kɔɔ mu",
+            registerLink: "Wo nnwom akontaabi? Dwumadi dzi kan",
+            forgotLink: "Wɔagye wo kurow a wɔde kɔɔ mu?",
+            rememberMe: "Ka me wɔ mema",
+            signupTitle: "Yɛ Dwumadi",
+            signupButton: "Dwumadi",
+            loginLink: "Wowo akontaabi? Fa kɔɔ mu",
+            verificationMessage: "Email a wɔde bɛhwehwɛ nokware no asoma! Yɛsrɛ sɛ hwɛ wo email inbox.",
+            showPassword: "Kyerɛ Kurow a Wode Kɔ Mu",
+            hidePassword: "Suma Kurow a Wode Kɔ Mu"
+          },
+          ig: {
+            mainTitle: "Nnọọ Veripharm",
+            mainDesc: "Ọ bụ ikpo okwu gị a pụrụ ịtụkwasị obi maka ọgwụ ziri ezi na nchekwa.",
+            loginTitle: "Banye",
+            usernameLabel: "Aha njirimara",
+            passwordLabel: "Okwuntughe",
+            loginButton: "Banye",
+            registerLink: "Ị naghị enwe akaụntụ? Debanye",
+            forgotLink: "Chefuru okwuntughe?",
+            rememberMe: "Cheta m",
+            signupTitle: "Mepụta Akaụntụ",
+            signupButton: "Debanye aha",
+            loginLink: "Ị nweela akaụntụ? Banye",
+            verificationMessage: "E zigara email nkwenye! Biko lelee igbe mbata gị.",
+            showPassword: "Gosi Okwuntughe",
+            hidePassword: "Zochi Okwuntughe"
           }
-
-          // Add your actual login logic here
-          console.log("Login attempted with:", username);
-        });
-
-      // Translation logic
-      const translations = {
-        fr: {
-          mainTitle: "Bienvenue à Veripharm",
-          mainDesc:
-            "Votre plateforme de confiance pour des services pharmaceutiques sécurisés et traçables.",
-          loginTitle: "Connexion",
-          emailLabel: "E-mail",
-          passwordLabel: "Mot de passe",
-          loginButton: "Se connecter",
-          registerLink: "Pas de compte ? Inscrivez-vous",
-          forgotLink: "Mot de passe oublié?",
-          rememberMe: "Se souvenir de moi",
-          signupTitle: "Créer un compte",
-          signupButton: "S'inscrire",
-          loginLink: "Vous avez déjà un compte? Connexion",
-          passwordRules: "Doit contenir 6+ caractères avec 2+ lettres",
-          verificationMessage:
-            "Email de vérification envoyé! Veuillez vérifier votre boîte de réception.",
-        },
-        ak: {
-          mainTitle: "Akwaaba ba Veripharm",
-          mainDesc: "Wo gyidi mu nhyehyɛe a ɛhwɛ aduro yiyedi ne nokware so.",
-          loginTitle: "Fa kɔɔ mu",
-          emailLabel: "Email",
-          passwordLabel: "Kurow a wɔde kɔɔ mu",
-          loginButton: "Fa kɔɔ mu",
-          registerLink: "Wo nnwom akontaabi? Dwumadi dzi kan",
-          forgotLink: "Wɔagye wo kurow a wɔde kɔɔ mu?",
-          rememberMe: "Ka me wɔ mema",
-          signupTitle: "Yɛ Dwumadi",
-          signupButton: "Dwumadi",
-          loginLink: "Wowo akontaabi? Fa kɔɔ mu",
-          passwordRules: "Ɛsɛ sɛ ɛwɔ 6+ nkyerɛwee ne 2+ ahyɛnsode",
-          verificationMessage:
-            "Email a wɔde bɛhwehwɛ nokware no asoma! Yɛsrɛ sɛ hwɛ wo email inbox.",
-        },
-        ig: {
-          mainTitle: "Nnọọ Veripharm",
-          mainDesc:
-            "Ọ bụ ikpo okwu gị a pụrụ ịtụkwasị obi maka ọgwụ ziri ezi na nchekwa.",
-          loginTitle: "Banye",
-          emailLabel: "Email",
-          passwordLabel: "Okwuntughe",
-          loginButton: "Banye",
-          registerLink: "Ị naghị enwe akaụntụ? Debanye",
-          forgotLink: "Chefuru okwuntughe?",
-          rememberMe: "Cheta m",
-          signupTitle: "Mepụta Akaụntụ",
-          signupButton: "Debanye aha",
-          loginLink: "Ị nweela akaụntụ? Banye",
-          passwordRules:
-            "Ga-enwerịrị opekata mpe 6 mkpụrụedemede nwere 2+ mkpụrụedemede",
-          verificationMessage:
-            "E zigara email nkwenye! Biko lelee igbe mbata gị.",
-        },
-        en: {
-          mainTitle: "Welcome to Veripharm",
-          mainDesc:
-            "Your trusted platform for secure, traceable, and authentic pharmaceutical services. Empowering patients, pharmacists, and regulators with real-time access and control.",
-          loginTitle: "Login",
-          emailLabel: "Email",
-          passwordLabel: "Password",
-          loginButton: "Login",
-          registerLink: "Don't have an account? Register",
-          forgotLink: "Forgot Password?",
-          rememberMe: "Remember me",
-          signupTitle: "Create Account",
-          signupButton: "Register",
-          loginLink: "Already have an account? Login",
-          passwordRules: "Must contain at least 6 characters with 2+ letters",
-          verificationMessage:
-            "Verification email sent! Please check your inbox.",
-        },
-      };
-
-      // Translate the page
-      function translatePage(lang) {
-        const t = translations[lang] || translations["en"];
-
-        // Update all translatable elements
-        const elements = {
-          "main-title": "mainTitle",
-          "main-desc": "mainDesc",
-          "login-title": "loginTitle",
-          "email-label": "emailLabel",
-          "password-label": "passwordLabel",
-          "login-button": "loginButton",
-          "register-link": "registerLink",
-          "forgot-link": "forgotLink",
-          "remember-me": "rememberMe",
-          "signup-title": "signupTitle",
-          "signup-button": "signupButton",
-          "login-link": "loginLink",
-          "password-rules-text": "passwordRules",
         };
 
-        Object.entries(elements).forEach(([id, key]) => {
-          const element = document.getElementById(id);
-          if (element) element.textContent = t[key];
-        });
+        function translatePage(lang) {
+          const t = translations[lang] || translations.en;
+          
+          // Update all translatable elements
+          document.getElementById("main-title").textContent = t.mainTitle;
+          document.getElementById("main-desc").textContent = t.mainDesc;
+          document.getElementById("login-title").textContent = t.loginTitle;
+          document.getElementById("username-label").textContent = t.usernameLabel;
+          document.getElementById("password-label").textContent = t.passwordLabel;
+          document.getElementById("login-button").textContent = t.loginButton;
+          document.getElementById("register-link").textContent = t.registerLink;
+          document.getElementById("forgot-link").textContent = t.forgotLink;
+          document.getElementById("remember-me-label").textContent = t.rememberMe;
+          document.getElementById("signup-title").textContent = t.signupTitle;
+          document.getElementById("signup-button").textContent = t.signupButton;
+          document.getElementById("login-link").textContent = t.loginLink;
+          
+          // Update password toggle buttons
+          document.querySelectorAll(".toggle-password").forEach(btn => {
+            const input = btn.parentElement.querySelector("input");
+            if (input) {
+              btn.innerHTML = input.type === "password" 
+                ? `<i class="ri-eye-line"></i> ${t.showPassword}` 
+                : `<i class="ri-eye-off-line"></i> ${t.hidePassword}`;
+            }
+          });
+          
+          const verificationMsg = document.querySelector("#email-verification p");
+          if (verificationMsg) verificationMsg.textContent = t.verificationMessage;
+        }
 
-        // Update verification message if exists
-        const verificationMsg = document.querySelector("#email-verification p");
-        if (verificationMsg)
-          verificationMsg.textContent = t.verificationMessage;
-
-        localStorage.setItem("preferredLang", lang);
-      }
+        // Load saved language preference
+        const savedLang = localStorage.getItem("preferredLang") || "en";
+        translatePage(savedLang);
+      });
     </script>
   </body>
 </html>
