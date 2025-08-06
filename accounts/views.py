@@ -4,7 +4,7 @@ from .forms import CustomUserCreationForm, CustomLoginForm
 from django.contrib.auth.decorators import login_required
 
 def home_view(request):
-    return render(request,'hhome.html')
+    return render(request,'landing.html')
 
 def signup_view(request):
     print("signup_view running")
@@ -58,4 +58,7 @@ def logout_view(request):
 
 def consumer_homepage(request):
     render(request,'chp.html')
+
+def about(request):
+    return render(request,"about_page.html")    
 
