@@ -57,7 +57,9 @@ def manufacturer_dashboard(request):
                     )
                     drug.save()
                 
+                log_event(f"Manufacturer:{request.user} created Batch:{batch.batch_id} containing {quantity} number of drugs",actor='manufacturer',log_type='creation')
                 print(f'{quantity} drugs added successfully.')
+
         
             
         if drug_form.is_valid():
@@ -71,7 +73,7 @@ def manufacturer_dashboard(request):
                 distribution.batch = sub_batch
                 distribution.save()
                 print(f"sent {distribution.quantity_sent}")
-                success = log_event(f"Batch ({distribution.batch}) sent to distributor({distribution.distributor})")  
+                log_event(f"Manufacturer:{request.user} transfered Batch:{sub_batch.batch_id} containing {distribution.quantity_sent} number of drugs to Distributor:{distribution.distributor}",actor=request.user,log_type='transfer')  
             else:
                 print("Cannot send more than available quantity.")
                 distributor_form_error = "Cannot send more than available quantity."
