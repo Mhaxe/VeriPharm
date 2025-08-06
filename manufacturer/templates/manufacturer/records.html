@@ -212,7 +212,10 @@
         
         
       <button class="dark-mode-toggle" id="darkModeToggle">
-          <span id="darkModeIcon">🌙</span> Dark Mode
+          <span id="darkModeIcon">🌙</span> 
+          <span> Dark Mode</span>
+
+        
         </button>
         
       </div>
@@ -285,11 +288,11 @@
         if (body.classList.contains('dark-mode')) {
           localStorage.setItem('theme', 'dark');
           darkModeIcon.textContent = '☀️';
-          darkModeToggle.querySelector('span:last-child').textContent = ' Light Mode';
+          darkModeToggle.querySelector('span:last-child').textContent = '';
         } else {
           localStorage.setItem('theme', 'light');
           darkModeIcon.textContent = '🌙';
-          darkModeToggle.querySelector('span:last-child').textContent = ' Dark Mode';
+          darkModeToggle.querySelector('span:last-child').textContent = '';
         }
       });
     </script>
