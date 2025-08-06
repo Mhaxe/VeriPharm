@@ -2,6 +2,8 @@ from web3 import Web3
 import json
 import os
 
+from contract.utils import sync_log_by_tx_hash
+
 # Connect to local or remote Ethereum node
 w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))  
 
@@ -18,6 +20,7 @@ def log_event(message: str):
     account = w3.eth.accounts[0]
     tx = contract.functions.logEvent(message).transact({'from': account})
     receipt = w3.eth.wait_for_transaction_receipt(tx)
+    sync_log_by_tx_hash(tx_hash=tx,w3=w3,contract=contract)
     return receipt
 
 def get_contract_instance():

@@ -22,5 +22,13 @@
     {% else %}
         <p>No logs found.</p>
     {% endif %}
+    {% for log in logs %}
+  <div>
+    <strong>{{ log.timestamp }}</strong> — {{ log.message }}
+  </div>
+{% empty %}
+  <p>No logs found.</p>
+{% endfor %}
+
 </body>
 </html>

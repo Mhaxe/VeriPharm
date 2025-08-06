@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+
+from contract.models import BlockchainLog
 from .blockchain import contract, w3
 
 def register_drug(request):
@@ -57,14 +59,25 @@ from .blockchain import get_contract_instance
 def logs_view(request):
     contract = get_contract_instance()
     events = contract.events.LogMessage().get_logs(from_block=0)
+    logs = BlockchainLog.objects.order_by("-block_number")
+    
     context = {
         "events": [
             {
                 "message": e["args"]["message"],
                 "block": e["blockNumber"]
             } for e in events
-        ]
+        ],
+        "logs": logs
     }
     return render(request, "contract/logs.html", context)
+
+
+from .utils import sync_logs_from_blockchain
+@staff_member_required
+def sync_logs_view(request):
+    contract = get_contract_instance()
+    sync_logs_from_blockchain(contract, w3)
+    return redirect("logs_view")
 
 
