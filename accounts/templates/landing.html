@@ -15,6 +15,71 @@
     />
     <link rel="stylesheet" href="{% static 'accounts/css/styles.css' %}" />
     <style>
+      /* Preloader Styles */
+      .preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease;
+      }
+      
+      .preloader.fade-out {
+        opacity: 0;
+      }
+      /* Preloader container - controls fade-out speed */
+.preloader {
+  transition: opacity 3.0s ease; /* ← Adjust this value for fade-out speed */
+}
+
+/* Logo size */
+.pill-logo {
+  width:5500px;  /* ← Logo width */
+  height:5500px; /* ← Logo height */
+  animation: pulse 10s infinite ease-in-out; /* ← Pulse speed (1s = fast, 2s = slow) */
+}
+
+/* Pulse intensity - adjust scale() values */
+@keyframes pulse {
+  0% { transform: scale(1); } /* ← Starting size */
+  50% { transform: scale(5); } /* ← Peak pulse size (increase for stronger pulse) */
+  100% { transform: scale(5); }
+}
+
+/* Blue blur effect intensity */
+.preloader.fade-out {
+  backdrop-filter: blur(50px); /* ← Increase for more blur (e.g. 15px) */
+  background: rgba(0, 100, 255, 0.7); /* ← Blue color intensity */
+}
+      
+      .pill-logo {
+        width: 400px;
+        height: 400px;
+        animation: pulse 1.5s infinite ease-in-out;
+      }
+      
+      @keyframes pulse {
+        0% { transform: scale(1); opacity: 0.7; }
+        50% { transform: scale(1.1); opacity: 1; }
+        100% { transform: scale(1); opacity: 0.7; }
+      }
+      
+      /* Nav Logo Styles */
+      .nav__logo {
+        display: flex;
+        align-items: center;
+      }
+      
+      .nav__logo img {
+        height: 40px; /* Adjust based on your logo size */
+      }
+
       /* Combined and Enhanced Animation Styles */
       @keyframes blink {
         0%, 100% { opacity: 1; }
@@ -172,12 +237,36 @@
         transform: translateY(-3px);
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
       }
+      
+
+/* Content Card on Top */
+.header .content {
+  position: absolute;
+  top: 20%;
+  left: 5%;
+  z-index: 2;
+  width: 40%;
+  background: rgba(255, 255, 255, 0.40);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+
     </style>
   </head>
   <body>
+    <!-- Preloader with pill logo -->
+    <div class="preloader">
+      <img src="{% static 'accounts/images/pill-logo.png' %}" class="pill-logo" alt="VeriPharm Loading">
+    </div>
+   
     <div class="container">
       <nav>
-        <div class="nav__logo">VeriPharm</div>
+        <div class="nav__logo">
+          <!-- Replace with your text logo -->
+          <img src="{% static 'accounts/images/text-logo.png' %}" alt="VeriPharm">
+        </div>
         <ul class="nav__links">
           <li><a href="#">Home</a></li>
           <li><a href="#how-it-works">How it Works</a></li>
@@ -188,6 +277,7 @@
         <a href="{%url 'login'%}"><button class="btn">Join Us</button></a>
       </nav>
 
+      <!-- Rest of your HTML remains the same -->
       <header class="header">
         <div class="slideshow">
           <img src="{% static 'accounts/images/landing1.jpg' %}" class="slide slide1 active" alt="Slide 1" />
@@ -203,7 +293,7 @@
             medicines worldwide. We leverage blockchain to protect patients and
             empower healthcare professionals.
           </p>
-          <button class="btn">Learn More</button>
+          
         </div>
       </header>
 
@@ -394,6 +484,23 @@
     </div>
 
     <script>
+      // Preloader functionality
+      window.addEventListener('load', function() {
+        const preloader = document.querySelector('.preloader');
+        setTimeout(function() {
+          preloader.classList.add('fade-out');
+          setTimeout(function() {
+            preloader.style.display = 'none';
+          }, 500);
+        }, 3500); // Adjust time as needed
+      });
+      setTimeout(function() {
+  preloader.classList.add('fade-out');
+  setTimeout(function() {
+    preloader.style.display = 'none';
+  }, 800); /* ← Should match CSS transition time (0.8s = 800ms) */
+}, 1500); /* ← Total visible time before fade starts (in milliseconds) */
+
       // Enhanced Slideshow functionality
       document.addEventListener('DOMContentLoaded', function() {
         // Slideshow with smoother transitions
@@ -423,12 +530,12 @@
           });
         }
         
-        // Counter animation with improved performance
+        // Counter animation with improved performance and slower speed
         const stats = [
-          { element: document.querySelector('.impact-stat:nth-child(1) .stat-number'), target: 50000, duration: 2000 },
-          { element: document.querySelector('.impact-stat:nth-child(2) .stat-number'), target: 1000000, duration: 2000 },
-          { element: document.querySelector('.impact-stat:nth-child(3) .stat-number'), target: 20, duration: 1500 },
-          { element: document.querySelector('.impact-stat:nth-child(4) .stat-number'), target: 100, duration: 1500 }
+          { element: document.querySelector('.impact-stat:nth-child(1) .stat-number'), target: 500, duration: 4000 }, // Increased duration
+          { element: document.querySelector('.impact-stat:nth-child(2) .stat-number'), target: 1000, duration: 4000 }, // Increased duration
+          { element: document.querySelector('.impact-stat:nth-child(3) .stat-number'), target: 1, duration: 3000 }, // Increased duration
+          { element: document.querySelector('.impact-stat:nth-child(4) .stat-number'), target: 100, duration: 3000 } // Increased duration
         ];
         
         function animateCounters() {
