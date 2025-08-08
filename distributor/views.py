@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from accounts.decorators import distributor_required  # optional role check
 from django.shortcuts import redirect, get_object_or_404
+from contract.blockchain import log_event
 from manufacturer.models import BatchDistribution,Drug,Batch
 from django.http import JsonResponse
 from .models import PharmacyDistribution
@@ -29,6 +30,7 @@ def verify_distribution(request, distribution_id):
     distribution = get_object_or_404(BatchDistribution, id=distribution_id, distributor=request.user)
     distribution.verified = True
     distribution.save()
+    log_event(f"Distributor:{request.user} verified Batch:{distribution.batch.batch_id} containing {distribution.batch.quantity_left} number of drugs from Manufacturer:{distribution.batch.manufacturer}",actor=request.user,log_type='verification')  
     return redirect('distributor:dashboard') 
 
 def scan(request):
@@ -53,6 +55,7 @@ def scan(request):
                     distribution = BatchDistribution.objects.get(batch=batch, distributor=request.user)
                     distribution.verified = True
                     distribution.save()
+                    log_event(f"Distributor:{request.user} verified Batch:{distribution.batch.batch_id} containing {distribution.batch.quantity_left} number of drugs from Manufacturer:{distribution.batch.manufacturer}",actor=request.user,log_type='verification')
                     return redirect("distributor:dashboard")
                 except BatchDistribution.DoesNotExist:
                     error = "No distribution record found for this batch and your account."
@@ -79,18 +82,55 @@ from .forms import PharmacyDistributionForm
 
 @login_required
 def pass_to_pharmacy(request):
+    error = ''
     if request.method == 'POST':
         form = PharmacyDistributionForm(request.POST, distributor=request.user)
+
         if form.is_valid():
-            form.save()
-            print("valid form")
-            return redirect('distributor:dashboard')  # or any other success view
+            instance = form.save(commit=False)
+
+            # Get the distributor's allocation from manufacturer
+            distribution = BatchDistribution.objects.filter(
+                batch=instance.batch,
+                distributor=request.user,
+                verified=True,
+                finished=False
+            ).first()
+
+            if not distribution:
+                error = "You have no active stock for this batch."
+            elif instance.quantity_sent > distribution.quantity_sent:
+                error = "Cannot send more than available quantity."
+            elif instance.quantity_sent == distribution.quantity_sent:
+                # Send all stock to pharmacy
+                distribution.finished = True
+                distribution.save()
+
+                instance.save()  # PharmacyDistribution record
+            else:
+                # Send part of the stock
+                #distribution.quantity_sent -= instance.quantity_sent
+                sub_batch = distribution.create_sub_batch(instance.quantity_sent)
+                distribution.save()
+                instance.batch = sub_batch.batch
+                instance.save()  # PharmacyDistribution record
+
+            if not error:
+                log_event(
+                    f"Distributor:{request.user} sent {instance.quantity_sent} units of Batch:{instance.batch} to Pharmacy:{instance.pharmacy}",
+                    actor=request.user,
+                    log_type='verification'
+                )
+                return redirect('distributor:dashboard')
+
         else:
-            print(f"not valid,{form.errors}")
+            print(f"Form invalid: {form.errors}")
+
     else:
         form = PharmacyDistributionForm(distributor=request.user)
 
-    return render(request, 'distributor/transfer_to_pharmacy.html', {'form': form})
+    return render(request, 'distributor/transfer_to_pharmacy.html', {'form': form, 'error': error})
+
 
 def about(request):
     return render(request, 'distributor/about_page.html')

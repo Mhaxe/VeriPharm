@@ -1,34 +1,55 @@
-<!-- templates/blockchain/logs.html -->
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
     <title>Blockchain Logs</title>
+    <link rel="stylesheet" href="{% static 'contract/css/style.css' %}">
 </head>
 <body>
-    <h1>Blockchain Logs</h1>
-    {% if events %}
-        <table border="1">
+    <h1>Blockchain Logs (Simulated)</h1>
+    <form method="get" style="margin-bottom: 20px;">
+        <label for="actor">Actor:</label>
+        <select name="actor" id="actor">
+            <option value="">All</option>
+            <option value="manufacturer" {% if selected_actor == 'manufacturer' %}selected{% endif %}>Manufacturer</option>
+            <option value="distributor" {% if selected_actor == 'distributor' %}selected{% endif %}>Distributor</option>
+            <option value="pharmacy" {% if selected_actor == 'pharmacy' %}selected{% endif %}>Pharmacy</option>
+            <option value="admin" {% if selected_actor == 'admin' %}selected{% endif %}>Admin</option>
+        </select>
+    
+        <label for="log_type">Log Type:</label>
+        <select name="log_type" id="log_type">
+            <option value="">All</option>
+            <option value="creation" {% if selected_log_type == 'creation' %}selected{% endif %}>Batch Creation</option>
+            <option value="transfer" {% if selected_log_type == 'transfer' %}selected{% endif %}>Drug Transfer</option>
+            <option value="verification" {% if selected_log_type == 'verification' %}selected{% endif %}>Verification</option>
+            <option value="general" {% if selected_log_type == 'general' %}selected{% endif %}>General</option>
+        </select>
+    
+        <button type="submit">Filter</button>
+    </form>
+    
+    <table border="1">
+        <thead>
             <tr>
+                <th>Block #</th>
                 <th>Message</th>
-                <th>Block Number</th>
+                <th>Transaction Hash</th>
+                <th>Timestamp</th>
             </tr>
-            {% for event in events %}
+        </thead>
+        <tbody>
+            {% for log in logs %}
                 <tr>
-                    <td>{{ event.message }}</td>
-                    <td>{{ event.block }}</td>
+                    <td>{{ log.block_number }}</td>
+                    <td>{{ log.message }}</td>
+                    <td>{{ log.tx_hash }}</td>
+                    <td>{{ log.timestamp }}</td>
                 </tr>
+            {% empty %}
+                <tr><td colspan="4">No logs yet.</td></tr>
             {% endfor %}
-        </table>
-    {% else %}
-        <p>No logs found.</p>
-    {% endif %}
-    {% for log in logs %}
-  <div>
-    <strong>{{ log.timestamp }}</strong> — {{ log.message }}
-  </div>
-{% empty %}
-  <p>No logs found.</p>
-{% endfor %}
-
+        </tbody>
+    </table>
 </body>
 </html>

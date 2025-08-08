@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from contract.blockchain import log_event
 from distributor.models import PharmacyDistribution  
 from accounts.decorators import pharmacy_required
 from manufacturer.models import Drug,Batch
@@ -49,6 +50,11 @@ def scan(request):
                     pharmacy_distribution = PharmacyDistribution.objects.get(batch=batch, pharmacy=request.user)
                     pharmacy_distribution.verified = True
                     pharmacy_distribution.save()
+                    log_event(
+                        f"Pharmacist:{request.user} verified Batch:{batch.batch_id}",
+                        actor=request.user.username,
+                        log_type="verification"
+                    )
                     return redirect("pharmacy:dashboard")
                 except PharmacyDistribution.DoesNotExist:
                     error = "No distribution record found for this batch and your account."
