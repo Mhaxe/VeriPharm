@@ -44,7 +44,7 @@
         color: var(--dark-text);
       }
 
-      /* Top Navigation */
+      /* Top Navigation - Optimized */
       .top-bar {
         background-color: var(--primary-blue);
         color: var(--white);
@@ -60,13 +60,36 @@
         background-color: #004a99;
       }
 
-      .top-bar .nav-links {
+      /* Logo */
+      .nav__logo {
+        display: flex;
+        align-items: center;
+      }
+
+      .nav__logo img {
+        height: 40px;
+        width: auto;
+        transition: var(--transition);
+      }
+
+      .nav__logo img:hover {
+        transform: scale(1.05);
+      }
+
+      /* Right-aligned Group */
+      .right-aligned-group {
         display: flex;
         align-items: center;
         gap: 20px;
       }
 
-      .top-bar .nav-links a {
+      /* Navigation Links */
+      .nav-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav-links a {
         color: var(--white);
         text-decoration: none;
         font-weight: 600;
@@ -75,7 +98,7 @@
         position: relative;
       }
 
-      .top-bar .nav-links a::after {
+      .nav-links a::after {
         content: '';
         position: absolute;
         width: 0;
@@ -86,15 +109,14 @@
         transition: var(--transition);
       }
 
-      .top-bar .nav-links a:hover::after,
-      .top-bar .nav-links a:focus::after {
+      .nav-links a:hover::after,
+      .nav-links a:focus::after {
         width: 100%;
       }
 
       /* Navigation Controls */
       .nav-controls {
         display: flex;
-        align-items: center;
         gap: 10px;
       }
 
@@ -140,7 +162,7 @@
         background: var(--white);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         border-radius: var(--border-radius);
-        z-index: 100;
+        z-index: 1000;
         min-width: 150px;
         overflow: hidden;
       }
@@ -560,6 +582,14 @@
         .auth-form {
           padding: 30px;
         }
+
+        .right-aligned-group {
+          gap: 10px;
+        }
+
+        .nav-links {
+          gap: 10px;
+        }
       }
 
       @media (max-width: 576px) {
@@ -572,8 +602,8 @@
           padding: 25px;
         }
 
-        .top-bar .nav-links {
-          gap: 10px;
+        .nav__logo img {
+          height: 30px;
         }
 
         .nav-controls button {
@@ -585,10 +615,20 @@
   </head>
   <body>
     <div class="top-bar">
-      <div><strong>Veripharm</strong></div>
-      <div class="nav-links">
-        <a href="#">Home</a>
-        <a href="{% url 'about' %}" target="_blank">About</a>
+      <!-- Logo on the left -->
+      <div class="nav__logo">
+        <img src="{% static 'accounts/images/text-logo.png' %}" alt="VeriPharm">
+      </div>
+      
+      <!-- Everything else on the right -->
+      <div class="right-aligned-group">
+        <!-- Navigation links -->
+        <div class="nav-links">
+          <a href="{%url 'home'%}">Home</a>
+          <a href="{% url 'about' %}" target="_blank">About</a>
+        </div>
+        
+        <!-- Controls -->
         <div class="nav-controls">
           <button type="button" id="lang-toggle" aria-label="Language selector">
             🌐
@@ -597,6 +637,8 @@
             🌓
           </button>
         </div>
+        
+        <!-- Language dropdown -->
         <div class="lang-dropdown" id="lang-dropdown">
           <button type="button" data-lang="en">English</button>
           <button type="button" data-lang="fr">Français</button>

@@ -49,6 +49,11 @@
       z-index: 2;
     }
 
+    .nav__logo img {
+      height: 40px;
+      width: auto;
+    }
+
     .nav-links {
       display: flex;
       align-items: center;
@@ -211,7 +216,9 @@
 <canvas id="pillCanvas"></canvas>
 
 <div class="top-bar">
-  <div>Veripharm</div>
+  <div class="nav__logo">
+    <img src="{% static 'accounts/images/text-logo.png' %}" alt="VeriPharm">
+  </div>
   <div class="nav-links">
     <a href="{% url 'consumer:consumer_home' %}">Home</a>
     <a href="{% url 'consumer:about' %}">About</a>
