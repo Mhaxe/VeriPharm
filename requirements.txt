@@ -65,7 +65,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.1.1
 pytz==2025.2
 pyunormalize==16.0.0
-pywin32==310
+
 pyzbar==0.1.9
 pyzmq==26.4.0
 qrcode==8.2
