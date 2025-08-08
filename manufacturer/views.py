@@ -88,7 +88,7 @@ def manufacturer_dashboard(request):
                 print(f"Sent entire batch ({distribution.quantity_sent} drugs)")
                 log_event(
                     f"Manufacturer:{request.user} transferred ENTIRE Batch:{original_batch.batch_id} containing {distribution.quantity_sent} drugs to Distributor:{distribution.distributor}",
-                    actor=request.user,
+                    actor='distributor',
                     log_type='transfer'
                 )
             else:

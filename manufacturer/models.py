@@ -123,9 +123,21 @@ class BatchDistribution(models.Model):
     quantity_sent = models.IntegerField()
     distribution_date = models.DateField(auto_now_add=True)
     verified = models.BooleanField(default=False)
-
-
+    finished = models.BooleanField(default=False,blank=True)
 
 
     def __str__(self):
         return f"{self.quantity_sent} units of {self.batch.drug_name} to {self.distributor.username}"
+
+    def create_sub_batch(self,quantity_to_be_sent):
+        sub_batch = BatchDistribution.objects.create(
+            batch = self.batch.create_sub_batch(quantity_to_be_sent),
+            distributor = self.distributor,
+            quantity_sent = quantity_to_be_sent,
+            verified = self.verified,
+            finished = False,
+        )
+        sub_batch.save()
+        self.quantity_sent = self.quantity_sent - quantity_to_be_sent
+        self.save()
+        return sub_batch
