@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-ka93zth!3_m@$npbzi7kx$*w(zml7$3t7r4)t_*&r(8#a4y5wh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["your-railway-domain.up.railway.app"]
 
 
 # Application definition
@@ -141,6 +141,3 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-import os
-
-ALLOWED_HOSTS = ["your-railway-domain.up.railway.app"]
