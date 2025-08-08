@@ -1,2 +1,8 @@
 __pycache__/
 *.pyc
+# Ignore SQLite database
+*.sqlite3
+*.sqlite
+
+# Ignore PNG images
+*.png

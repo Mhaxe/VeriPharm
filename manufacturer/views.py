@@ -63,17 +63,34 @@ def manufacturer_dashboard(request):
         
             
         if drug_form.is_valid():
+            instance = drug_form
+            log_event(f"Manufacturer:{request.user} created Drug:{instance.name} to batch{instance.batch}",
+                      actor='manufacturer',
+                      log_type='creation')
             drug_form.save()
 
         if distributor_form.is_valid():
             distribution = distributor_form.save(commit=False)
             original_batch = distribution.batch
-            if distribution.quantity_sent <= original_batch.quantity_left:
+            if distribution.quantity_sent < original_batch.quantity_left and original_batch.finished == False:
                 sub_batch = original_batch.create_sub_batch(distribution.quantity_sent)
                 distribution.batch = sub_batch
                 distribution.save()
                 print(f"sent {distribution.quantity_sent}")
                 log_event(f"Manufacturer:{request.user} transfered Batch:{sub_batch.batch_id} containing {distribution.quantity_sent} number of drugs to Distributor:{distribution.distributor}",actor=request.user,log_type='transfer')  
+            elif distribution.quantity_sent == original_batch.quantity_left and original_batch.finished == False:
+                # Send the whole batch without creating a sub-batch
+                distribution.batch = original_batch
+                #original_batch.quantity_left = 0
+                original_batch.finished = True
+                original_batch.save()
+                distribution.save()
+                print(f"Sent entire batch ({distribution.quantity_sent} drugs)")
+                log_event(
+                    f"Manufacturer:{request.user} transferred ENTIRE Batch:{original_batch.batch_id} containing {distribution.quantity_sent} drugs to Distributor:{distribution.distributor}",
+                    actor=request.user,
+                    log_type='transfer'
+                )
             else:
                 print("Cannot send more than available quantity.")
                 distributor_form_error = "Cannot send more than available quantity."

@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from accounts.decorators import distributor_required  # optional role check
 from django.shortcuts import redirect, get_object_or_404
+from contract.blockchain import log_event
 from manufacturer.models import BatchDistribution,Drug,Batch
 from django.http import JsonResponse
 from .models import PharmacyDistribution
@@ -29,6 +30,7 @@ def verify_distribution(request, distribution_id):
     distribution = get_object_or_404(BatchDistribution, id=distribution_id, distributor=request.user)
     distribution.verified = True
     distribution.save()
+    log_event(f"Distributor:{request.user} verified Batch:{distribution.batch.batch_id} containing {distribution.batch.quantity_left} number of drugs from Manufacturer:{distribution.batch.manufacturer}",actor=request.user,log_type='verification')  
     return redirect('distributor:dashboard') 
 
 def scan(request):
@@ -53,6 +55,7 @@ def scan(request):
                     distribution = BatchDistribution.objects.get(batch=batch, distributor=request.user)
                     distribution.verified = True
                     distribution.save()
+                    log_event(f"Distributor:{request.user} verified Batch:{distribution.batch.batch_id} containing {distribution.batch.quantity_left} number of drugs from Manufacturer:{distribution.batch.manufacturer}",actor=request.user,log_type='verification')
                     return redirect("distributor:dashboard")
                 except BatchDistribution.DoesNotExist:
                     error = "No distribution record found for this batch and your account."
@@ -82,7 +85,8 @@ def pass_to_pharmacy(request):
     if request.method == 'POST':
         form = PharmacyDistributionForm(request.POST, distributor=request.user)
         if form.is_valid():
-            form.save()
+            instance = form.save()
+            log_event(f"Distributor:{request.user} sent Batch:{instance.batch} to Pharmacy:{instance.pharmacy}",actor=request.user,log_type='verification')
             print("valid form")
             return redirect('distributor:dashboard')  # or any other success view
         else:

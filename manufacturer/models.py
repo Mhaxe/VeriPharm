@@ -15,6 +15,7 @@ class Batch(models.Model):
     description = models.TextField(max_length=100)
     quantity = models.IntegerField(default=0)
     quantity_left = models.IntegerField(blank=True, null=True)
+    finished = models.BooleanField(blank=True,default=False)
     manufacture_date = models.DateField()
     expiry_date = models.DateField()
     batch_qr_code = models.ImageField(upload_to='batch_codes/', blank=True, null=True)
