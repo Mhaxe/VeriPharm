@@ -91,7 +91,7 @@ DATABASES = {
     }
 }
 DEBUG = os.environ.get("DEBUG", "True") == "True"
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
+
 
 
 # Password validation
