@@ -389,6 +389,7 @@
         {% csrf_token %}
         <label for="distro_batch">Batch</label>
         <select name="batch_id" id="batch_id" required>
+          <option value="" disabled selected>-- Select a batch --</option>
           {% for batch in distributor_form.fields.batch.queryset %}
             <option value="{{ batch.id }}">{{ batch.batch_id }} - {{ batch.drug_name }}</option>
           {% endfor %}

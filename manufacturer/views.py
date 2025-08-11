@@ -177,3 +177,31 @@ def manufacturer_records(request):
     context = {"records" : records,}
     return render(request,"manufacturer/records.html",context=context)
 
+def scan(request):
+    query = request.GET.get("code")
+    drug = None
+    error = None
+
+    if query:
+        try:
+            drug = Drug.objects.get(qr_code_string=query)
+            return render(request, "distributor/scan.html", {"drug": drug, "error": error})
+        except Drug.DoesNotExist:
+            drug = None
+
+        try:
+            print("trying batch")
+            batch = Batch.objects.get(batch_qr_code_string=query)
+            print(f"batch:{batch}")
+        except Batch.DoesNotExist:
+            batch = None
+
+        if not drug and not batch:
+            error = "Invalid or unregistered QR code."
+
+        print(error)
+        print(query)
+    return render(request, "manufacturer/scan.html", {"drug": drug, "error": error,"batch":batch})  
+
+
+
