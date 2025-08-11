@@ -64,3 +64,8 @@ class DrugForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'batch': forms.Select(attrs={'class': 'form-control'}),
         }
+
+class CodeForm(forms.ModelForm):
+    class Meta:
+        model = Batch
+        fields = ['batch_id']
