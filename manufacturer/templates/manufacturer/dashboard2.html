@@ -357,7 +357,7 @@
         <button type="submit">Submit Drug Form</button>
       </form>
 
-      <h1>Distro Form</h1>
+      <h1>Transfer to Distributor Form</h1>
       <form method="POST">
         {% csrf_token %}
         <label for="distro_batch">Batch</label>
@@ -382,6 +382,21 @@
         {%endif%}
 
         <button type="submit">Submit Distro Form</button>
+      </form>
+
+      <h1>Download batch QR code</h1>
+      <form method="POST">
+        {% csrf_token %}
+        <label for="distro_batch">Batch</label>
+        <select name="batch_id" id="batch_id" required>
+          {% for batch in distributor_form.fields.batch.queryset %}
+            <option value="{{ batch.id }}">{{ batch.batch_id }} - {{ batch.drug_name }}</option>
+          {% endfor %}
+        </select>
+        {%if code_form_error%}
+        <p>{{code_form_error}}</p>
+        {%endif%}
+        <button type="submit">Download</button>
       </form>
     </div>
 

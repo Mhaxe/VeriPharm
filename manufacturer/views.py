@@ -6,7 +6,7 @@ from .forms import *
 from distributor.models import PharmacyDistribution
 from contract.blockchain import log_event
 
-
+from django.http import FileResponse, Http404
 @login_required
 @manufacturer_required  
 #def manufacturer_dashboard(request):
@@ -23,12 +23,15 @@ def manufacturer_dashboard(request):
     distributor_form = BatchDistributionForm()
     batch_form_error = ''
     distributor_form_error=''
+    code_form_error = ''
+    code_form = CodeForm()
 
     if request.method == 'POST':
         print("post req made")
         batch_form = BatchForm(request.POST)
         drug_form = DrugForm(request.POST)
         distributor_form = BatchDistributionForm(request.POST)
+        code_form = CodeForm(request.POST)
         
     
         if batch_form.is_valid():
@@ -96,12 +99,29 @@ def manufacturer_dashboard(request):
                 distributor_form_error = "Cannot send more than available quantity."
 
 
+        if code_form.is_valid():
+            print("valid code form")
+            instance = code_form.save(commit=False)
+            _batch_id = instance.batch_id
+            print(_batch_id)
+            batch = Batch.objects.filter(id=_batch_id).first()
+            print(batch)
+            if batch and batch.batch_qr_code:
+                return FileResponse(batch.batch_qr_code.open('rb'), as_attachment=True, filename=batch.batch_qr_code.name.split('/')[-1])
+            else:
+                code_form_error = "QR code image not found"
+
+            
+
+
+
     return render(request, 'manufacturer/dashboard2.html', {
         'batch_form': batch_form,
         'drug_form': drug_form,
         'distributor_form': distributor_form,
         'batch_form_error': batch_form_error,
         'distributor_form_error':distributor_form_error,
+        'code_form_error':code_form_error
     })
 
 
