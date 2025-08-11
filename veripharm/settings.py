@@ -30,7 +30,7 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS = [RENDER_EXTERNAL_HOSTNAME, 'veripharm.onrender.com']
 else:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+    ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -130,7 +130,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # For development
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')    # For production
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')    # For production
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",  # if you're using pathlib (Django 3.1+)
