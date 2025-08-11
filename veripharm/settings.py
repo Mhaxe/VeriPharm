@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-ka93zth!3_m@$npbzi7kx$*w(zml7$3t7r4)t_*&r(8#a4y5wh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 
 # Application definition
@@ -87,7 +87,6 @@ DATABASES = {
     }
 }
 DEBUG = os.environ.get("DEBUG", "True") == "True"
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
 
 
 # Password validation
@@ -126,7 +125,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # For development
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')    # For production
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')    # For production
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",  # if you're using pathlib (Django 3.1+)
