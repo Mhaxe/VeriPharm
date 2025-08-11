@@ -54,6 +54,15 @@
             background-color: #0056b3;
         }
 
+        .return-btn {
+            background-color: #0a5ba2;
+            margin-top: 20px;
+        }
+
+        .return-btn:hover {
+            background-color: #5a6268;
+        }
+
         .result {
             background-color: #eafaf1;
             border-left: 5px solid #28a745;
@@ -96,12 +105,37 @@
                 <p><strong>Category:</strong> {{ drug.batch.drug_category }}</p>
                 <p><strong>Manufactured by:</strong> {{ drug.batch.manufacturer.username }}</p>
                 <p><strong>Expiry Date:</strong> {{ drug.batch.expiry_date }}</p>
+                {% if drug.scanned_by %}
+                <p><strong>Scanned by:</strong> {{ drug.scanned_by.username }}</p>
+                {% endif %}
+                <button class="return-btn" onclick="goBackTwoPages()">Return</button>
             </div>
         {% elif error %}
             <div class="error">
                 <h2>{{ error }}</h2>
+                <button class="return-btn" onclick="goBackTwoPages()">Return </button>
             </div>
+        {% elif message %}
+            <div class="error">
+                <h2>{{ message }}</h2>
+                <button class="return-btn" onclick="goBackTwoPages()">Return</button>
+            </div>    
         {% endif %}
     </div>
+
+    <script>
+        function goBackTwoPages() {
+            // Go back two pages in history
+            window.history.go(-2);
+            
+            // Fallback to home page if history is too short
+            setTimeout(function() {
+                window.location.href = '/'; // Replace with your home page URL
+            }, 100);
+        }
+    </script>
+    <footer>
+        <p>&copy; 2023 VeriPharm. All rights reserved.</p>
+    </footer>
 </body>
 </html>

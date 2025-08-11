@@ -55,7 +55,7 @@
         }
 
         .return-btn {
-            background-color: #6c757d;
+            background-color: #0a5ba2;
             margin-top: 20px;
         }
 
@@ -108,17 +108,17 @@
                 {% if drug.scanned_by %}
                 <p><strong>Scanned by:</strong> {{ drug.scanned_by.username }}</p>
                 {% endif %}
-                <button class="return-btn" onclick="goBackTwoPages()">Return to Previous Page</button>
+                <button class="return-btn" onclick="goBackTwoPages()">Return</button>
             </div>
         {% elif error %}
             <div class="error">
                 <h2>{{ error }}</h2>
-                <button class="return-btn" onclick="goBackTwoPages()">Return to Previous Page</button>
+                <button class="return-btn" onclick="goBackTwoPages()">Return</button>
             </div>
         {% elif message %}
             <div class="error">
                 <h2>{{ message }}</h2>
-                <button class="return-btn" onclick="goBackTwoPages()">Return to Previous Page</button>
+                <button class="return-btn" onclick="goBackTwoPages()">Return </button>
             </div>    
         {% endif %}
     </div>
@@ -134,5 +134,8 @@
             }, 100);
         }
     </script>
+    <footer>
+        <p>&copy; 2023 VeriPharm. All rights reserved.</p>
+    </footer>
 </body>
 </html>
