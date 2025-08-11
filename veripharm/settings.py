@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-ka93zth!3_m@$npbzi7kx$*w(zml7$3t7r4)t_*&r(8#a4y5wh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -87,6 +87,7 @@ DATABASES = {
     }
 }
 DEBUG = os.environ.get("DEBUG", "True") == "True"
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
 
 
 # Password validation
