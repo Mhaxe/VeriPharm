@@ -100,16 +100,19 @@ def manufacturer_dashboard(request):
 
 
         if code_form.is_valid():
-            print("valid code form")
-            instance = code_form.save(commit=False)
-            _batch_id = instance.batch_id
-            print(_batch_id)
-            batch = Batch.objects.filter(id=_batch_id).first()
-            print(batch)
-            if batch and batch.batch_qr_code:
-                return FileResponse(batch.batch_qr_code.open('rb'), as_attachment=True, filename=batch.batch_qr_code.name.split('/')[-1])
-            else:
-                code_form_error = "QR code image not found"
+            try:
+                print("valid code form")
+                instance = code_form.save(commit=False)
+                _batch_id = instance.batch_id
+                print(_batch_id)
+                batch = Batch.objects.filter(id=_batch_id).first()
+                print(batch)
+                if batch and batch.batch_qr_code:
+                    return FileResponse(batch.batch_qr_code.open('rb'), as_attachment=True, filename=batch.batch_qr_code.name.split('/')[-1])
+                else:
+                    code_form_error = "QR code image not found"
+            except(ValueError):
+                pass        
 
             
 

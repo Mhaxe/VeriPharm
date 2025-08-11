@@ -1,5 +1,7 @@
 make ui consistent 
 add restritions to functions to prevent lenght extension attacks
-fix css of scan button on consumer page
+
+pharmacy has to scan to verify drugs
+
 implement profile settings
 
