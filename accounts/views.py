@@ -63,7 +63,7 @@ def about(request):
     return render(request,"about_page.html")    
 
 def mobile_login_view(request):
-    print("login_view running")
+    print("mobile login_view running")
     if request.method == 'POST':
         print("POST req made to login_view")
         form = CustomLoginForm(data=request.POST)
@@ -80,7 +80,7 @@ def mobile_login_view(request):
     return render(request, 'mobile_home.html', {'form': form})
 
 def mobile_signup_view(request):
-    print("signup_view running")
+    print("mobile signup_view running")
     if request.method == 'POST':
         print("POST req made to signup_view")
         form = CustomUserCreationForm(request.POST)
