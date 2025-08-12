@@ -62,3 +62,11 @@ def consumer_homepage(request):
 def about(request):
     return render(request,"about_page.html")    
 
+def mobile_login_view(request):
+    return render(request,"mobile_login.html")
+
+def mobile_signup_view(request):
+    return render(request,"mobile_signup.html")
+
+def mobile_home_view(request):
+    return render(request,"mobile_home.html")

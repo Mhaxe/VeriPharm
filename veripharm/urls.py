@@ -25,4 +25,5 @@ urlpatterns = [
     path('distributor/',include('distributor.urls', namespace = 'distributor')),
     path('pharmacy/',include('pharmacy.urls', namespace = 'pharmacy')),
     path('logs/', include('contract.urls')),
+    path('api/',include('api.urls')),
 ]
