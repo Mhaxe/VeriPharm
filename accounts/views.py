@@ -46,8 +46,8 @@ def login_view(request):
             else:
                 return redirect('dashboard')#to be changed to an error page i guess
             
-    else:
-        print("invalid form from login_view")
+        else:
+            print("invalid form from login_view")
         form = CustomLoginForm()
     return render(request, 'hhome.html', {'form': form})
 
