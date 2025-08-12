@@ -11,6 +11,6 @@ urlpatterns = [
     path('about/',views.about,name='about'),
     path('m/login/',views.mobile_login_view,name='mobile_login'),
     path('m/signup/',views.mobile_signup_view,name='mobile_signup'),
-    path('m/home/',views.mobile_home_view,name='mobile_login'),
+    path('m/home/',views.mobile_home_view,name='mobile_home'),
 
 ]

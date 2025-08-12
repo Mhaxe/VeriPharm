@@ -63,10 +63,40 @@ def about(request):
     return render(request,"about_page.html")    
 
 def mobile_login_view(request):
-    return render(request,"mobile_login.html")
+    print("login_view running")
+    if request.method == 'POST':
+        print("POST req made to login_view")
+        form = CustomLoginForm(data=request.POST)
+        if form.is_valid():
+            print("valid form from login_view")
+            user = form.get_user()
+            role = user.role
+            login(request, user)
+            if role == 'consumer':
+                return redirect('consumer:consumer_home')
+    else:
+        print("invalid form from login_view")
+        form = CustomLoginForm()
+    return render(request, 'mobile_home.html', {'form': form})
 
 def mobile_signup_view(request):
-    return render(request,"mobile_signup.html")
+    print("signup_view running")
+    if request.method == 'POST':
+        print("POST req made to signup_view")
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            print("valid form from signup_view")
+            user = form.save(commit=False)
+            user.role = request.POST.get('role','consumer')
+            user.save()
+            login(request, user)
+            return redirect('mobile_home')
+        else:
+             print("Form errors:", form.errors)  # 🔍 log why it failed 
+    else:
+        print("invalid form from signup_view")
+        form = CustomUserCreationForm()
+    return render(request, 'mobile_signup.html', {'form': form})
 
 def mobile_home_view(request):
     return render(request,"mobile_home.html")
