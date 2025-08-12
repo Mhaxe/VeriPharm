@@ -6,7 +6,7 @@ from django.shortcuts import render
 from manufacturer.models import Drug
 #from accounts.decorators import consumer_required  # optional role check
 
-@login_required
+
 def consumer_homepage(request):
     return render(request, 'consumer/homepage.html')
 
