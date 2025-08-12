@@ -5,3 +5,4 @@ pharmacy has to scan to verify drugs
 
 implement profile settings
 
+6
