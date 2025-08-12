@@ -100,16 +100,19 @@ def manufacturer_dashboard(request):
 
 
         if code_form.is_valid():
-            print("valid code form")
-            instance = code_form.save(commit=False)
-            _batch_id = instance.batch_id
-            print(_batch_id)
-            batch = Batch.objects.filter(id=_batch_id).first()
-            print(batch)
-            if batch and batch.batch_qr_code:
-                return FileResponse(batch.batch_qr_code.open('rb'), as_attachment=True, filename=batch.batch_qr_code.name.split('/')[-1])
-            else:
-                code_form_error = "QR code image not found"
+            try:
+                print("valid code form")
+                instance = code_form.save(commit=False)
+                _batch_id = instance.batch_id
+                print(_batch_id)
+                batch = Batch.objects.filter(id=_batch_id).first()
+                print(batch)
+                if batch and batch.batch_qr_code:
+                    return FileResponse(batch.batch_qr_code.open('rb'), as_attachment=True, filename=batch.batch_qr_code.name.split('/')[-1])
+                else:
+                    code_form_error = "QR code image not found"
+            except(ValueError):
+                pass        
 
             
 
@@ -176,4 +179,32 @@ def manufacturer_records(request):
 
     context = {"records" : records,}
     return render(request,"manufacturer/records.html",context=context)
+
+def scan(request):
+    query = request.GET.get("code")
+    drug = None
+    error = None
+
+    if query:
+        try:
+            drug = Drug.objects.get(qr_code_string=query)
+            return render(request, "distributor/scan.html", {"drug": drug, "error": error})
+        except Drug.DoesNotExist:
+            drug = None
+
+        try:
+            print("trying batch")
+            batch = Batch.objects.get(batch_qr_code_string=query)
+            print(f"batch:{batch}")
+        except Batch.DoesNotExist:
+            batch = None
+
+        if not drug and not batch:
+            error = "Invalid or unregistered QR code."
+
+        print(error)
+        print(query)
+    return render(request, "manufacturer/scan.html", {"drug": drug, "error": error,"batch":batch})  
+
+
 

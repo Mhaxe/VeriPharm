@@ -45,3 +45,7 @@ def scan(request):
 
 def scan_camera(request):
     return render(request, "consumer/scan_camera.html")
+
+
+
+
