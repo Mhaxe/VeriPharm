@@ -1,11 +1,12 @@
 # Create your views here.
+import os
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from accounts.decorators import distributor_required  # optional role check
 from django.shortcuts import redirect, get_object_or_404
 from contract.blockchain import log_event
 from manufacturer.models import BatchDistribution,Drug,Batch
-from django.http import JsonResponse
+from django.http import FileResponse, JsonResponse
 from .models import PharmacyDistribution
 
 
@@ -101,27 +102,27 @@ def pass_to_pharmacy(request):
                 error = "You have no active stock for this batch."
             elif instance.quantity_sent > distribution.quantity_sent:
                 error = "Cannot send more than available quantity."
-            elif instance.quantity_sent == distribution.quantity_sent:
-                # Send all stock to pharmacy
-                distribution.finished = True
-                distribution.save()
-
-                instance.save()  # PharmacyDistribution record
             else:
-                # Send part of the stock
-                #distribution.quantity_sent -= instance.quantity_sent
-                sub_batch = distribution.create_sub_batch(instance.quantity_sent)
-                distribution.save()
-                instance.batch = sub_batch.batch
-                instance.save()  # PharmacyDistribution record
+                # Determine if full or partial send
+                if instance.quantity_sent == distribution.quantity_sent:
+                    distribution.finished = True
+                    batch = instance.batch
+                else:
+                    # Partial send: create sub-batch
+                    sub_batch = distribution.create_sub_batch(instance.quantity_sent)
+                    batch = sub_batch.batch
+                    instance.batch = batch
 
-            if not error:
+                # Save changes
+                distribution.save()
+                instance.save()
+
+                # Log the event
                 log_event(
-                    f"Distributor:{request.user} sent {instance.quantity_sent} units of Batch:{instance.batch} to Pharmacy:{instance.pharmacy}",
+                    f"Distributor:{request.user} sent {instance.quantity_sent} units of Batch:{batch} to Pharmacy:{instance.pharmacy}",
                     actor=request.user,
                     log_type='verification'
                 )
-                return redirect('distributor:dashboard')
 
         else:
             print(f"Form invalid: {form.errors}")
@@ -130,6 +131,7 @@ def pass_to_pharmacy(request):
         form = PharmacyDistributionForm(distributor=request.user)
 
     return render(request, 'distributor/transfer_to_pharmacy.html', {'form': form, 'error': error})
+
 
 
 def about(request):
@@ -157,4 +159,10 @@ def verify_qr_code(request):
 
 
 
-
+def download_batch_qr(request, batch_id):
+    batch = get_object_or_404(Batch, id=batch_id)
+    return FileResponse(
+        batch.batch_qr_code.open('rb'),
+        as_attachment=True,
+        filename=batch.batch_qr_code.name.split('/')[-1]
+    )

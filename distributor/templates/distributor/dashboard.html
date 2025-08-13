@@ -208,6 +208,7 @@ table.batch-table td {
             <th>Date Received</th>
             <th>Action</th>
             <th>Status</th>
+            <th> </th>
           </tr>
         </thead>
         <tbody>
@@ -243,6 +244,10 @@ table.batch-table td {
                 </span>
                 {% endwith %}
               </div>
+            </td>
+            <td><a href="{% url 'distributor:download_batch_qr' dist.batch.id %}" class="btn btn-primary">
+              📥 
+          </a>
             </td>
           </tr>
           {% endfor %}
