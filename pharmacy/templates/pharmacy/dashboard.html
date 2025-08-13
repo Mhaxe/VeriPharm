@@ -300,7 +300,7 @@ body.dark-mode #bg-video {
                         {% if item.verified %}
                         <span class="verified-badge">✅ Verified</span>
                         {% else %}
-                        <form method="post" action="{% url 'pharmacy:verify_receipt' item.id %}">
+                        <form method="post" action="{% url 'pharmacy:scan_camera'%}">
                             {% csrf_token %}
                             <button type="submit">Verify</button>
                         </form>
