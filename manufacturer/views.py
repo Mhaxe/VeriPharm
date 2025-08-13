@@ -204,7 +204,25 @@ def scan(request):
 
         print(error)
         print(query)
-    return render(request, "manufacturer/scan.html", {"drug": drug, "error": error,"batch":batch})  
+    return render(request, "manufacturer/scan.html", {"drug": drug, "error": error,"batch":batch}) 
+
+
+def download_drug_qr(request, batch_id):
+    try:
+        batch = Batch.objects.get(id=batch_id)
+    except Batch.DoesNotExist:
+        raise Http404("Batch not found")
+
+    # Get the first drug in the batch that has a QR code
+    drug = Drug.objects.filter(batch=batch, qr_code__isnull=False).first()
+    if not drug:
+        raise Http404("No drugs with QR code found for this batch")
+
+    return FileResponse(
+        drug.qr_code.open('rb'),
+        as_attachment=True,
+        filename=drug.qr_code.name.split('/')[-1]
+    )
 
 
 

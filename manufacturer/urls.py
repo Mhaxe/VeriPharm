@@ -9,4 +9,5 @@ urlpatterns = [
     path('records/', views.manufacturer_records, name='records'),
     path('about/', views.about, name='about'),
     path("scan-camera/", views.scan_camera, name="scan_camera"),
+    path('download-drug-qr/<int:batch_id>/', views.download_drug_qr, name='download_drug_qr'),
 ]

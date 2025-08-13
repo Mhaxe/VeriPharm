@@ -230,6 +230,7 @@
           <th>Drug</th>
           <th>Quantity</th>
           <th>Status</th>
+          <th> </th>
         </tr>
       </thead>
       <tbody>
@@ -262,6 +263,10 @@
               </span>
               
             </div>
+          </td>
+          <td><a href="{% url 'manufacturer:download_drug_qr' rec.batch.id %}" class="btn btn-primary">
+            📥 
+        </a>
           </td>
         </tr>
         {% endfor %}
